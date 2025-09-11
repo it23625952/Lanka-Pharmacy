@@ -7,7 +7,7 @@ import toast from 'react-hot-toast'
 
 const App = () => {
   return (
-    <div data-theme="corporate">
+    <div>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/create-product" element={<CreateProductPage />} />
