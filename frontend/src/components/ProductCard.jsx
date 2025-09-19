@@ -5,13 +5,14 @@ import { Link } from 'react-router';
  * Product card component that displays essential product information.
  * Provides a clickable card that navigates to the product detail page.
  * 
- * @param {Object} product - The product object to display
- * @param {string} product._id - The unique identifier for the product
- * @param {string} product.name - The name of the product
- * @param {number} product.retailPrice - The retail price of the product
- * @param {string} [product.description] - Optional product description
- * @param {string} [product.category] - Optional product category
- * @param {number} [product.stock] - Optional stock quantity
+ * @param {Object} props - Component props
+ * @param {Object} props.product - The product object to display
+ * @param {string} props.product._id - The unique identifier for the product
+ * @param {string} props.product.name - The name of the product
+ * @param {number} props.product.retailPrice - The retail price of the product
+ * @param {string} [props.product.description] - Optional product description
+ * @param {string} [props.product.category] - Optional product category
+ * @param {number} [props.product.stock] - Optional stock quantity
  * @returns {JSX.Element} The rendered product card component
  */
 const ProductCard = ({ product }) => {
@@ -37,25 +38,25 @@ const ProductCard = ({ product }) => {
           </div>
         )}
 
-        {/* Product description with line clamping */}
+        {/* Product description with line clamping for multi-line text */}
         {description && (
           <p className="text-base-content/70 text-sm line-clamp-3 mt-2">
             {description}
           </p>
         )}
 
-        {/* Price and stock information */}
+        {/* Price and stock information section */}
         <div className="card-actions justify-between items-center mt-4">
           <div className="flex flex-col">
             <span className="text-2xl font-bold text-primary">
-              ${retailPrice?.toFixed(2)}
+              LKR {retailPrice?.toFixed(2)}
             </span>
             <span className="text-sm text-base-content/60">
               Retail Price
             </span>
           </div>
 
-          {/* Stock status indicator */}
+          {/* Stock status indicator with color coding */}
           {stock !== undefined && (
             <div className={`badge badge-lg ${stock > 0 ? 'badge-success' : 'badge-error'}`}>
               {stock > 0 ? `${stock} in stock` : 'Out of stock'}

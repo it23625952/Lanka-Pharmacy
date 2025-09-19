@@ -3,29 +3,37 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import productRoutes from "./routes/productRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 import { connectDB } from "./config/db.js";
+import { JWT_SECRET } from "./config/jwt.js"; // Import JWT configuration
 import rateLimiter from "./middleware/rateLimiter.js";
-
 
 dotenv.config();
 
+// Validate required environment variables for production security
+const requiredEnvVars = ['JWT_SECRET', 'MONGO_URI'];
+requiredEnvVars.forEach(envVar => {
+  if (!process.env[envVar] || process.env[envVar].includes('your_jwt_secret')) {
+    console.error(`❌ FATAL: ${envVar} not configured properly`);
+    process.exit(1); // Terminate application on missing or default configuration
+  }
+});
+
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5001; // Default to port 5001 if not specified
 
-// Middleware
+// Middleware configuration
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'http://localhost:5173', // Allow requests from frontend development server
 }));
-app.use(express.json());
-app.use(rateLimiter);
+app.use(express.json()); // Parse JSON request bodies
+app.use(rateLimiter); // Apply rate limiting to all routes
 
-// app.use((req, res, next) => {
-//     console.log(`Request Method: ${req.method}, Request URL: ${req.url}`);
-//     next();
-// });
+// API route handlers
+app.use("/api/products", productRoutes); // Product-related endpoints
+app.use("/api/users", userRoutes); // User authentication and profile endpoints
 
-app.use("/api/products", productRoutes);
-
+// Database connection and server startup
 connectDB().then(() => {
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);

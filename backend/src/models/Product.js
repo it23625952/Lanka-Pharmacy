@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+/**
+ * Mongoose schema for Product entities.
+ * Defines the data structure, validation rules, and pricing information
+ * for products in the inventory management system.
+ */
 const productSchema = new mongoose.Schema(
     {
         name: {
@@ -23,9 +28,13 @@ const productSchema = new mongoose.Schema(
             required: true
         }
     },
-    { timestamps: true }
-)
+    { timestamps: true } // Automatically manages createdAt and updatedAt fields
+);
 
+/**
+ * Mongoose model for the Product collection.
+ * Provides an interface for interacting with product documents in MongoDB.
+ */
 const Product = mongoose.model("Product", productSchema);
 
 export default Product;
