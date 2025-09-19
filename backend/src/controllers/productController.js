@@ -1,6 +1,13 @@
 import Product from "../models/Product.js";
 
-export async function getAllProducts (_, res) {
+/**
+ * Retrieves all products from the database.
+ * 
+ * @param {Object} _ - Request object (unused)
+ * @param {Object} res - Response object
+ * @returns {Promise<void>} JSON response with products array or error message
+ */
+export async function getAllProducts(_, res) {
     try {
         const products = await Product.find();
         res.json(products);
@@ -9,21 +16,36 @@ export async function getAllProducts (_, res) {
     }
 }
 
-export async function getProductById (req, res) {
+/**
+ * Retrieves a specific product by its ID.
+ * Returns 404 status if no product is found with the given ID.
+ * 
+ * @param {Object} req - Request object containing product ID in params
+ * @param {Object} res - Response object
+ * @returns {Promise<void>} JSON response with product data or error message
+ */
+export async function getProductById(req, res) {
     try {
         const product = await Product.findById(req.params.id);
 
         if (!product) {
-            return res.status(404).json({"message": "Product not found!"});
+            return res.status(404).json({ "message": "Product not found!" });
         }
         res.json(product);
     } catch (error) {
         console.error("Error retrieving product:", error);
-        res.status(500).json({"message": "Server error"});
+        res.status(500).json({ "message": "Server error" });
     }
 }
 
-export async function createProduct (req, res) {
+/**
+ * Creates a new product in the database.
+ * 
+ * @param {Object} req - Request object containing product data in body
+ * @param {Object} res - Response object
+ * @returns {Promise<void>} JSON response with created product or error message
+ */
+export async function createProduct(req, res) {
     try {
         const { name, retailPrice, wholesalePrice, description, imageUrl } = req.body;
         const newProduct = new Product({ name, retailPrice, wholesalePrice, description, imageUrl });
@@ -32,37 +54,57 @@ export async function createProduct (req, res) {
         res.status(201).json(newProduct);
     } catch (error) {
         console.error("Error creating product:", error);
-        res.status(500).json({"message": "Server error"});
+        res.status(500).json({ "message": "Server error" });
     }
 }
 
-export async function updateProduct (req, res) {
+/**
+ * Updates an existing product by its ID.
+ * Returns 404 status if no product is found with the given ID.
+ * 
+ * @param {Object} req - Request object containing product ID and update data
+ * @param {Object} res - Response object
+ * @returns {Promise<void>} JSON response with success message or error
+ */
+export async function updateProduct(req, res) {
     try {
         const { name, retailPrice, wholesalePrice, description, imageUrl } = req.body;
-        const updatedProduct = await Product.findByIdAndUpdate(req.params.id, { name, retailPrice, wholesalePrice, description, imageUrl }, { new: true });
+        const updatedProduct = await Product.findByIdAndUpdate(
+            req.params.id,
+            { name, retailPrice, wholesalePrice, description, imageUrl },
+            { new: true } // Returns the updated document
+        );
 
         if (!updatedProduct) {
-            return res.status(404).json({"message": "Product not found"});
+            return res.status(404).json({ "message": "Product not found" });
         }
 
-        res.status(200).json({"message": "Product updated successfully"});
+        res.status(200).json({ "message": "Product updated successfully" });
     } catch (error) {
         console.error("Error updating product: ", error);
-        res.status(500).json({"message": "Server error"});
+        res.status(500).json({ "message": "Server error" });
     }
 }
 
-export async function deleteProduct (req, res) {
+/**
+ * Deletes a product by its ID.
+ * Returns 404 status if no product is found with the given ID.
+ * 
+ * @param {Object} req - Request object containing product ID in params
+ * @param {Object} res - Response object
+ * @returns {Promise<void>} JSON response with success message or error
+ */
+export async function deleteProduct(req, res) {
     try {
         const deletedProduct = await Product.findByIdAndDelete(req.params.id);
 
         if (!deletedProduct) {
-            return res.status(404).json({"message": "Product not found"});
+            return res.status(404).json({ "message": "Product not found" });
         }
 
-        res.status(200).json({"message": "Product deleted successfully"});
+        res.status(200).json({ "message": "Product deleted successfully" });
     } catch (error) {
         console.error("Error deleting product: ", error);
-        res.status(500).json({"message": "Server error"});
+        res.status(500).json({ "message": "Server error" });
     }
 }

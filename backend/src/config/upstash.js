@@ -1,14 +1,17 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
-
 import dotenv from "dotenv";
 
 dotenv.config();
 
-// Create a ratelimit that allows 100 requests per 60 seconds
+/**
+ * Rate limiter instance using Upstash Redis for distributed rate limiting.
+ * Configures a sliding window of 100 requests per 60 seconds per client.
+ * Environment variables are used for Redis connection configuration.
+ */
 const rateLimit = new Ratelimit({
-    redis: Redis.fromEnv(),
-    limiter: Ratelimit.slidingWindow(100, "60s"),
+    redis: Redis.fromEnv(), // Creates Redis client using environment variables
+    limiter: Ratelimit.slidingWindow(100, "60s"), // 100 requests allowed per 60-second window
 });
 
 export default rateLimit;
