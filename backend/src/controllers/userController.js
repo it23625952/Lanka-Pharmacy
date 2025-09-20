@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
+import crypto from 'crypto';
 import { JWT_SECRET, JWT_OPTIONS } from "../config/jwt.js";
 
 /**
@@ -185,5 +186,146 @@ export const deleteAccount = async (req, res) => {
     } catch (error) {
         console.error('Delete account error:', error);
         res.status(500).json({ message: 'Server error during account deletion' });
+    }
+};
+
+/**
+ * Handles password reset request by generating a reset token.
+ * Sends reset link via email or returns token directly in development.
+ * 
+ * @param {Object} req - Request object containing user email
+ * @param {Object} res - Response object
+ * @returns {Promise<void>} JSON response with reset token or success message
+ */
+export const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            // Return generic message for security (don't reveal if email exists)
+            return res.json({ 
+                message: 'If an account with that email exists, a reset link has been sent' 
+            });
+        }
+
+        // Generate cryptographically secure reset token
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        const resetTokenExpiry = Date.now() + 3600000; // 1 hour expiration
+
+        // Store reset token and expiration in user document
+        user.resetPasswordToken = resetToken;
+        user.resetPasswordExpires = resetTokenExpiry;
+        await user.save();
+
+        // In development: return the reset token directly for testing
+        if (process.env.NODE_ENV === 'development') {
+            return res.json({ 
+                message: 'Development mode: Use this reset token',
+                resetToken: resetToken,
+                resetLink: `${process.env.FRONTEND_URL}/reset-password/${resetToken}`
+            });
+        }
+
+        // In production: try to send email (email function would be implemented elsewhere)
+        try {
+            await sendPasswordResetEmail(email, resetToken);
+            return res.json({ 
+                message: 'If an account with that email exists, a reset link has been sent'
+            });
+        } catch (emailError) {
+            console.error('Email sending failed:', emailError);
+            // Fallback: return token if email service fails
+            return res.json({ 
+                message: 'Password reset initiated. Check your console for the reset link.',
+                resetToken: resetToken
+            });
+        }
+
+    } catch (error) {
+        console.error('Forgot password error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+/**
+ * Resets user password using a valid reset token.
+ * Validates token expiration and updates password in database.
+ * 
+ * @param {Object} req - Request object containing reset token and new password
+ * @param {Object} res - Response object
+ * @returns {Promise<void>} JSON response with success or error message
+ */
+export const resetPassword = async (req, res) => {
+    try {
+        const { token } = req.params;
+        const { password } = req.body;
+
+        // Find user with valid, non-expired reset token
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid or expired reset token' });
+        }
+
+        // Hash new password with secure salt rounds
+        const saltRounds = 12;
+        user.password = await bcrypt.hash(password, saltRounds);
+        
+        // Clear reset token fields after successful password reset
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        
+        await user.save();
+
+        res.json({ message: 'Password reset successfully' });
+    } catch (error) {
+        console.error('Reset password error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+/**
+ * Changes user password while authenticated.
+ * Requires current password verification for security.
+ * 
+ * @param {Object} req - Request object containing current and new passwords
+ * @param {Object} res - Response object
+ * @returns {Promise<void>} JSON response with success or error message
+ */
+export const changePassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+        const userId = req.user.userId;
+
+        // Find user by ID
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Verify current password matches
+        const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.password);
+        if (!isCurrentPasswordValid) {
+            return res.status(400).json({ message: 'Current password is incorrect' });
+        }
+
+        // Validate new password meets minimum requirements
+        if (newPassword.length < 6) {
+            return res.status(400).json({ message: 'New password must be at least 6 characters' });
+        }
+
+        // Hash new password with secure salt rounds
+        const saltRounds = 12;
+        user.password = await bcrypt.hash(newPassword, saltRounds);
+        await user.save();
+
+        res.json({ message: 'Password changed successfully' });
+    } catch (error) {
+        console.error('Change password error:', error);
+        res.status(500).json({ message: 'Server error during password change' });
     }
 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
-import { User, Mail, Phone, MapPin, Edit3, Save, X, Calendar, Trash2, AlertTriangle } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Edit3, Save, X, Calendar, Trash2, AlertTriangle, Key, Eye, EyeOff } from 'lucide-react';
 import api from '../lib/axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router';
@@ -9,6 +9,8 @@ const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deletePassword, setDeletePassword] = useState('');
   const [userData, setUserData] = useState({
@@ -20,6 +22,19 @@ const ProfilePage = () => {
     createdAt: ''
   });
   const [tempData, setTempData] = useState({ ...userData });
+  
+  // Change password form state
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+  const [showPasswords, setShowPasswords] = useState({
+    current: false,
+    new: false,
+    confirm: false
+  });
+  
   const navigate = useNavigate();
 
   // Fetch user data on component mount
@@ -92,6 +107,73 @@ const ProfilePage = () => {
   };
 
   /**
+   * Handles password change form submission
+   */
+  const handleChangePassword = async () => {
+    const { currentPassword, newPassword, confirmPassword } = passwordData;
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      toast.error('Please fill in all password fields');
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      toast.error('New password must be at least 6 characters');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast.error('New passwords do not match');
+      return;
+    }
+
+    setIsChangingPassword(true);
+
+    try {
+      await api.post('/users/change-password', {
+        currentPassword,
+        newPassword
+      });
+
+      toast.success('Password changed successfully');
+      setShowChangePassword(false);
+      setPasswordData({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      });
+    } catch (error) {
+      console.error('Change password error:', error);
+      toast.error(error.response?.data?.message || 'Failed to change password');
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
+  /**
+   * Handles password input changes
+   * @param {string} field - The password field to update
+   * @param {string} value - The new value for the field
+   */
+  const handlePasswordInputChange = (field, value) => {
+    setPasswordData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  /**
+   * Toggles password visibility for specific field
+   * @param {string} field - The password field to toggle visibility
+   */
+  const togglePasswordVisibility = (field) => {
+    setShowPasswords(prev => ({
+      ...prev,
+      [field]: !prev[field]
+    }));
+  };
+
+  /**
    * Handles account deletion with password confirmation
    */
   const handleDeleteAccount = async () => {
@@ -134,6 +216,123 @@ const ProfilePage = () => {
     <div className='min-h-screen bg-base-200 flex flex-col'>
       <Navbar />
       
+      {/* Change Password Modal */}
+      {showChangePassword && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="modal-box bg-base-100 max-w-md w-full">
+            <div className="flex items-center gap-2 mb-4">
+              <Key className="text-primary size-6" />
+              <h3 className="font-bold text-lg">Change Password</h3>
+            </div>
+            
+            <div className="space-y-4">
+              {/* Current Password Field */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium">Current Password</span>
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPasswords.current ? 'text' : 'password'}
+                    placeholder="Enter current password"
+                    className="input input-bordered w-full pr-10"
+                    value={passwordData.currentPassword}
+                    onChange={(e) => handlePasswordInputChange('currentPassword', e.target.value)}
+                  />
+                  {/* Password Visibility Toggle Button */}
+                  <button
+                    type="button"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    onClick={() => togglePasswordVisibility('current')}
+                  >
+                    {showPasswords.current ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
+              </div>
+
+              {/* New Password Field */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium">New Password</span>
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPasswords.new ? 'text' : 'password'}
+                    placeholder="Enter new password (min 6 characters)"
+                    className="input input-bordered w-full pr-10"
+                    value={passwordData.newPassword}
+                    onChange={(e) => handlePasswordInputChange('newPassword', e.target.value)}
+                    minLength={6}
+                  />
+                  {/* Password Visibility Toggle Button */}
+                  <button
+                    type="button"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    onClick={() => togglePasswordVisibility('new')}
+                  >
+                    {showPasswords.new ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Confirm Password Field */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium">Confirm New Password</span>
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPasswords.confirm ? 'text' : 'password'}
+                    placeholder="Confirm new password"
+                    className="input input-bordered w-full pr-10"
+                    value={passwordData.confirmPassword}
+                    onChange={(e) => handlePasswordInputChange('confirmPassword', e.target.value)}
+                  />
+                  {/* Password Visibility Toggle Button */}
+                  <button
+                    type="button"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    onClick={() => togglePasswordVisibility('confirm')}
+                  >
+                    {showPasswords.confirm ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            {/* Modal Action Buttons */}
+            <div className="modal-action mt-6">
+              <button 
+                className="btn btn-ghost"
+                onClick={() => {
+                  setShowChangePassword(false);
+                  setPasswordData({
+                    currentPassword: '',
+                    newPassword: '',
+                    confirmPassword: ''
+                  });
+                }}
+                disabled={isChangingPassword}
+              >
+                Cancel
+              </button>
+              <button 
+                className="btn btn-primary gap-2"
+                onClick={handleChangePassword}
+                disabled={isChangingPassword}
+              >
+                {isChangingPassword ? (
+                  <span className="loading loading-spinner loading-xs"></span>
+                ) : (
+                  <Key className="size-4" />
+                )}
+                {isChangingPassword ? 'Changing...' : 'Change Password'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -338,8 +537,15 @@ const ProfilePage = () => {
               <div className='mt-8 pt-6 border-t border-base-300'>
                 <h3 className='text-lg font-semibold text-base-content mb-4'>Account Actions</h3>
                 <div className='space-y-2'>
-                  <button className='btn btn-outline btn-primary btn-sm w-full justify-start'>
+                  <button 
+                    className='btn btn-outline btn-primary btn-sm w-full justify-start gap-2'
+                    onClick={() => setShowChangePassword(true)}
+                  >
+                    <Key className="size-4" />
                     Change Password
+                  </button>
+                  <button className='btn btn-outline btn-warning btn-sm w-full justify-start'>
+                    Download Data
                   </button>
                   <button 
                     className='btn btn-outline btn-error btn-sm w-full justify-start gap-2'
