@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router';
+import { useNavigate, Link } from 'react-router';
 import api from '../lib/axios';
 import { Eye, EyeOff } from 'lucide-react';
 
@@ -93,6 +93,7 @@ const SignInPage = () => {
                                         className='input input-bordered input-md focus:input-primary transition-colors' 
                                         value={email} 
                                         onChange={(e) => setEmail(e.target.value)}
+                                        required
                                     />
                                 </div>
 
@@ -108,6 +109,7 @@ const SignInPage = () => {
                                             className='input input-bordered input-md focus:input-primary transition-colors w-full' 
                                             value={password} 
                                             onChange={(e) => setPassword(e.target.value)}
+                                            required
                                         />
                                         {/* Password Visibility Toggle Button */}
                                         <button
@@ -137,9 +139,18 @@ const SignInPage = () => {
                                 <div className='text-center mt-4'>
                                     <p className='text-base-content/70 text-sm'>
                                         Don't have an account?{' '}
-                                        <a href='/signup' className='link link-primary font-medium'>
+                                        <Link to="/signup" className='link link-primary font-medium'>
                                             Sign Up
-                                        </a>
+                                        </Link>
+                                    </p>
+                                </div>
+
+                                {/* Forgot Password Link */}
+                                <div className='text-center mt-2'>
+                                    <p className='text-base-content/70 text-sm'>
+                                        <Link to="/forgot-password" className='link link-primary text-sm'>
+                                            Forgot your password?
+                                        </Link>
                                     </p>
                                 </div>
                             </form>

@@ -4,6 +4,8 @@ import HomePage from './pages/HomePage'
 import SignUpPage from './pages/SignUpPage'
 import SignInPage from './pages/SignInPage'
 import ProfilePage from './pages/ProfilePage'
+import ForgotPasswordPage from './pages/ForgotPasswordPage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
 import CreateProductPage from './pages/CreateProductPage'
 import ProductDetailPage from './pages/ProductDetailPage'
 import toast from 'react-hot-toast'
@@ -26,6 +28,10 @@ const App = () => {
         <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/signIn" element={<SignInPage />} />
         
+        {/* Password recovery routes */}
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+        
         {/* User profile management route */}
         <Route path="/profile" element={<ProfilePage />} />
         
@@ -37,4 +43,4 @@ const App = () => {
   )
 }
 
-export default App
+export default App;

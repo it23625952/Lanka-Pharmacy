@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema(
             enum: ['Owner', 'Manager', 'Staff', 'Wholesale Customer', 'Retail Customer'],
             default: 'Retail Customer',
         },
+        // Password reset token for forgot password functionality
+        resetPasswordToken: String,
+        // Expiration timestamp for password reset token (typically 1 hour)
+        resetPasswordExpires: Date,
     },
     { timestamps: true } // Automatically adds createdAt and updatedAt fields
 );
