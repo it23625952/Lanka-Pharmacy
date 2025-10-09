@@ -8,7 +8,12 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 import CreateProductPage from './pages/CreateProductPage'
 import ProductDetailPage from './pages/ProductDetailPage'
+import UploadPrescriptionPage from './pages/UploadPrescriptionPage'
+import UploadSuccessPage from './pages/UploadSuccessPage'
+import StaffPrescriptionsPage from './pages/StaffPrescriptionsPage'
 import toast from 'react-hot-toast'
+import CustomerPrescriptionsPage from './pages/CustomerPrescriptionsPage'
+import ProtectedRoute from './components/ProtectedRoute'
 
 /**
  * Main application component that defines the routing structure.
@@ -38,6 +43,20 @@ const App = () => {
         {/* Product management routes */}
         <Route path="/create-product" element={<CreateProductPage />} />
         <Route path="/product/:id" element={<ProductDetailPage />} />
+
+        <Route path="/upload-prescription" element={<UploadPrescriptionPage />} />
+        <Route path="/upload-success" element={<UploadSuccessPage />} />
+
+        <Route 
+          path="/staff/prescriptions" 
+          element={
+              <ProtectedRoute allowedRoles={['Owner', 'Manager', 'Staff']}>
+                  <StaffPrescriptionsPage />
+              </ProtectedRoute>
+          } 
+        />
+
+        <Route path='/my-prescriptions' element={<CustomerPrescriptionsPage />} />
       </Routes>
     </div>
   )
