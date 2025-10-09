@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import prescriptionRoutes from "./routes/prescriptionRoutes.js";
+import orderRoutes from './routes/orderRoutes.js';
 import { connectDB } from "./config/db.js";
 import { JWT_SECRET } from "./config/jwt.js"; // Import JWT configuration
 import rateLimiter from "./middleware/rateLimiter.js";
@@ -36,6 +37,7 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 app.use("/api/products", productRoutes); // Product-related endpoints
 app.use("/api/users", userRoutes); // User authentication and profile endpoints
 app.use("/api/prescriptions", prescriptionRoutes)
+app.use("/api/orders", orderRoutes);
 
 // Database connection and server startup
 connectDB().then(() => {
