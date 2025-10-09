@@ -1,19 +1,22 @@
-import React from 'react'
-import { Route, Routes } from 'react-router'
-import HomePage from './pages/HomePage'
-import SignUpPage from './pages/SignUpPage'
-import SignInPage from './pages/SignInPage'
-import ProfilePage from './pages/ProfilePage'
-import ForgotPasswordPage from './pages/ForgotPasswordPage'
-import ResetPasswordPage from './pages/ResetPasswordPage'
-import CreateProductPage from './pages/CreateProductPage'
-import ProductDetailPage from './pages/ProductDetailPage'
-import UploadPrescriptionPage from './pages/UploadPrescriptionPage'
-import UploadSuccessPage from './pages/UploadSuccessPage'
-import StaffPrescriptionsPage from './pages/StaffPrescriptionsPage'
-import toast from 'react-hot-toast'
-import CustomerPrescriptionsPage from './pages/CustomerPrescriptionsPage'
-import ProtectedRoute from './components/ProtectedRoute'
+import React from 'react';
+import { Route, Routes } from 'react-router';
+import toast from 'react-hot-toast';
+import HomePage from './pages/HomePage';
+import SignUpPage from './pages/SignUpPage';
+import SignInPage from './pages/SignInPage';
+import ProfilePage from './pages/ProfilePage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
+import CreateProductPage from './pages/CreateProductPage';
+import ProductDetailPage from './pages/ProductDetailPage';
+import UploadPrescriptionPage from './pages/UploadPrescriptionPage';
+import UploadSuccessPage from './pages/UploadSuccessPage';
+import StaffPrescriptionsPage from './pages/StaffPrescriptionsPage';
+import CustomerPrescriptionsPage from './pages/CustomerPrescriptionsPage';
+import ProtectedRoute from './components/ProtectedRoute';
+import CustomerOrdersPage from './pages/CustomerOrdersPage';
+import StaffOrdersPage from './pages/StaffOrdersPage';
+import OrderDetailPage from './pages/OrderDetailPage';
 
 /**
  * Main application component that defines the routing structure.
@@ -57,6 +60,27 @@ const App = () => {
         />
 
         <Route path='/my-prescriptions' element={<CustomerPrescriptionsPage />} />
+
+        <Route path="/my-orders" element={<CustomerOrdersPage />} />
+
+        <Route 
+          path="/staff/orders" 
+          element={
+            <ProtectedRoute allowedRoles={['Owner', 'Manager', 'Staff']}>
+              <StaffOrdersPage />
+            </ProtectedRoute>
+          } 
+        />
+
+        <Route path="/orders/:id" element={<OrderDetailPage />} />
+        <Route 
+          path="/staff/orders/:id" 
+          element={
+            <ProtectedRoute allowedRoles={['Owner', 'Manager', 'Staff']}>
+              <OrderDetailPage />
+            </ProtectedRoute>
+          } 
+        />
       </Routes>
     </div>
   )

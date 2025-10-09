@@ -1,7 +1,7 @@
-import { Eye, Clock, CheckCircle, XCircle, FileText } from 'lucide-react';
+import { Eye, Clock, CheckCircle, XCircle, FileText, ShoppingCart } from 'lucide-react';
 import React from 'react';
 
-const CustomerPrescriptionCard = ({ prescription, onSelect }) => {
+const CustomerPrescriptionCard = ({ prescription, onSelect, onCreateOrder }) => {
     const getStatusIcon = (status) => {
         switch (status) {
             case 'Pending': return <Clock className="size-5 text-yellow-600" />;
@@ -35,6 +35,12 @@ const CustomerPrescriptionCard = ({ prescription, onSelect }) => {
         }
     };
 
+    const handleCreateOrderClick = () => {
+        if (onCreateOrder) {
+            onCreateOrder(prescription);
+        }
+    };
+
     return (
         <div className='bg-white rounded-2xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-200'>
             <div className='p-6'>
@@ -65,7 +71,15 @@ const CustomerPrescriptionCard = ({ prescription, onSelect }) => {
 
                         {prescription.verifiedAt && (
                             <div className="text-sm text-gray-600">
-                                <strong>Processed on:</strong> {new Date(prescription.verifiedAt).toLocaleDateString()}
+                                <strong>Verified on:</strong> {new Date(prescription.verifiedAt).toLocaleDateString()}
+                            </div>
+                        )}
+
+                        {/* Order Status */}
+                        {prescription.order && (
+                            <div className="bg-blue-50 rounded-xl p-3 border border-blue-200">
+                                <strong className="text-blue-700">Order Created:</strong>
+                                <p className="text-blue-600 text-sm mt-1">Order #{prescription.order.orderNumber}</p>
                             </div>
                         )}
                     </div>
@@ -78,6 +92,17 @@ const CustomerPrescriptionCard = ({ prescription, onSelect }) => {
                             <Eye className='size-4' />
                             View Details
                         </button>
+
+                        {/* Create Order Button for Verified Prescriptions */}
+                        {onCreateOrder && (
+                            <button 
+                                className='btn bg-gradient-to-r from-green-500 to-green-600 border-none text-white hover:from-green-600 hover:to-green-700 gap-2 transition-all duration-200 flex items-center justify-center min-h-[40px]'
+                                onClick={handleCreateOrderClick}
+                            >
+                                <ShoppingCart className='size-4' />
+                                Create Order
+                            </button>
+                        )}
                     </div>
                 </div>
 

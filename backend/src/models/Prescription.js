@@ -53,6 +53,10 @@ const prescriptionSchema = new mongoose.Schema(
         totalAmount: {
             type: Number,
             default: 0 // Calculated total cost of prescribed products
+        },
+        order: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Order'
         }
     },
     { timestamps: true } // Automatically adds createdAt and updatedAt fields

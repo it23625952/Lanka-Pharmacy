@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { Plus, UserPlus, LogOut, LogIn, User, ShoppingCart, Upload, FileText, ClipboardList, Menu, X, Phone, Mail, Clock } from 'lucide-react';
+import { Plus, UserPlus, LogOut, LogIn, User, ShoppingCart, Upload, FileText, ClipboardList, Menu, X, Phone, Mail, Clock, Package } from 'lucide-react';
 import api from '../lib/axios';
 import Logo from './Logo.jpg';
 
@@ -176,12 +176,22 @@ const Navbar = () => {
                         <ClipboardList className="size-4" />
                         My Prescriptions
                       </Link>
+                      <Link to="/my-orders" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
+                        <Package className="size-4" />
+                        My Orders
+                      </Link>
                       {/* Staff Dashboard Link - Only for authorized roles */}
                       {userData?.role && ['Owner', 'Manager', 'Staff'].includes(userData.role) && (
-                        <Link to="/staff/prescriptions" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
-                          <FileText className="size-4" />
-                          Staff Dashboard
-                        </Link>
+                        <>
+                          <Link to="/staff/prescriptions" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
+                            <FileText className="size-4" />
+                            Staff Dashboard
+                          </Link>
+                          <Link to="/staff/orders" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
+                            <Package className="size-4" />
+                            Manage Orders
+                          </Link>
+                        </>
                       )}
                       <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 mt-2 border-t border-gray-100 flex items-center gap-2">
                         <LogOut className="size-4" />
@@ -244,10 +254,21 @@ const Navbar = () => {
                   <Link to="/my-prescriptions" className="block px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 font-medium">
                     My Prescriptions
                   </Link>
+                  <Link to="/my-orders" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
+                    <Package className="size-4" />
+                    My Orders
+                  </Link>
                   {userData?.role && ['Owner', 'Manager', 'Staff'].includes(userData.role) && (
-                    <Link to="/staff/prescriptions" className="block px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 font-medium">
-                      Staff Dashboard
-                    </Link>
+                    <>
+                      <Link to="/staff/prescriptions" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
+                        <FileText className="size-4" />
+                        Staff Dashboard
+                      </Link>
+                      <Link to="/staff/orders" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
+                        <Package className="size-4" />
+                        Manage Orders
+                      </Link>
+                    </>
                   )}
                   <button onClick={handleLogout} className="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 font-medium">
                     Logout

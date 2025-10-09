@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
-import { Search, FileText } from 'lucide-react';
+import { Search, FileText, ShoppingCart } from 'lucide-react';
 import api from '../lib/axios';
 import toast from 'react-hot-toast';
 import PrescriptionModal from '../components/PrescriptionModal';
 import CustomerPrescriptionCard from '../components/CustomerPrescriptionCard';
+import CreateOrderModal from '../components/CreateOrderModal';
 
 const CustomerPrescriptionsPage = () => {
     const [prescriptions, setPrescriptions] = useState([]);
@@ -12,6 +13,7 @@ const CustomerPrescriptionsPage = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedPrescription, setSelectedPrescription] = useState(null);
     const [showPrescriptionModal, setShowPrescriptionModal] = useState(false);
+    const [showCreateOrderModal, setShowCreateOrderModal] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [userEmail, setUserEmail] = useState('');
 
@@ -29,22 +31,18 @@ const CustomerPrescriptionsPage = () => {
         try {
             setIsLoading(true);
             
-            // Use the customer-specific endpoint
             const url = filter === 'all' 
                 ? '/prescriptions/customer/my-prescriptions' 
                 : `/prescriptions/customer/my-prescriptions?status=${filter}`;
             
             const response = await api.get(url);
             
-            // Directly use the prescriptions from the response
             const userPrescriptions = response.data.prescriptions || [];
             setPrescriptions(userPrescriptions);
             
-            // Set user email from the first prescription or from profile
             if (userPrescriptions.length > 0) {
                 setUserEmail(userPrescriptions[0].customer?.email || '');
             } else {
-                // If no prescriptions, get email from profile
                 const profileResponse = await api.get('/users/profile');
                 setUserEmail(profileResponse.data.email);
             }
@@ -62,6 +60,16 @@ const CustomerPrescriptionsPage = () => {
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleCreateOrder = (prescription) => {
+        setSelectedPrescription(prescription);
+        setShowCreateOrderModal(true);
+    };
+
+    const handleOrderCreated = () => {
+        fetchUserPrescriptions(); // Refresh prescriptions list
+        toast.success('Order created successfully!');
     };
 
     const filteredPrescriptions = prescriptions.filter(prescription => {
@@ -137,6 +145,21 @@ const CustomerPrescriptionsPage = () => {
                     </div>
                 </div>
 
+                {/* Verified Prescriptions Alert */}
+                {prescriptions.some(p => p.status === 'Verified' && !p.order) && (
+                    <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
+                        <div className="flex items-center gap-3">
+                            <ShoppingCart className="size-5 text-green-600" />
+                            <div>
+                                <strong className="text-green-800">Ready to Order!</strong>
+                                <p className="text-green-700 text-sm">
+                                    You have verified prescriptions that can be converted to orders.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {/* Prescriptions List */}
                 {isLoading ? (
                     <div className="flex justify-center py-12">
@@ -153,7 +176,7 @@ const CustomerPrescriptionsPage = () => {
                                 </p>
                                 <a 
                                     href="/upload-prescription" 
-                                    className="btn bg-gradient-to-r from-blue-600 to-blue-800 border-none text-white hover:from-blue-700 hover:to-blue-900 px-6 py-3 items-center justify-center"
+                                    className="btn bg-gradient-to-r from-blue-600 to-blue-800 border-none text-white hover:from-blue-700 hover:to-blue-900 px-6 py-3 flex items-center justify-center"
                                 >
                                     Upload Prescription
                                 </a>
@@ -173,6 +196,7 @@ const CustomerPrescriptionsPage = () => {
                                 key={prescription._id} 
                                 prescription={prescription} 
                                 onSelect={handleSelectPrescription}
+                                onCreateOrder={prescription.status === 'Verified' && !prescription.order ? handleCreateOrder : null}
                             />
                         ))}
                     </div>
@@ -188,6 +212,17 @@ const CustomerPrescriptionsPage = () => {
                     }}
                     onVerify={null}
                     onReject={null}
+                />
+
+                {/* Create Order Modal */}
+                <CreateOrderModal
+                    prescription={selectedPrescription}
+                    isOpen={showCreateOrderModal}
+                    onClose={() => {
+                        setShowCreateOrderModal(false);
+                        setSelectedPrescription(null);
+                    }}
+                    onSuccess={handleOrderCreated}
                 />
             </div>
         </div>
