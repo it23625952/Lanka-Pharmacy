@@ -26,6 +26,12 @@ const productSchema = new mongoose.Schema(
         imageUrl: {
             type: String,
             required: true
+        },
+        stock: {
+            type: Number,
+            required: true,
+            default: 0,
+            min: 0
         }
     },
     { timestamps: true } // Automatically manages createdAt and updatedAt fields

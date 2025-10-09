@@ -17,4 +17,4 @@ export function formatDate(date) {
         day: 'numeric',    // Day of month (e.g., 1, 15, 31)
         year: 'numeric',   // Full year (e.g., 2024)
     });
-}
+};

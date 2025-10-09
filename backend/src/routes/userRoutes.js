@@ -1,15 +1,15 @@
 import express from "express";
-import { signUp, signIn, getUserProfile, updateUserProfile, deleteAccount, forgotPassword, resetPassword, changePassword } from "../controllers/userController.js";
+import { signUp, signIn, getUserProfile, updateUserProfile, deleteAccount, requestPasswordReset, resetPassword, changePassword } from "../controllers/userController.js";
 import authenticate from "../middleware/authenticate.js"; // Import authentication middleware
 
 const router = express.Router();
 
 // Public routes (no authentication required)
-router.post("/auth/signUp", signUp); // User registration endpoint
-router.post("/auth/signIn", signIn); // User authentication endpoint
+router.post("/auth/signup", signUp); // User registration endpoint
+router.post("/auth/signin", signIn); // User authentication endpoint
 
 // Password management routes (no authentication required for recovery)
-router.post('/forgot-password', forgotPassword); // Initiate password reset process
+router.post('/forgot-password', requestPasswordReset); // Initiate password reset process
 router.post('/reset-password/:token', resetPassword); // Complete password reset with token
 
 // Protected routes (authentication required)

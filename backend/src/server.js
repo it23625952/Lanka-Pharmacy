@@ -1,9 +1,11 @@
 import express from "express";
+import path from "path";
 import cors from "cors";
 import dotenv from "dotenv";
 
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import prescriptionRoutes from "./routes/prescriptionRoutes.js";
 import { connectDB } from "./config/db.js";
 import { JWT_SECRET } from "./config/jwt.js"; // Import JWT configuration
 import rateLimiter from "./middleware/rateLimiter.js";
@@ -28,10 +30,12 @@ app.use(cors({
 }));
 app.use(express.json()); // Parse JSON request bodies
 app.use(rateLimiter); // Apply rate limiting to all routes
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // API route handlers
 app.use("/api/products", productRoutes); // Product-related endpoints
 app.use("/api/users", userRoutes); // User authentication and profile endpoints
+app.use("/api/prescriptions", prescriptionRoutes)
 
 // Database connection and server startup
 connectDB().then(() => {
