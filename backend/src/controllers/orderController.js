@@ -2,13 +2,16 @@ import Order from '../models/Order.js';
 import Prescription from '../models/Prescription.js';
 import Product from '../models/Product.js';
 
-// Create order from verified prescription
+/**
+ * Create order from verified prescription
+ * Converts a verified prescription into a purchase order
+ */
 export const createOrderFromPrescription = async (req, res) => {
     try {
         const { prescriptionId, paymentMethod, shippingAddress, notes } = req.body;
         const customerId = req.user.userId;
 
-        // Find the verified prescription
+        // Find and validate prescription
         const prescription = await Prescription.findById(prescriptionId)
             .populate('products.productId')
             .populate('customer');
@@ -25,7 +28,7 @@ export const createOrderFromPrescription = async (req, res) => {
             return res.status(403).json({ message: 'You can only create orders from your own prescriptions' });
         }
 
-        // Prepare order items
+        // Prepare order items from prescription products
         const items = prescription.products.map(item => ({
             product: item.productId._id,
             quantity: item.quantity,
@@ -33,10 +36,10 @@ export const createOrderFromPrescription = async (req, res) => {
             dosage: item.dosage || ''
         }));
 
-        // Calculate total amount
+        // Calculate total order amount
         const totalAmount = items.reduce((total, item) => total + (item.price * item.quantity), 0);
 
-        // Create order
+        // Create new order
         const order = new Order({
             customer: customerId,
             prescription: prescriptionId,
@@ -48,6 +51,8 @@ export const createOrderFromPrescription = async (req, res) => {
         });
 
         await order.save();
+        
+        // Populate order data for response
         await order.populate('customer', 'name email phone');
         await order.populate('prescription');
         await order.populate('items.product', 'name imageUrl');
@@ -62,7 +67,9 @@ export const createOrderFromPrescription = async (req, res) => {
     }
 };
 
-// Get all orders (for staff)
+/**
+ * Get all orders with pagination and filtering (staff access only)
+ */
 export const getAllOrders = async (req, res) => {
     try {
         const { status, page = 1, limit = 10 } = req.query;
@@ -91,7 +98,9 @@ export const getAllOrders = async (req, res) => {
     }
 };
 
-// Get customer's orders
+/**
+ * Get orders for the authenticated customer
+ */
 export const getCustomerOrders = async (req, res) => {
     try {
         const customerId = req.user.userId;
@@ -124,7 +133,9 @@ export const getCustomerOrders = async (req, res) => {
     }
 };
 
-// Get single order
+/**
+ * Get single order by ID with access control
+ */
 export const getOrderById = async (req, res) => {
     try {
         const order = await Order.findById(req.params.id)
@@ -137,7 +148,7 @@ export const getOrderById = async (req, res) => {
             return res.status(404).json({ message: 'Order not found' });
         }
 
-        // Check if user has permission to view this order
+        // Check user permissions for order access
         if (req.user.role === 'Retail Customer' || req.user.role === 'Wholesale Customer') {
             if (order.customer._id.toString() !== req.user.userId) {
                 return res.status(403).json({ message: 'Access denied' });
@@ -151,7 +162,10 @@ export const getOrderById = async (req, res) => {
     }
 };
 
-// Update order status (staff only)
+/**
+ * Update order status (staff only)
+ * Handles order workflow transitions and automatic timestamps
+ */
 export const updateOrderStatus = async (req, res) => {
     try {
         const { status, estimatedReadyTime, notes } = req.body;
@@ -161,17 +175,17 @@ export const updateOrderStatus = async (req, res) => {
             return res.status(404).json({ message: 'Order not found' });
         }
 
-        // Update order
+        // Update order properties
         order.status = status;
         if (estimatedReadyTime) order.estimatedReadyTime = estimatedReadyTime;
         if (notes) order.notes = notes;
 
-        // Set picked up time if status is completed
+        // Set picked up timestamp when order is completed
         if (status === 'Completed' && !order.pickedUpAt) {
             order.pickedUpAt = new Date();
         }
 
-        // Set cancelled time if status is cancelled
+        // Set cancellation details when order is cancelled
         if (status === 'Cancelled' && !order.cancelledAt) {
             order.cancelledAt = new Date();
             order.cancelledBy = req.user.userId;
@@ -191,7 +205,10 @@ export const updateOrderStatus = async (req, res) => {
     }
 };
 
-// Cancel order
+/**
+ * Cancel order with permission validation
+ * Customers can cancel their own orders, staff can cancel any order
+ */
 export const cancelOrder = async (req, res) => {
     try {
         const { cancellationReason } = req.body;
@@ -202,16 +219,17 @@ export const cancelOrder = async (req, res) => {
             return res.status(404).json({ message: 'Order not found' });
         }
 
-        // Check if user owns the order or is staff
+        // Validate user permissions
         if (order.customer.toString() !== customerId && !['Owner', 'Manager', 'Staff'].includes(req.user.role)) {
             return res.status(403).json({ message: 'Access denied' });
         }
 
-        // Check if order can be cancelled
+        // Validate order can be cancelled
         if (['Completed', 'Cancelled', 'Ready for Pickup'].includes(order.status)) {
             return res.status(400).json({ message: `Cannot cancel order with status: ${order.status}` });
         }
 
+        // Update order cancellation details
         order.status = 'Cancelled';
         order.cancelledAt = new Date();
         order.cancelledBy = customerId;

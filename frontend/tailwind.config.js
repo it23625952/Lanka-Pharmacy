@@ -9,8 +9,14 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [daisyui],
+  plugins: [
+    require('daisyui'),  
+  ],
   daisyui: {
-    themes: ["corporate"],
+    themes: false,
+    darkTheme: false,
+    base: true,
+    styled: true,
+    utils: true,
   },
 }

@@ -1,5 +1,9 @@
 import mongoose from 'mongoose';
 
+/**
+ * Mongoose schema for Order entities
+ * Manages medication orders linked to prescriptions with full order lifecycle
+ */
 const orderSchema = new mongoose.Schema(
     {
         orderNumber: {
@@ -87,7 +91,10 @@ const orderSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-// Generate order number before saving
+/**
+ * Pre-save middleware to generate unique order number
+ * Format: ORDYYMMDDXXX (e.g., ORD241215001)
+ */
 orderSchema.pre('save', async function (next) {
     if (this.isNew) {
         const date = new Date();
@@ -95,7 +102,7 @@ orderSchema.pre('save', async function (next) {
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const day = date.getDate().toString().padStart(2, '0');
         
-        // Find the latest order for today
+        // Find the latest order for today to increment sequence
         const latestOrder = await this.constructor.findOne(
             { orderNumber: new RegExp(`^ORD${year}${month}${day}`) },
             { orderNumber: 1 },

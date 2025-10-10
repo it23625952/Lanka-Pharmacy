@@ -3,21 +3,17 @@ import Product from "../models/Product.js";
 import User from "../models/User.js";
 
 /**
- * Handles prescription image upload and creates a new prescription record.
- * Supports both authenticated users and guest users.
- * 
- * @param {Object} req - Request object containing prescription data and file
- * @param {Object} res - Response object
- * @returns {Promise<void>} JSON response with prescription details or error
+ * Upload prescription image and create prescription record
+ * Supports both authenticated users and guest users
  */
 export const uploadPrescription = async (req, res) => {
     try {
         const { customerName, customerEmail, customerPhone, notes } = req.body;
         const prescriptionImage = req.file ? req.file.path : null;
         
-        let customerId = req.user?.userId; // Optional chaining for guest users
+        let customerId = req.user?.userId;
 
-        // Validate that prescription image is provided
+        // Validate prescription image
         if (!prescriptionImage) {
             return res.status(400).json({ message: "Prescription image is required" });
         }
@@ -27,11 +23,10 @@ export const uploadPrescription = async (req, res) => {
             notes: notes || ''
         };
 
-        // If user is authenticated, use their ID
+        // Handle authenticated vs guest users
         if (customerId) {
             prescriptionData.customer = customerId;
         } else {
-            // For guest users, store the provided contact details
             prescriptionData.customerName = customerName;
             prescriptionData.customerEmail = customerEmail;
             prescriptionData.customerPhone = customerPhone;
@@ -40,7 +35,7 @@ export const uploadPrescription = async (req, res) => {
         const prescription = new Prescription(prescriptionData);
         await prescription.save();
 
-        // Populate customer details if authenticated user
+        // Populate customer details for authenticated users
         if (customerId) {
             await prescription.populate('customer', 'name email phone');
         }
@@ -50,7 +45,6 @@ export const uploadPrescription = async (req, res) => {
             prescription: {
                 id: prescription._id,
                 status: prescription.status,
-                // Return appropriate customer info based on user type
                 customer: customerId ? {
                     name: prescription.customer.name,
                     email: prescription.customer.email,
@@ -69,23 +63,19 @@ export const uploadPrescription = async (req, res) => {
 };
 
 /**
- * Retrieves all prescriptions with optional status filtering.
- * Used by administrators to view all prescription submissions.
- * 
- * @param {Object} req - Request object with optional status query parameter
- * @param {Object} res - Response object
- * @returns {Promise<void>} JSON response with prescriptions array or error
+ * Get all prescriptions with optional status filtering
+ * Used by administrators to manage prescription submissions
  */
 export const getPrescriptions = async (req, res) => {
     try {
         const { status } = req.query;
-        const filter = status ? { status } : {}; // Apply status filter if provided
+        const filter = status ? { status } : {};
 
         const prescriptions = await Prescription.find(filter)
-            .populate('customer', 'name email phone') // Populate customer details
-            .populate('verifiedBy', 'name email') // Populate staff who verified
-            .populate('products.productId', 'name retailPrice imageUrl') // Populate product details
-            .sort({ createdAt: -1 }); // Sort by newest first
+            .populate('customer', 'name email phone')
+            .populate('verifiedBy', 'name email')
+            .populate('products.productId', 'name retailPrice imageUrl')
+            .sort({ createdAt: -1 });
 
         res.json({ prescriptions });
     } catch (error) {
@@ -95,12 +85,8 @@ export const getPrescriptions = async (req, res) => {
 };
 
 /**
- * Verifies a prescription by checking product availability and calculating total.
- * Updates prescription status and associates products with quantities.
- * 
- * @param {Object} req - Request object with prescription ID and product data
- * @param {Object} res - Response object
- * @returns {Promise<void>} JSON response with verification result or error
+ * Verify prescription by checking product availability and calculating total
+ * Updates prescription status and associates products with quantities
  */
 export const verifyPrescription = async (req, res) => {
     try {
@@ -115,7 +101,7 @@ export const verifyPrescription = async (req, res) => {
 
         let totalAmount = 0;
 
-        // Validate each product and calculate total amount
+        // Validate products and calculate total
         for (const item of products) {
             const product = await Product.findById(item.productId);
 
@@ -123,9 +109,10 @@ export const verifyPrescription = async (req, res) => {
                 return res.status(400).json({ message: `Product with ID ${item.productId} not found` });
             }
 
-            // Check product stock availability
             if (product.stock < item.quantity) {
-                return res.status(400).json({ message: `Insufficient stock for product ${product.name}. Available: ${product.stock}, Requested: ${item.quantity}` });
+                return res.status(400).json({ 
+                    message: `Insufficient stock for product ${product.name}. Available: ${product.stock}, Requested: ${item.quantity}` 
+                });
             }
 
             totalAmount += product.retailPrice * item.quantity;
@@ -160,12 +147,8 @@ export const verifyPrescription = async (req, res) => {
 };
 
 /**
- * Rejects a prescription with a specified reason.
- * Updates prescription status and stores rejection details.
- * 
- * @param {Object} req - Request object with prescription ID and rejection reason
- * @param {Object} res - Response object
- * @returns {Promise<void>} JSON response with rejection confirmation or error
+ * Reject prescription with specified reason
+ * Updates prescription status and stores rejection details
  */
 export const rejectPrescription = async (req, res) => {
     try {
@@ -178,7 +161,6 @@ export const rejectPrescription = async (req, res) => {
             return res.status(404).json({ message: "Prescription not found" });
         }
 
-        // Update prescription with rejection details
         prescription.status = 'Rejected';
         prescription.verifiedBy = req.user.userId;
         prescription.verifiedAt = new Date();
@@ -194,34 +176,64 @@ export const rejectPrescription = async (req, res) => {
 };
 
 /**
- * Retrieves prescriptions for the authenticated customer.
- * Supports optional status filtering for customer's own prescriptions.
- * 
- * @param {Object} req - Request object with authenticated user and optional status filter
- * @param {Object} res - Response object
- * @returns {Promise<void>} JSON response with customer's prescriptions or error
+ * Get prescriptions for authenticated customer
+ * Supports optional status filtering for customer's prescriptions
  */
 export const getCustomerPrescriptions = async (req, res) => {
     try {
-        const customerId = req.user.userId; // Get user ID from authenticated user
-        
+        const customerId = req.user.userId;
         const { status } = req.query;
-        const filter = { customer: customerId }; // Filter by customer ID
+        const filter = { customer: customerId };
         
-        // Apply status filter if provided and not 'all'
         if (status && status !== 'all') {
             filter.status = status;
         }
 
         const prescriptions = await Prescription.find(filter)
-            .populate('customer', 'name email phone') // Populate customer details
-            .populate('verifiedBy', 'name email') // Populate staff who processed
-            .populate('products.productId', 'name retailPrice imageUrl') // Populate product details
-            .sort({ createdAt: -1 }); // Sort by newest first
+            .populate('customer', 'name email phone')
+            .populate('verifiedBy', 'name email')
+            .populate('products.productId', 'name retailPrice imageUrl')
+            .sort({ createdAt: -1 });
 
         res.json({ prescriptions });
     } catch (error) {
         console.error("Error getting customer prescriptions: ", error);
         res.status(500).json({ message: "Server error while getting prescriptions" });
+    }
+};
+
+/**
+ * Delete prescription (only if status is Pending)
+ * Customers can only delete their own pending prescriptions
+ */
+export const deletePrescription = async (req, res) => {
+    try {
+        const { prescriptionId } = req.params;
+        const customerId = req.user.userId;
+
+        const prescription = await Prescription.findById(prescriptionId);
+
+        if (!prescription) {
+            return res.status(404).json({ message: "Prescription not found" });
+        }
+
+        // Check prescription ownership
+        if (prescription.customer.toString() !== customerId) {
+            return res.status(403).json({ message: "Access denied. You can only delete your own prescriptions." });
+        }
+
+        // Only allow deletion of pending prescriptions
+        if (prescription.status !== 'Pending') {
+            return res.status(400).json({ 
+                message: "Cannot delete prescription. Only pending prescriptions can be deleted." 
+            });
+        }
+
+        await Prescription.findByIdAndDelete(prescriptionId);
+
+        res.json({ message: "Prescription deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting prescription: ", error);
+        res.status(500).json({ message: "Server error while deleting prescription" });
     }
 };

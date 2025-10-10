@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Routes } from 'react-router';
-import toast from 'react-hot-toast';
 import HomePage from './pages/HomePage';
 import SignUpPage from './pages/SignUpPage';
 import SignInPage from './pages/SignInPage';
@@ -19,50 +18,41 @@ import StaffOrdersPage from './pages/StaffOrdersPage';
 import OrderDetailPage from './pages/OrderDetailPage';
 
 /**
- * Main application component that defines the routing structure.
- * Sets up all the route paths and their corresponding page components.
- * 
- * @returns {JSX.Element} The application routing structure
+ * Main application component defining the routing structure
  */
 const App = () => {
   return (
     <div>
-      {/* Application routing configuration */}
       <Routes>
-        {/* Home page route - displays product dashboard */}
+        {/* Public routes */}
         <Route path="/" element={<HomePage />} />
-        
-        {/* User authentication routes */}
         <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/signIn" element={<SignInPage />} />
-        
-        {/* Password recovery routes */}
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-        
-        {/* User profile management route */}
-        <Route path="/profile" element={<ProfilePage />} />
-        
-        {/* Product management routes */}
-        <Route path="/create-product" element={<CreateProductPage />} />
-        <Route path="/product/:id" element={<ProductDetailPage />} />
-
         <Route path="/upload-prescription" element={<UploadPrescriptionPage />} />
         <Route path="/upload-success" element={<UploadSuccessPage />} />
-
+        
+        {/* Authenticated user routes */}
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/my-prescriptions" element={<CustomerPrescriptionsPage />} />
+        <Route path="/my-orders" element={<CustomerOrdersPage />} />
+        <Route path="/orders/:id" element={<OrderDetailPage />} />
+        
+        {/* Product routes */}
+        <Route path="/create-product" element={<CreateProductPage />} />
+        <Route path="/product/:id" element={<ProductDetailPage />} />
+        
+        {/* Staff protected routes */}
         <Route 
           path="/staff/prescriptions" 
           element={
-              <ProtectedRoute allowedRoles={['Owner', 'Manager', 'Staff']}>
-                  <StaffPrescriptionsPage />
-              </ProtectedRoute>
+            <ProtectedRoute allowedRoles={['Owner', 'Manager', 'Staff']}>
+              <StaffPrescriptionsPage />
+            </ProtectedRoute>
           } 
         />
-
-        <Route path='/my-prescriptions' element={<CustomerPrescriptionsPage />} />
-
-        <Route path="/my-orders" element={<CustomerOrdersPage />} />
-
+        
         <Route 
           path="/staff/orders" 
           element={
@@ -71,8 +61,7 @@ const App = () => {
             </ProtectedRoute>
           } 
         />
-
-        <Route path="/orders/:id" element={<OrderDetailPage />} />
+        
         <Route 
           path="/staff/orders/:id" 
           element={
