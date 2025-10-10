@@ -79,7 +79,7 @@ const Navbar = () => {
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
               <Phone className="size-4" />
-              <span>+94 11 234 5678</span>
+              <span>+94 51 222 5523</span>
             </div>
             <div className="hidden md:flex items-center gap-2">
               <Mail className="size-4" />
@@ -158,7 +158,7 @@ const Navbar = () => {
                   </button>
                   
                   {/* User Dropdown Menu */}
-                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  <div className="absolute right-0 mt-2 w-60 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                     <div className="p-3 border-b border-gray-100">
                       <p className="font-semibold text-gray-800 truncate">
                         {userData?.name || 'User Account'}
@@ -184,8 +184,8 @@ const Navbar = () => {
                       {userData?.role && ['Owner', 'Manager', 'Staff'].includes(userData.role) && (
                         <>
                           <Link to="/staff/prescriptions" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
-                            <FileText className="size-4" />
-                            Staff Dashboard
+                            <ClipboardList className="size-4" />
+                            Manage Prescriptions
                           </Link>
                           <Link to="/staff/orders" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
                             <Package className="size-4" />
@@ -261,8 +261,8 @@ const Navbar = () => {
                   {userData?.role && ['Owner', 'Manager', 'Staff'].includes(userData.role) && (
                     <>
                       <Link to="/staff/prescriptions" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
-                        <FileText className="size-4" />
-                        Staff Dashboard
+                        <ClipboardList className="size-4" />
+                        Manage Prescriptions
                       </Link>
                       <Link to="/staff/orders" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
                         <Package className="size-4" />
