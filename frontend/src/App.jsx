@@ -17,6 +17,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import CustomerOrdersPage from './pages/CustomerOrdersPage';
 import StaffOrdersPage from './pages/StaffOrdersPage';
 import OrderDetailPage from './pages/OrderDetailPage';
+import EditProductPage from './pages/EditProductPage';
 
 /**
  * Main application component that defines the routing structure.
@@ -81,6 +82,10 @@ const App = () => {
             </ProtectedRoute>
           } 
         />
+      
+        <Route path="/product/:id" element={<ProductDetailPage />} />
+
+        <Route path="/edit-product/:id" element={<EditProductPage />} />
       </Routes>
     </div>
   )
