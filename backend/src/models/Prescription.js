@@ -1,9 +1,8 @@
 import mongoose from 'mongoose';
 
 /**
- * Mongoose schema definition for Prescription entities.
- * Manages prescription uploads, verification, and associated medication orders.
- * Tracks customer prescriptions through the verification workflow.
+ * Mongoose schema for Prescription entities
+ * Manages prescription uploads, verification, and associated medication orders
  */
 const prescriptionSchema = new mongoose.Schema(
     {
@@ -14,55 +13,54 @@ const prescriptionSchema = new mongoose.Schema(
         },
         prescriptionImage: {
             type: String,
-            required: true // Path to uploaded prescription image file
+            required: true
         },
         status: {
             type: String,
-            enum: ['Pending', 'Verified', 'Rejected'], // Workflow states for prescription processing
+            enum: ['Pending', 'Verified', 'Rejected'],
             default: 'Pending'
         },
         verifiedBy: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'User' // Reference to staff member who verified the prescription
+            ref: 'User'
         },
         verifiedAt: {
-            type: Date // Timestamp when prescription was verified or rejected
+            type: Date
         },
         notes: {
             type: String,
-            default: '' // Additional notes from staff or customer
+            default: ''
         },
         products: [
             {
                 productId: {
                     type: mongoose.Schema.Types.ObjectId,
                     ref: 'Product',
-                    required: true // Reference to prescribed medication product
+                    required: true
                 },
                 quantity: {
                     type: Number,
                     required: true,
-                    min: 1 // Minimum quantity of 1 unit
+                    min: 1
                 },
                 dosage: {
                     type: String,
-                    default: '' // Optional dosage instructions for the medication
+                    default: ''
                 }
             }
         ],
         totalAmount: {
             type: Number,
-            default: 0 // Calculated total cost of prescribed products
+            default: 0
         },
         order: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Order'
         }
     },
-    { timestamps: true } // Automatically adds createdAt and updatedAt fields
+    { timestamps: true }
 );
 
-// Create and export the Prescription model based on the schema
 const Prescription = mongoose.model('Prescription', prescriptionSchema);
 
 export default Prescription;

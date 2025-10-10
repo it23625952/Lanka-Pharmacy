@@ -40,6 +40,7 @@ const CustomerPrescriptionsPage = () => {
             const userPrescriptions = response.data.prescriptions || [];
             setPrescriptions(userPrescriptions);
             
+            // Set user email from prescriptions or profile
             if (userPrescriptions.length > 0) {
                 setUserEmail(userPrescriptions[0].customer?.email || '');
             } else {
@@ -68,8 +69,13 @@ const CustomerPrescriptionsPage = () => {
     };
 
     const handleOrderCreated = () => {
-        fetchUserPrescriptions(); // Refresh prescriptions list
+        fetchUserPrescriptions();
         toast.success('Order created successfully!');
+    };
+
+    const handleDeletePrescription = (deletedPrescriptionId) => {
+        setPrescriptions(prev => prev.filter(p => p._id !== deletedPrescriptionId));
+        toast.success('Prescription deleted successfully');
     };
 
     const filteredPrescriptions = prescriptions.filter(prescription => {
@@ -92,44 +98,44 @@ const CustomerPrescriptionsPage = () => {
     };
 
     return (
-        <div className='min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex flex-col'>
+        <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
             <Navbar />
 
-            <div className='flex-1 container mx-auto px-4 py-8 max-w-6xl'>
-                {/* Header */}
-                <div className='text-center mb-8'>
-                    <h1 className='text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent mb-3'>
+            <div className='flex-1 container mx-auto px-4 py-8 max-w-7xl'>
+                {/* Header Section */}
+                <div className='text-center mb-12'>
+                    <h1 className='text-5xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-transparent mb-4'>
                         My Prescriptions
                     </h1>
-                    <p className='text-gray-600 text-lg'>Track and manage your uploaded prescriptions</p>
+                    <p className='text-gray-600 text-xl'>Track and manage your uploaded prescriptions</p>
                     
                     {userEmail && (
-                        <div className="bg-blue-50 border border-blue-200 rounded-xl max-w-md mx-auto mt-4 p-3">
-                            <p className="text-blue-700 text-sm">
+                        <div className="bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-200 rounded-2xl max-w-md mx-auto mt-6 p-4">
+                            <p className="text-emerald-700 text-lg">
                                 Tracking prescriptions for: <strong>{userEmail}</strong>
                             </p>
                         </div>
                     )}
                 </div>
 
-                {/* Filters and Search */}
-                <div className='flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8'>
+                {/* Search and Filter Controls */}
+                <div className='flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-12'>
                     <div className='flex flex-col sm:flex-row gap-4 w-full lg:w-auto'>
-                        <div className='relative w-full sm:w-80'>
+                        <div className='relative w-full sm:w-96'>
                             <input 
                                 type='text' 
-                                placeholder='Search by reference ID...' 
-                                className='input input-lg w-full border-2 border-gray-300 bg-gray-50 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 text-gray-800 placeholder-gray-500 pr-12' 
+                                placeholder='Search by reference ID or name...' 
+                                className='w-full pl-12 pr-4 py-4 border-2 border-gray-200 bg-white rounded-2xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all duration-300 text-gray-800 placeholder-gray-500 text-lg' 
                                 value={searchTerm} 
                                 onChange={(e) => setSearchTerm(e.target.value)} 
                             />
-                            <button className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-600 transition-colors duration-200'>
-                                <Search className='size-5' />
-                            </button>
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                <Search className='size-6' />
+                            </div>
                         </div>
 
                         <select 
-                            className='select select-lg w-full sm:w-48 border-2 border-gray-300 bg-gray-50 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 text-gray-800' 
+                            className='w-full sm:w-48 py-4 border-2 border-gray-200 bg-white rounded-2xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all duration-300 text-gray-800 text-lg px-4'
                             value={filter} 
                             onChange={(e) => setFilter(e.target.value)}
                         >
@@ -140,19 +146,19 @@ const CustomerPrescriptionsPage = () => {
                         </select>
                     </div>
 
-                    <div className="text-sm text-gray-600">
+                    <div className="text-lg text-gray-600 bg-white px-4 py-2 rounded-xl border-2 border-gray-200">
                         {prescriptions.length} prescription(s) found
                     </div>
                 </div>
 
                 {/* Verified Prescriptions Alert */}
                 {prescriptions.some(p => p.status === 'Verified' && !p.order) && (
-                    <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
-                        <div className="flex items-center gap-3">
-                            <ShoppingCart className="size-5 text-green-600" />
+                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-2xl p-6 mb-8">
+                        <div className="flex items-center gap-4">
+                            <ShoppingCart className="size-8 text-green-600" />
                             <div>
-                                <strong className="text-green-800">Ready to Order!</strong>
-                                <p className="text-green-700 text-sm">
+                                <strong className="text-green-800 text-xl">Ready to Order!</strong>
+                                <p className="text-green-700 text-lg">
                                     You have verified prescriptions that can be converted to orders.
                                 </p>
                             </div>
@@ -162,41 +168,43 @@ const CustomerPrescriptionsPage = () => {
 
                 {/* Prescriptions List */}
                 {isLoading ? (
-                    <div className="flex justify-center py-12">
-                        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="flex justify-center py-20">
+                        <div className="w-16 h-16 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
                     </div>
                 ) : filteredPrescriptions.length === 0 ? (
-                    <div className="text-center py-12 bg-white rounded-2xl shadow-lg border border-gray-200">
+                    <div className="text-center py-20 bg-white rounded-3xl shadow-xl border border-gray-100">
                         {prescriptions.length === 0 ? (
-                            <div className="space-y-4">
-                                <FileText className="size-16 text-gray-400 mx-auto" />
-                                <h3 className="text-xl font-semibold text-gray-700">No prescriptions found</h3>
-                                <p className="text-gray-500 max-w-md mx-auto">
+                            <div className="space-y-6">
+                                <FileText className="size-24 text-gray-400 mx-auto" />
+                                <h3 className="text-2xl font-semibold text-gray-700">No prescriptions found</h3>
+                                <p className="text-gray-500 text-lg max-w-md mx-auto">
                                     You haven't uploaded any prescriptions yet. Upload your first prescription to get started.
                                 </p>
                                 <a 
                                     href="/upload-prescription" 
-                                    className="btn bg-gradient-to-r from-blue-600 to-blue-800 border-none text-white hover:from-blue-700 hover:to-blue-900 px-6 py-3 flex items-center justify-center"
+                                    className="btn bg-gradient-to-r from-emerald-600 to-emerald-700 border-none text-white hover:from-emerald-700 hover:to-emerald-800 px-8 py-4 text-lg rounded-2xl inline-flex items-center gap-3 shadow-lg hover:shadow-xl transition-all duration-300"
                                 >
+                                    <FileText className="size-5" />
                                     Upload Prescription
                                 </a>
                             </div>
                         ) : (
-                            <div className="space-y-2">
-                                <Search className="size-12 text-gray-400 mx-auto" />
-                                <h3 className="text-xl font-semibold text-gray-700">No matching prescriptions</h3>
-                                <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+                            <div className="space-y-4">
+                                <Search className="size-16 text-gray-400 mx-auto" />
+                                <h3 className="text-2xl font-semibold text-gray-700">No matching prescriptions</h3>
+                                <p className="text-gray-500 text-lg">Try adjusting your search or filter criteria</p>
                             </div>
                         )}
                     </div>
                 ) : (
-                    <div className='grid gap-6'>
+                    <div className='grid gap-8'>
                         {filteredPrescriptions.map(prescription => (
                             <CustomerPrescriptionCard 
                                 key={prescription._id} 
                                 prescription={prescription} 
                                 onSelect={handleSelectPrescription}
                                 onCreateOrder={prescription.status === 'Verified' && !prescription.order ? handleCreateOrder : null}
+                                onDelete={handleDeletePrescription}
                             />
                         ))}
                     </div>

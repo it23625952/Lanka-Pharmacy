@@ -113,17 +113,17 @@ const ProfilePage = () => {
   // Loading state
   if (isLoading) {
     return (
-      <div className='min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex flex-col'>
+      <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
         <Navbar />
         <div className='flex-1 flex items-center justify-center'>
-          <div className='w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin'></div>
+          <div className='w-16 h-16 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin'></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex flex-col'>
+    <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
       <Navbar />
       
       {/* Change Password Modal */}
@@ -142,40 +142,46 @@ const ProfilePage = () => {
 
       <div className='flex-1 container mx-auto px-4 py-8 max-w-4xl'>
         {/* Header Section */}
-        <div className='text-center mb-8'>
-          <h1 className='text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent mb-3'>User Profile</h1>
-          <p className='text-gray-600 text-lg'>Manage your account information</p>
+        <div className='text-center mb-12'>
+          <h1 className='text-5xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-transparent mb-4'>
+            User Profile
+          </h1>
+          <p className='text-gray-600 text-xl'>Manage your account information</p>
         </div>
 
-        {/* Profile Card */}
-        <div className='bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden'>
-          <div className='bg-gradient-to-r from-blue-600 to-blue-800 p-6'>
+        {/* Profile Card Container */}
+        <div className='bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden'>
+          {/* Card Header with Gradient Background */}
+          <div className='bg-gradient-to-r from-emerald-600 to-emerald-800 p-8'>
             <div className='flex justify-between items-center'>
-              <h2 className='text-2xl font-bold text-white'>Personal Information</h2>
-              <div className='flex gap-2'>
+              <h2 className='text-3xl font-bold text-white'>Personal Information</h2>
+              <div className='flex gap-3'>
                 {isEditing ? (
                   <>
+                    {/* Save Changes Button */}
                     <button 
                       onClick={handleSaveProfile}
-                      className='btn bg-green-500 border-none text-white hover:bg-green-600 btn-sm gap-2 shadow-md hover:shadow-lg transition-all duration-200'
+                      className='btn bg-green-500 border-none text-white hover:bg-green-600 gap-3 px-6 py-3 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center min-h-[52px]'
                     >
-                      <Save className='size-4' />
-                      Save
+                      <Save className='size-5' />
+                      Save Changes
                     </button>
+                    {/* Cancel Edit Button */}
                     <button 
                       onClick={handleCancelEdit}
-                      className='btn border-2 border-gray-300 text-white bg-transparent hover:bg-gray-50 hover:text-gray-700 btn-sm gap-2 transition-all duration-200'
+                      className='btn border-2 border-white text-white bg-transparent hover:bg-white/10 gap-3 px-6 py-3 rounded-2xl font-semibold text-lg transition-all duration-300 flex items-center justify-center min-h-[52px]'
                     >
-                      <X className='size-4' />
+                      <X className='size-5' />
                       Cancel
                     </button>
                   </>
                 ) : (
+                  /* Edit Profile Button */
                   <button 
                     onClick={handleEditToggle}
-                    className='btn border-2 border-white text-white bg-transparent hover:bg-white/10 btn-sm gap-2 transition-all duration-200'
+                    className='btn border-2 border-white text-white bg-transparent hover:bg-white/10 gap-3 px-6 py-3 rounded-2xl font-semibold text-lg transition-all duration-300 flex items-center justify-center min-h-[52px]'
                   >
-                    <Edit3 className='size-4' />
+                    <Edit3 className='size-5' />
                     Edit Profile
                   </button>
                 )}
@@ -183,130 +189,141 @@ const ProfilePage = () => {
             </div>
           </div>
 
+          {/* Profile Information Section */}
           <div className='p-8'>
-            {/* Profile Information */}
-            <div className='space-y-6'>
+            <div className='space-y-8'>
               {/* Name Field */}
               <div className='form-control'>
-                <label className='label mb-2'>
-                  <span className='label-text font-semibold text-gray-700 text-lg flex items-center gap-3'>
-                    <User className='size-5 text-blue-600' />
+                <label className='block mb-4'>
+                  <span className='font-semibold text-gray-700 text-xl flex items-center gap-4'>
+                    <User className='size-6 text-emerald-600' />
                     Full Name
                   </span>
                 </label>
                 {isEditing ? (
                   <input
                     type='text'
-                    className='input input-lg w-full border-2 border-gray-300 bg-gray-50 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 text-gray-800'
+                    className='w-full pl-12 pr-4 py-4 border-2 border-gray-200 bg-white rounded-2xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all duration-300 text-gray-800 text-lg'
                     value={tempData.name}
                     onChange={(e) => handleInputChange('name', e.target.value)}
                   />
                 ) : (
-                  <p className='text-gray-800 text-lg'>{userData.name}</p>
+                  <p className='text-gray-800 text-xl pl-16'>{userData.name}</p>
                 )}
               </div>
 
-              {/* Email Field */}
+              {/* Email Field (Read-only) */}
               <div className='form-control'>
-                <label className='label mb-2'>
-                  <span className='label-text font-semibold text-gray-700 text-lg flex items-center gap-3'>
-                    <Mail className='size-5 text-blue-600' />
+                <label className='block mb-4'>
+                  <span className='font-semibold text-gray-700 text-xl flex items-center gap-4'>
+                    <Mail className='size-6 text-emerald-600' />
                     Email Address
                   </span>
                 </label>
-                <p className='text-gray-800 text-lg'>{userData.email}</p>
-                <span className='text-sm text-gray-500 mt-1'>Email cannot be changed</span>
+                <p className='text-gray-800 text-xl pl-16'>{userData.email}</p>
+                <span className='text-gray-500 text-lg mt-2 pl-16'>Email cannot be changed</span>
               </div>
 
               {/* Phone Field */}
               <div className='form-control'>
-                <label className='label mb-2'>
-                  <span className='label-text font-semibold text-gray-700 text-lg flex items-center gap-3'>
-                    <Phone className='size-5 text-blue-600' />
+                <label className='block mb-4'>
+                  <span className='font-semibold text-gray-700 text-xl flex items-center gap-4'>
+                    <Phone className='size-6 text-emerald-600' />
                     Phone Number
                   </span>
                 </label>
                 {isEditing ? (
                   <input
                     type='tel'
-                    className='input input-lg w-full border-2 border-gray-300 bg-gray-50 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 text-gray-800 placeholder-gray-500'
+                    className='w-full pl-12 pr-4 py-4 border-2 border-gray-200 bg-white rounded-2xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all duration-300 text-gray-800 text-lg placeholder-gray-500'
                     value={tempData.phone || ''}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
                     placeholder='Add phone number'
                   />
                 ) : (
-                  <p className='text-gray-800 text-lg'>{userData.phone || 'Not provided'}</p>
+                  <p className='text-gray-800 text-xl pl-16'>{userData.phone || 'Not provided'}</p>
                 )}
               </div>
 
               {/* Address Field */}
               <div className='form-control'>
-                <label className='label mb-2'>
-                  <span className='label-text font-semibold text-gray-700 text-lg flex items-center gap-3'>
-                    <MapPin className='size-5 text-blue-600' />
+                <label className='block mb-4'>
+                  <span className='font-semibold text-gray-700 text-xl flex items-center gap-4'>
+                    <MapPin className='size-6 text-emerald-600' />
                     Address
                   </span>
                 </label>
                 {isEditing ? (
                   <textarea
-                    className='textarea textarea-lg w-full border-2 border-gray-300 bg-gray-50 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 text-gray-800 placeholder-gray-500'
+                    className='w-full pl-12 pr-4 py-4 border-2 border-gray-200 bg-white rounded-2xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all duration-300 text-gray-800 text-lg placeholder-gray-500'
                     value={tempData.address || ''}
                     onChange={(e) => handleInputChange('address', e.target.value)}
                     rows={3}
                     placeholder='Enter your address'
                   />
                 ) : (
-                  <p className='text-gray-800 text-lg'>{userData.address || 'Not provided'}</p>
+                  <p className='text-gray-800 text-xl pl-16'>{userData.address || 'Not provided'}</p>
                 )}
               </div>
 
-              {/* Role Field */}
+              {/* Role Field (Read-only) */}
               <div className='form-control'>
-                <label className='label mb-2'>
-                  <span className='label-text font-semibold text-gray-700 text-lg'>Role</span>
+                <label className='block mb-4'>
+                  <span className='font-semibold text-gray-700 text-xl'>Account Role</span>
                 </label>
-                <div className='bg-gradient-to-r from-blue-600 to-blue-800 text-white px-4 py-2 rounded-full text-sm font-semibold inline-block'>
+                <div className='bg-gradient-to-r from-emerald-600 to-emerald-800 text-white px-6 py-3 rounded-2xl text-lg font-semibold inline-block'>
                   {userData.role || 'User'}
                 </div>
               </div>
 
-              {/* Account Created Date */}
+              {/* Account Created Date (Read-only) */}
               <div className='form-control'>
-                <label className='label mb-2'>
-                  <span className='label-text font-semibold text-gray-700 text-lg flex items-center gap-3'>
-                    <Calendar className='size-5 text-blue-600' />
+                <label className='block mb-4'>
+                  <span className='font-semibold text-gray-700 text-xl flex items-center gap-4'>
+                    <Calendar className='size-6 text-emerald-600' />
                     Member Since
                   </span>
                 </label>
-                <p className='text-gray-600 text-lg'>
-                  {userData.createdAt ? new Date(userData.createdAt).toLocaleDateString() : 'N/A'}
+                <p className='text-gray-600 text-xl pl-16'>
+                  {userData.createdAt ? new Date(userData.createdAt).toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  }) : 'N/A'}
                 </p>
               </div>
             </div>
 
-            {/* Additional Sections */}
+            {/* Account Actions Section (Visible only when not editing) */}
             {!isEditing && (
-              <div className='mt-12 pt-8 border-t border-gray-200'>
-                <h3 className='text-xl font-semibold text-gray-800 mb-6'>Account Actions</h3>
-                <div className='space-y-3'>
+              <div className='mt-16 pt-8 border-t border-gray-200'>
+                <h3 className='text-2xl font-semibold text-gray-800 mb-8'>Account Actions</h3>
+                <div className='space-y-4'>
+                  {/* Change Password Button */}
                   <button 
-                    className='btn border-2 border-blue-500 text-blue-600 bg-transparent hover:bg-blue-50 w-full justify-start gap-3 py-4 text-lg transition-all duration-200 flex items-center min-h-[64px]'
+                    className='btn border-2 border-emerald-500 text-emerald-600 bg-transparent hover:bg-emerald-50 w-full justify-start gap-4 py-5 text-xl rounded-2xl transition-all duration-300 flex items-center min-h-[72px] pl-6'
                     onClick={() => setShowChangePassword(true)}
                   >
-                    <Key className="size-5" />
+                    <Key className="size-6" />
                     Change Password
                   </button>
+                  {/* Delete Account Button */}
                   <button 
-                    className='btn border-2 border-red-500 text-red-600 bg-transparent hover:bg-red-50 w-full justify-start gap-3 py-4 text-lg transition-all duration-200 flex items-center min-h-[64px]'
+                    className='btn border-2 border-red-500 text-red-600 bg-transparent hover:bg-red-50 w-full justify-start gap-4 py-5 text-xl rounded-2xl transition-all duration-300 flex items-center min-h-[72px] pl-6'
                     onClick={() => setShowDeleteConfirm(true)}
                   >
-                    <Trash2 className="size-5" />
+                    <Trash2 className="size-6" />
                     Delete Account
                   </button>
                 </div>
               </div>
             )}
           </div>
+        </div>
+
+        {/* Security Trust Badge */}
+        <div className="text-center mt-8 text-gray-600 text-lg">
+          <p>🔒 Your personal information is secure and encrypted</p>
         </div>
       </div>
     </div>

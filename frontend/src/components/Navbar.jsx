@@ -82,7 +82,7 @@ const Navbar = () => {
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
               <Phone className="size-4" />
-              <span>+94 11 234 5678</span>
+              <span>+94 51 222 5523</span>
             </div>
             <div className="hidden md:flex items-center gap-2">
               <Mail className="size-4" />
@@ -172,7 +172,7 @@ const Navbar = () => {
                   </button>
                   
                   {/* User Dropdown Menu */}
-                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  <div className="absolute right-0 mt-2 w-60 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                     <div className="p-3 border-b border-gray-100">
                       <p className="font-semibold text-gray-800 truncate">
                         {userData?.name || 'User Account'}
@@ -194,27 +194,17 @@ const Navbar = () => {
                         <Package className="size-4" />
                         My Orders
                       </Link>
-                      
-                      {/* Staff Management Links - Only for authorized roles */}
-                      {canCreateProducts && (
+                      {/* Staff Dashboard Link - Only for authorized roles */}
+                      {userData?.role && ['Owner', 'Manager', 'Staff'].includes(userData.role) && (
                         <>
-                          <div className="border-t border-gray-100 mt-2 pt-2">
-                            <div className="px-4 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                              Staff Management
-                            </div>
-                            <Link to="/create-product" className="w-full text-left px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 flex items-center gap-2">
-                              <Plus className="size-4" />
-                              Add Product
-                            </Link>
-                            <Link to="/staff/prescriptions" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
-                              <FileText className="size-4" />
-                              Manage Prescriptions
-                            </Link>
-                            <Link to="/staff/orders" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
-                              <Package className="size-4" />
-                              Manage Orders
-                            </Link>
-                          </div>
+                          <Link to="/staff/prescriptions" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
+                            <ClipboardList className="size-4" />
+                            Manage Prescriptions
+                          </Link>
+                          <Link to="/staff/orders" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
+                            <Package className="size-4" />
+                            Manage Orders
+                          </Link>
                         </>
                       )}
                       
@@ -284,27 +274,16 @@ const Navbar = () => {
                     <Package className="size-4" />
                     My Orders
                   </Link>
-                  
-                  {/* Mobile Staff Management Links */}
-                  {canCreateProducts && (
+                  {userData?.role && ['Owner', 'Manager', 'Staff'].includes(userData.role) && (
                     <>
-                      <div className="border-t border-gray-200 mt-2 pt-2">
-                        <div className="px-4 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                          Staff Management
-                        </div>
-                        <Link to="/create-product" className="w-full text-left px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 flex items-center gap-2">
-                          <Plus className="size-4" />
-                          Add Product
-                        </Link>
-                        <Link to="/staff/prescriptions" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
-                          <FileText className="size-4" />
-                          Manage Prescriptions
-                        </Link>
-                        <Link to="/staff/orders" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
-                          <Package className="size-4" />
-                          Manage Orders
-                        </Link>
-                      </div>
+                      <Link to="/staff/prescriptions" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
+                        <ClipboardList className="size-4" />
+                        Manage Prescriptions
+                      </Link>
+                      <Link to="/staff/orders" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
+                        <Package className="size-4" />
+                        Manage Orders
+                      </Link>
                     </>
                   )}
                   
