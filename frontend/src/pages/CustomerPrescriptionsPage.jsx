@@ -5,6 +5,7 @@ import api from '../lib/axios';
 import toast from 'react-hot-toast';
 import PrescriptionModal from '../components/PrescriptionModal';
 import CustomerPrescriptionCard from '../components/CustomerPrescriptionCard';
+import CreateOrderModal from '../components/CreateOrderModal';
 
 const CustomerPrescriptionsPage = () => {
     const [prescriptions, setPrescriptions] = useState([]);
@@ -12,6 +13,7 @@ const CustomerPrescriptionsPage = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedPrescription, setSelectedPrescription] = useState(null);
     const [showPrescriptionModal, setShowPrescriptionModal] = useState(false);
+    const [showCreateOrderModal, setShowCreateOrderModal] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [userEmail, setUserEmail] = useState('');
 
@@ -59,6 +61,11 @@ const CustomerPrescriptionsPage = () => {
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleCreateOrder = (prescription) => {
+        setSelectedPrescription(prescription);
+        setShowCreateOrderModal(true);
     };
 
     const handleOrderCreated = () => {
@@ -213,6 +220,17 @@ const CustomerPrescriptionsPage = () => {
                     }}
                     onVerify={null}
                     onReject={null}
+                />
+
+                {/* Create Order Modal */}
+                <CreateOrderModal
+                    prescription={selectedPrescription}
+                    isOpen={showCreateOrderModal}
+                    onClose={() => {
+                        setShowCreateOrderModal(false);
+                        setSelectedPrescription(null);
+                    }}
+                    onSuccess={handleOrderCreated}
                 />
             </div>
         </div>
