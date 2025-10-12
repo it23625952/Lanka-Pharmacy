@@ -11,6 +11,9 @@ import UploadSuccessPage from './pages/UploadSuccessPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import StaffPrescriptionsPage from './pages/StaffPrescriptionsPage';
 import CustomerPrescriptionsPage from './pages/CustomerPrescriptionsPage';
+import CustomerOrdersPage from './pages/CustomerOrdersPage';
+import StaffOrdersPage from './pages/StaffOrdersPage';
+import OrderDetailPage from './pages/OrderDetailPage';
 
 /**
  * Main application component defining the routing structure
@@ -31,13 +34,33 @@ const App = () => {
         {/* Authenticated user routes */}
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/my-prescriptions" element={<CustomerPrescriptionsPage />} />
-                
+        <Route path="/my-orders" element={<CustomerOrdersPage />} />
+        <Route path="/orders/:id" element={<OrderDetailPage />} />
+        
         {/* Staff protected routes */}
         <Route 
           path="/staff/prescriptions" 
           element={
             <ProtectedRoute allowedRoles={['Owner', 'Manager', 'Staff']}>
               <StaffPrescriptionsPage />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/staff/orders" 
+          element={
+            <ProtectedRoute allowedRoles={['Owner', 'Manager', 'Staff']}>
+              <StaffOrdersPage />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/staff/orders/:id" 
+          element={
+            <ProtectedRoute allowedRoles={['Owner', 'Manager', 'Staff']}>
+              <OrderDetailPage />
             </ProtectedRoute>
           } 
         />
