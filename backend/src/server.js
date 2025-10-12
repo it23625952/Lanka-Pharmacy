@@ -5,9 +5,11 @@ import dotenv from "dotenv";
 
 // Route imports
 import productRoutes from "./routes/productRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 // Configuration imports
 import { connectDB } from "./config/db.js";
+import { JWT_SECRET } from "./config/jwt.js";
 import rateLimiter from "./middleware/rateLimiter.js";
 
 // Load environment variables
@@ -37,6 +39,7 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // API route registration
 app.use("/api/products", productRoutes);
+app.use("/api/users", userRoutes);
 
 // Database connection and server startup
 connectDB().then(() => {
