@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 // Route imports
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import prescriptionRoutes from "./routes/prescriptionRoutes.js";
 
 // Configuration imports
 import { connectDB } from "./config/db.js";
@@ -40,6 +41,7 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 // API route registration
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/prescriptions", prescriptionRoutes);
 
 // Database connection and server startup
 connectDB().then(() => {
