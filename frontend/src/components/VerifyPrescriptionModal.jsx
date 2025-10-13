@@ -283,7 +283,6 @@ const VerifyPrescriptionModal = ({ prescription, isOpen, onClose, onSuccess }) =
                                                 <div className="flex-1">
                                                     <div className="font-semibold text-gray-800 text-lg">{item.productName}</div>
                                                     <div className="text-emerald-600 font-semibold flex items-center gap-1 mt-1">
-                                                        <DollarSign className="size-4" />
                                                         LKR {item.retailPrice?.toFixed(2)} each
                                                     </div>
                                                 </div>
