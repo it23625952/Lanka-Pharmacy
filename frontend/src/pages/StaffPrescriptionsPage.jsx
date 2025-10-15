@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
-import { Search } from 'lucide-react';
+import { Search, FileText } from 'lucide-react';
 import api from '../lib/axios';
 import toast from 'react-hot-toast';
 import StaffPrescriptionCard from '../components/StaffPrescriptionCard';
@@ -55,13 +55,11 @@ const StaffPrescriptionsPage = () => {
   // Handle successful verification
   const handleVerificationSuccess = () => {
     getPrescriptions();
-    toast.success('Prescription verified successfully!');
   };
 
   // Handle successful rejection
   const handleRejectionSuccess = () => {
     getPrescriptions();
-    toast.success('Prescription rejected successfully!');
   };
 
   const filteredPrescriptions = prescriptions.filter(prescription => {
@@ -81,57 +79,91 @@ const StaffPrescriptionsPage = () => {
   });
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex flex-col'>
+    <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
       <Navbar />
 
-      <div className='flex-1 container mx-auto px-4 py-8'>
-        <div className='flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8'>
-          <h1 className='text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent'>Prescription Queue</h1>
+      <div className='flex-1 container mx-auto px-4 py-8 max-w-7xl'>
+        {/* Header Section */}
+        <div className='text-center mb-12'>
+          <h1 className='text-5xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-transparent mb-4'>
+            Prescription Queue
+          </h1>
+          <p className='text-gray-600 text-xl'>Review and manage customer prescriptions</p>
+        </div>
 
+        {/* Search and Filter Controls */}
+        <div className='flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-12'>
           <div className='flex flex-col sm:flex-row gap-4 w-full lg:w-auto'>
-            <div className='relative w-full sm:w-80 lg:w-96'>
+            <div className='relative w-full sm:w-96'>
               <input 
                 type='text' 
                 placeholder='Search by customer name, email, or prescription ID...' 
-                className='input input-lg w-full border-2 border-gray-300 bg-gray-50 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 text-gray-800 placeholder-gray-500 pr-12' 
+                className='w-full pl-12 pr-4 py-4 border-2 border-gray-200 bg-white rounded-2xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all duration-300 text-gray-800 placeholder-gray-500 text-lg' 
                 value={searchTerm} 
                 onChange={(e) => setSearchTerm(e.target.value)} 
               />
-              <button className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-600 transition-colors duration-200'>
-                <Search className='size-5' />
-              </button>
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                <Search className='size-6' />
+              </div>
             </div>
 
             <select 
-              className='select select-lg w-full sm:w-48 border-2 border-gray-300 bg-gray-50 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 text-gray-800' 
+              className='w-full sm:w-48 py-4 border-2 border-gray-200 bg-white rounded-2xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all duration-300 text-gray-800 text-lg px-4'
               value={filter} 
               onChange={(e) => setFilter(e.target.value)}
             >
-              <option value='all'>All Prescriptions</option>
+              <option value='all'>All Status</option>
               <option value='Pending'>Pending</option>
               <option value='Verified'>Verified</option>
               <option value='Rejected'>Rejected</option>
             </select>
           </div>
+
+          <div className="text-lg text-gray-600 bg-white px-4 py-2 rounded-xl border-2 border-gray-200">
+            {prescriptions.length} prescription(s) found
+          </div>
         </div>
 
+        {/* Pending Prescriptions Alert */}
+        {prescriptions.some(p => p.status === 'Pending') && (
+          <div className="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-200 rounded-2xl p-6 mb-8">
+            <div className="flex items-center gap-4">
+              <FileText className="size-8 text-amber-600" />
+              <div>
+                <strong className="text-amber-800 text-xl">Pending Reviews!</strong>
+                <p className="text-amber-700 text-lg">
+                  You have {prescriptions.filter(p => p.status === 'Pending').length} prescription(s) waiting for verification.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Prescriptions List */}
         {isLoading ? (
-          <div className="flex justify-center py-12">
-            <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="flex justify-center py-20">
+            <div className="w-16 h-16 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : filteredPrescriptions.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-2xl shadow-lg border border-gray-200">
-            <p className="text-gray-600 text-lg">
-              {searchTerm ? 'No prescriptions match your search' : 'No prescriptions found'}
-            </p>
-            {filter !== 'all' && (
-              <p className="text-gray-500 text-sm mt-2">
-                No prescriptions with status: {filter}
-              </p>
+          <div className="text-center py-20 bg-white rounded-3xl shadow-xl border border-gray-100">
+            {prescriptions.length === 0 ? (
+              <div className="space-y-6">
+                <FileText className="size-24 text-gray-400 mx-auto" />
+                <h3 className="text-2xl font-semibold text-gray-700">No prescriptions in queue</h3>
+                <p className="text-gray-500 text-lg max-w-md mx-auto">
+                  All prescriptions have been processed. New prescriptions will appear here when customers upload them.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <Search className="size-16 text-gray-400 mx-auto" />
+                <h3 className="text-2xl font-semibold text-gray-700">No matching prescriptions</h3>
+                <p className="text-gray-500 text-lg">Try adjusting your search or filter criteria</p>
+              </div>
             )}
           </div>
         ) : (
-          <div className='grid gap-6'>
+          <div className='grid gap-8'>
             {filteredPrescriptions.map(prescription => (
               <StaffPrescriptionCard 
                 key={prescription._id} 
