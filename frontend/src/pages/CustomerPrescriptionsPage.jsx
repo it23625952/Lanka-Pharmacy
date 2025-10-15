@@ -75,7 +75,6 @@ const CustomerPrescriptionsPage = () => {
 
     const handleDeletePrescription = (deletedPrescriptionId) => {
         setPrescriptions(prev => prev.filter(p => p._id !== deletedPrescriptionId));
-        toast.success('Prescription deleted successfully');
     };
 
     const filteredPrescriptions = prescriptions.filter(prescription => {

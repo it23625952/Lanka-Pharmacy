@@ -128,13 +128,6 @@ export const verifyPrescription = async (req, res) => {
 
         await prescription.save();
 
-        // Find customer for the verified prescription
-        let user = await User.findOne({ email: prescription.customerEmail });
-
-        if (!user) {
-            return res.status(404).json({ message: "Customer not found" });
-        }
-
         res.json({
             message: "Prescription verified successfully",
             prescription,
