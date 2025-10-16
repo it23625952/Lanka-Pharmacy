@@ -19,14 +19,10 @@
     "dotenv": "^17.2.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
-<<<<<<< HEAD
     "mongoose": "^8.17.2",
     "multer": "^2.0.2",
     "node-cron": "^4.2.1",
     "nodemailer": "^7.0.9"
-=======
-    "mongoose": "^8.17.2"
->>>>>>> cart
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
