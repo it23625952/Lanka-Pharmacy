@@ -1,16 +1,25 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
+=======
+import React, { useState } from 'react';
+>>>>>>> cart
 import Navbar from '../components/Navbar';
 import toast from 'react-hot-toast';
 import { useNavigate, Link } from 'react-router';
 import api from '../lib/axios';
+<<<<<<< HEAD
 import { Eye, EyeOff, Mail, Lock, ArrowLeft } from 'lucide-react';
 import Logo from '../components/Logo.jpg'
+=======
+import { Eye, EyeOff } from 'lucide-react';
+>>>>>>> cart
 
 const SignInPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+<<<<<<< HEAD
     const [rememberMe, setRememberMe] = useState(false);
 
     const navigate = useNavigate();
@@ -24,6 +33,11 @@ const SignInPage = () => {
         }
     }, []);
 
+=======
+
+    const navigate = useNavigate();
+
+>>>>>>> cart
     /**
      * Handles form submission for user authentication
      * @param {Event} e - Form submission event
@@ -31,13 +45,21 @@ const SignInPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+<<<<<<< HEAD
         // Basic validation for required fields
+=======
+        // Basic validation
+>>>>>>> cart
         if (!email.trim() || !password.trim()) {
             toast.error("Email and password are required");
             return;
         }
 
+<<<<<<< HEAD
         // Email format validation using regex
+=======
+        // Email regex validation
+>>>>>>> cart
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             toast.error("Please enter a valid email address");
@@ -46,7 +68,11 @@ const SignInPage = () => {
 
         setLoading(true);
         try {
+<<<<<<< HEAD
             const res = await api.post('users/auth/signin', {
+=======
+            const res = await api.post('users/auth/signIn', {
+>>>>>>> cart
                 email,
                 password
             });
@@ -78,6 +104,7 @@ const SignInPage = () => {
     }
 
     return (
+<<<<<<< HEAD
         <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
             <Navbar />
             <div className='flex-1 flex items-center justify-center p-4 py-12'>
@@ -138,6 +165,48 @@ const SignInPage = () => {
                                             type={showPassword ? 'text' : 'password'}
                                             placeholder='Enter your password' 
                                             className='w-full pl-12 pr-12 py-3.5 border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all duration-200 text-gray-800'
+=======
+        <div className='min-h-screen bg-base-200 flex flex-col'>
+            <Navbar />
+            <div className='flex-1 flex items-center justify-center p-4'>
+                <div className='w-full max-w-md'>
+                    {/* Sign In Card */}
+                    <div className='card bg-base-100 shadow-xl border border-base-300'>
+                        <div className='card-body p-6 sm:p-8'>
+                            {/* Header Section */}
+                            <div className='text-center mb-6'>
+                                <h2 className='text-2xl font-bold text-base-content'>Sign In</h2>
+                                <p className='text-base-content/60 mt-2'>Welcome back to Lanka Pharmacy</p>
+                            </div>
+                            
+                            {/* Sign In Form */}
+                            <form onSubmit={handleSubmit} className='space-y-4'>
+                                {/* Email Field */}
+                                <div className='form-control'>
+                                    <label className='label'>
+                                        <span className='label-text font-medium'>Email Address</span>
+                                    </label>
+                                    <input 
+                                        type='email' 
+                                        placeholder='your.email@example.com' 
+                                        className='input input-bordered input-md focus:input-primary transition-colors' 
+                                        value={email} 
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                    />
+                                </div>
+
+                                {/* Password Field with Toggle Visibility */}
+                                <div className='form-control'>
+                                    <label className='label'>
+                                        <span className='label-text font-medium'>Password</span>
+                                    </label>
+                                    <div className="relative">
+                                        <input 
+                                            type={showPassword ? 'text' : 'password'}
+                                            placeholder='Enter your password' 
+                                            className='input input-bordered input-md focus:input-primary transition-colors w-full' 
+>>>>>>> cart
                                             value={password} 
                                             onChange={(e) => setPassword(e.target.value)}
                                             required
@@ -145,14 +214,24 @@ const SignInPage = () => {
                                         {/* Password Visibility Toggle Button */}
                                         <button
                                             type="button"
+<<<<<<< HEAD
                                             className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
                                             onClick={() => setShowPassword((prev) => !prev)}
                                         >
                                             {showPassword ? <EyeOff className="size-5" /> : <Eye className="size-5" />}
+=======
+                                            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                            onClick={() => setShowPassword((prev) => !prev)}
+                                            tabIndex={-1}
+                                            aria-label={showPassword ? "Hide password" : "Show password"}
+                                        >
+                                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+>>>>>>> cart
                                         </button>
                                     </div>
                                 </div>
 
+<<<<<<< HEAD
                                 {/* Remember Me & Forgot Password Section */}
                                 <div className="flex items-center justify-between">
                                     <label className="flex items-center gap-2 cursor-pointer">
@@ -226,6 +305,40 @@ const SignInPage = () => {
                     <div className="text-center mt-6 text-sm text-gray-500">
                         <p>🔒 Your data is secure and encrypted</p>
                     </div>
+=======
+                                {/* Submit Button */}
+                                <div className='form-control mt-6'>
+                                    <button 
+                                        type='submit' 
+                                        className='btn btn-primary btn-md w-full'
+                                        disabled={loading}
+                                    >
+                                        {loading ? 'Signing In...' : 'Sign In'}
+                                    </button>
+                                </div>
+
+                                {/* Sign Up Link */}
+                                <div className='text-center mt-4'>
+                                    <p className='text-base-content/70 text-sm'>
+                                        Don't have an account?{' '}
+                                        <Link to="/signup" className='link link-primary font-medium'>
+                                            Sign Up
+                                        </Link>
+                                    </p>
+                                </div>
+
+                                {/* Forgot Password Link */}
+                                <div className='text-center mt-2'>
+                                    <p className='text-base-content/70 text-sm'>
+                                        <Link to="/forgot-password" className='link link-primary text-sm'>
+                                            Forgot your password?
+                                        </Link>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+>>>>>>> cart
                 </div>
             </div>
         </div>

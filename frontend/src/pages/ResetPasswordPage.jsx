@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
+<<<<<<< HEAD
 import { Eye, EyeOff, Lock, ArrowLeft, CheckCircle } from 'lucide-react';
+=======
+import { Key, ArrowLeft, Eye, EyeOff } from 'lucide-react';
+>>>>>>> cart
 import api from '../lib/axios';
 import toast from 'react-hot-toast';
 import { Link, useParams, useNavigate } from 'react-router';
@@ -8,10 +12,18 @@ import { Link, useParams, useNavigate } from 'react-router';
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+<<<<<<< HEAD
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [resetSuccess, setResetSuccess] = useState(false);
+=======
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPasswords, setShowPasswords] = useState({
+    password: false,
+    confirmPassword: false
+  });
+>>>>>>> cart
   const [tokenValid, setTokenValid] = useState(true);
   const { token } = useParams();
   const navigate = useNavigate();
@@ -24,6 +36,7 @@ const ResetPasswordPage = () => {
     }
   }, [token]);
 
+<<<<<<< HEAD
   // Password complexity requirements validation
   const passwordRequirements = {
     length: password.length >= 8,
@@ -37,6 +50,8 @@ const ResetPasswordPage = () => {
   const allRequirementsMet = Object.values(passwordRequirements).every(req => req);
   const passwordsMatch = password && password === confirmPassword;
 
+=======
+>>>>>>> cart
   /**
    * Handles password reset form submission
    * @param {Event} e - Form submission event
@@ -60,6 +75,7 @@ const ResetPasswordPage = () => {
 
     try {
       // Send password reset request to API
+<<<<<<< HEAD
       await api.post(`/users/reset-password/${token}`, { 
         newPassword: password
       });
@@ -71,6 +87,11 @@ const ResetPasswordPage = () => {
       setTimeout(() => {
         navigate('/signin');
       }, 2000);
+=======
+      await api.post(`/users/reset-password/${token}`, { password });
+      toast.success('Password reset successfully!');
+      navigate('/signin');
+>>>>>>> cart
     } catch (error) {
       console.error('Reset password error:', error);
       // Handle invalid or expired token
@@ -86,6 +107,7 @@ const ResetPasswordPage = () => {
   };
 
   /**
+<<<<<<< HEAD
    * Reusable component for password requirement items
    * @param {Object} props - Component props
    * @param {boolean} props.met - Whether the requirement is met
@@ -102,10 +124,22 @@ const ResetPasswordPage = () => {
       <span>{text}</span>
     </li>
   );
+=======
+   * Toggles password visibility for specific field
+   * @param {string} field - The password field to toggle visibility
+   */
+  const togglePasswordVisibility = (field) => {
+    setShowPasswords(prev => ({
+      ...prev,
+      [field]: !prev[field]
+    }));
+  };
+>>>>>>> cart
 
   // Display error state if token is invalid
   if (!tokenValid) {
     return (
+<<<<<<< HEAD
       <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
         <Navbar />
         <div className='flex-1 flex items-center justify-center p-4 py-12'>
@@ -153,6 +187,20 @@ const ResetPasswordPage = () => {
                 Sign In Now
               </Link>
             </div>
+=======
+      <div className='min-h-screen bg-base-200 flex flex-col'>
+        <Navbar />
+        <div className='flex-1 flex items-center justify-center p-4'>
+          <div className='w-full max-w-md text-center'>
+            {/* Error alert for invalid token */}
+            <div className="alert alert-error mb-4">
+              <span>Invalid or expired reset link</span>
+            </div>
+            {/* Link to request new reset token */}
+            <Link to="/forgot-password" className="btn btn-primary">
+              Get New Reset Link
+            </Link>
+>>>>>>> cart
           </div>
         </div>
       </div>
@@ -160,6 +208,7 @@ const ResetPasswordPage = () => {
   }
 
   return (
+<<<<<<< HEAD
     <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
       <Navbar />
       
@@ -202,6 +251,45 @@ const ResetPasswordPage = () => {
                       placeholder='Enter new password'
                       className='w-full pl-12 pr-12 py-3.5 border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all duration-200 text-gray-800'
                       value={password}
+=======
+    <div className='min-h-screen bg-base-200 flex flex-col'>
+      <Navbar />
+      
+      <div className='flex-1 flex items-center justify-center p-4'>
+        <div className='w-full max-w-md'>
+          {/* Password Reset Card */}
+          <div className='card bg-base-100 shadow-xl border border-base-300'>
+            <div className='card-body p-6 sm:p-8'>
+              
+              {/* Back to Sign In link */}
+              <Link to="/signin" className="btn btn-ghost btn-sm mb-4 self-start">
+                <ArrowLeft className="size-4" />
+                Back to Sign In
+              </Link>
+
+              {/* Header Section */}
+              <div className='text-center mb-6'>
+                <div className="bg-primary/10 p-3 rounded-full inline-block mb-4">
+                  <Key className="size-8 text-primary" />
+                </div>
+                <h2 className='text-2xl font-bold text-base-content'>Set New Password</h2>
+                <p className='text-base-content/60 mt-2'>Enter your new password below</p>
+              </div>
+
+              {/* Password Reset Form */}
+              <form onSubmit={handleSubmit} className='space-y-4'>
+                {/* New Password Field */}
+                <div className='form-control'>
+                  <label className='label'>
+                    <span className='label-text font-medium'>New Password</span>
+                  </label>
+                  <div className="relative">
+                    <input 
+                      type={showPasswords.password ? 'text' : 'password'}
+                      placeholder='Enter new password' 
+                      className='input input-bordered input-md w-full pr-10' 
+                      value={password} 
+>>>>>>> cart
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       minLength={6}
@@ -209,6 +297,7 @@ const ResetPasswordPage = () => {
                     {/* Password Visibility Toggle Button */}
                     <button
                       type="button"
+<<<<<<< HEAD
                       className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
                       onClick={() => setShowPassword(!showPassword)}
                     >
@@ -296,6 +385,63 @@ const ResetPasswordPage = () => {
           <div className="text-center mt-6 text-sm text-gray-500">
             <p>🔒 Your password is encrypted and secure</p>
           </div>
+=======
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                      onClick={() => togglePasswordVisibility('password')}
+                      tabIndex={-1}
+                      aria-label={showPasswords.password ? "Hide password" : "Show password"}
+                    >
+                      {showPasswords.password ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Confirm Password Field */}
+                <div className='form-control'>
+                  <label className='label'>
+                    <span className='label-text font-medium'>Confirm Password</span>
+                  </label>
+                  <div className="relative">
+                    <input 
+                      type={showPasswords.confirmPassword ? 'text' : 'password'}
+                      placeholder='Confirm new password' 
+                      className='input input-bordered input-md w-full pr-10' 
+                      value={confirmPassword} 
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                    />
+                    {/* Password Visibility Toggle Button */}
+                    <button
+                      type="button"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                      onClick={() => togglePasswordVisibility('confirmPassword')}
+                      tabIndex={-1}
+                      aria-label={showPasswords.confirmPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPasswords.confirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Submit Button */}
+                <div className='form-control mt-6'>
+                  <button 
+                    type='submit' 
+                    className='btn btn-primary btn-md w-full gap-2'
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <span className="loading loading-spinner loading-xs"></span>
+                    ) : (
+                      <Key className="size-4" />
+                    )}
+                    {isLoading ? 'Resetting...' : 'Reset Password'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+>>>>>>> cart
         </div>
       </div>
     </div>

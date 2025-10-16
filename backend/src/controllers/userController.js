@@ -3,7 +3,10 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import crypto from 'crypto';
 import { JWT_SECRET, JWT_OPTIONS } from "../config/jwt.js";
+<<<<<<< HEAD
 import { sendPasswordResetEmail } from '../config/emailService.js';
+=======
+>>>>>>> cart
 
 /**
  * Handles user registration by creating a new user account.
@@ -191,6 +194,7 @@ export const deleteAccount = async (req, res) => {
 };
 
 /**
+<<<<<<< HEAD
  * Handles password reset request by generating a reset token and sending email.
  * Uses secure token generation and provides generic response for security.
  * 
@@ -208,11 +212,30 @@ export const requestPasswordReset = async (req, res) => {
             // For security, don't reveal if email exists or not
             return res.status(200).json({
                 message: 'If the email exists, a password reset link has been sent'
+=======
+ * Handles password reset request by generating a reset token.
+ * Sends reset link via email or returns token directly in development.
+ * 
+ * @param {Object} req - Request object containing user email
+ * @param {Object} res - Response object
+ * @returns {Promise<void>} JSON response with reset token or success message
+ */
+export const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            // Return generic message for security (don't reveal if email exists)
+            return res.json({ 
+                message: 'If an account with that email exists, a reset link has been sent' 
+>>>>>>> cart
             });
         }
 
         // Generate cryptographically secure reset token
         const resetToken = crypto.randomBytes(32).toString('hex');
+<<<<<<< HEAD
         
         // Save token to user in database with expiration (1 hour)
         user.resetPasswordToken = resetToken;
@@ -231,19 +254,63 @@ export const requestPasswordReset = async (req, res) => {
         res.status(500).json({
             message: 'Error processing password reset request'
         });
+=======
+        const resetTokenExpiry = Date.now() + 3600000; // 1 hour expiration
+
+        // Store reset token and expiration in user document
+        user.resetPasswordToken = resetToken;
+        user.resetPasswordExpires = resetTokenExpiry;
+        await user.save();
+
+        // In development: return the reset token directly for testing
+        if (process.env.NODE_ENV === 'development') {
+            return res.json({ 
+                message: 'Development mode: Use this reset token',
+                resetToken: resetToken,
+                resetLink: `${process.env.FRONTEND_URL}/reset-password/${resetToken}`
+            });
+        }
+
+        // In production: try to send email (email function would be implemented elsewhere)
+        try {
+            await sendPasswordResetEmail(email, resetToken);
+            return res.json({ 
+                message: 'If an account with that email exists, a reset link has been sent'
+            });
+        } catch (emailError) {
+            console.error('Email sending failed:', emailError);
+            // Fallback: return token if email service fails
+            return res.json({ 
+                message: 'Password reset initiated. Check your console for the reset link.',
+                resetToken: resetToken
+            });
+        }
+
+    } catch (error) {
+        console.error('Forgot password error:', error);
+        res.status(500).json({ message: 'Server error' });
+>>>>>>> cart
     }
 };
 
 /**
+<<<<<<< HEAD
  * Resets user password using a valid reset token from URL parameters.
  * Validates token expiration and updates password in database.
  * 
  * @param {Object} req - Request object containing reset token in params and new password in body
+=======
+ * Resets user password using a valid reset token.
+ * Validates token expiration and updates password in database.
+ * 
+ * @param {Object} req - Request object containing reset token and new password
+>>>>>>> cart
  * @param {Object} res - Response object
  * @returns {Promise<void>} JSON response with success or error message
  */
 export const resetPassword = async (req, res) => {
     try {
+<<<<<<< HEAD
         const { token } = req.params; // Get token from URL parameters
         const { newPassword } = req.body; // Get new password from request body
 
@@ -253,6 +320,10 @@ export const resetPassword = async (req, res) => {
                 message: 'New password must be at least 6 characters'
             });
         }
+=======
+        const { token } = req.params;
+        const { password } = req.body;
+>>>>>>> cart
 
         // Find user with valid, non-expired reset token
         const user = await User.findOne({
@@ -261,6 +332,7 @@ export const resetPassword = async (req, res) => {
         });
 
         if (!user) {
+<<<<<<< HEAD
             return res.status(400).json({
                 message: 'Invalid or expired reset token'
             });
@@ -272,11 +344,22 @@ export const resetPassword = async (req, res) => {
 
         // Update password and clear reset token fields after successful reset
         user.password = hashedPassword;
+=======
+            return res.status(400).json({ message: 'Invalid or expired reset token' });
+        }
+
+        // Hash new password with secure salt rounds
+        const saltRounds = 12;
+        user.password = await bcrypt.hash(password, saltRounds);
+        
+        // Clear reset token fields after successful password reset
+>>>>>>> cart
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
         
         await user.save();
 
+<<<<<<< HEAD
         res.status(200).json({
             message: 'Password reset successfully'
         });
@@ -286,6 +369,12 @@ export const resetPassword = async (req, res) => {
         res.status(500).json({
             message: 'Error resetting password'
         });
+=======
+        res.json({ message: 'Password reset successfully' });
+    } catch (error) {
+        console.error('Reset password error:', error);
+        res.status(500).json({ message: 'Server error' });
+>>>>>>> cart
     }
 };
 
