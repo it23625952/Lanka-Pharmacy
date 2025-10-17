@@ -1,0 +1,710 @@
+import React, { useState, useEffect } from 'react';
+import Navbar from '../components/Navbar';
+import { Package, DollarSign, FileText, ArrowLeft, Save, Calendar, AlertTriangle, Upload, Trash2, Edit } from 'lucide-react';
+import api from '../lib/axios';
+import toast from 'react-hot-toast';
+import { useNavigate, useParams, Link } from 'react-router';
+
+const EditProductPage = () => {
+    const { id } = useParams();
+    const [formData, setFormData] = useState({
+        name: '',
+        retailPrice: '',
+        wholesalePrice: '',
+        description: '',
+        category: '',
+        stock: '',
+        imageUrl: '',
+        expiryDate: ''
+    });
+    const [isLoading, setIsLoading] = useState(false);
+    const [imagePreview, setImagePreview] = useState('');
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const navigate = useNavigate();
+
+    // Product categories
+    const categories = [
+        'Prescription Medications',
+        'Over-the-Counter',
+        'Wellness & Supplements',
+        'Personal Care',
+        'Medical Supplies',
+        'Baby Care',
+        'First Aid',
+        'Beauty Products',
+        'Healthcare Devices'
+    ];
+
+    useEffect(() => {
+        fetchProduct();
+    }, [id]);
+
+    const fetchProduct = async () => {
+        try {
+            setIsLoading(true);
+            const response = await api.get(`/products/${id}`);
+            const product = response.data;
+            
+            setFormData({
+                name: product.name || '',
+                retailPrice: product.retailPrice || '',
+                wholesalePrice: product.wholesalePrice || '',
+                description: product.description || '',
+                category: product.category || '',
+                stock: product.stock || '',
+                imageUrl: product.imageUrl || '',
+                expiryDate: product.expiryDate ? new Date(product.expiryDate).toISOString().split('T')[0] : ''
+            });
+
+            if (product.imageUrl) {
+                setImagePreview(product.imageUrl);
+            }
+        } catch (error) {
+            console.error('Error fetching product:', error);
+            toast.error('Failed to load product');
+            navigate('/');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    /**
+     * Handles form input changes
+     */
+    const handleInputChange = (field, value) => {
+        setFormData(prev => ({
+            ...prev,
+            [field]: value
+        }));
+    };
+
+    /**
+     * Handles file selection for image upload
+     */
+    const handleFileSelect = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Validate file type
+        const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+            toast.error('Please select a valid image file (JPEG, PNG, or WebP)');
+            return;
+        }
+
+        // Validate file size (5MB max)
+        const maxSize = 5 * 1024 * 1024;
+        if (file.size > maxSize) {
+            toast.error('Image size must be less than 5MB');
+            return;
+        }
+
+        setSelectedFile(file);
+        
+        // Create preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            setImagePreview(e.target.result);
+        };
+        reader.readAsDataURL(file);
+
+        // Clear URL input when file is selected
+        setFormData(prev => ({ ...prev, imageUrl: '' }));
+    };
+
+    /**
+     * Removes selected file and clears preview
+     */
+    const handleRemoveFile = () => {
+        setSelectedFile(null);
+        setImagePreview('');
+        setUploadProgress(0);
+    };
+
+    /**
+     * Handles image URL input and generates preview
+     */
+    const handleImageUrlChange = (url) => {
+        setFormData(prev => ({ ...prev, imageUrl: url }));
+        if (url) {
+            setImagePreview(url);
+            setSelectedFile(null);
+            setUploadProgress(0);
+        }
+    };
+
+    /**
+     * Uploads image file to server
+     */
+    const uploadImageFile = async () => {
+        if (!selectedFile) return formData.imageUrl;
+
+        const uploadData = new FormData();
+        uploadData.append('productImage', selectedFile);
+
+        try {
+            const response = await api.post('/products/upload-image', uploadData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                onUploadProgress: (progressEvent) => {
+                    const progress = Math.round(
+                        (progressEvent.loaded * 100) / progressEvent.total
+                    );
+                    setUploadProgress(progress);
+                }
+            });
+
+            toast.success('Image uploaded successfully!');
+            return response.data.imageUrl;
+        } catch (error) {
+            console.error('Image upload error:', error);
+            toast.error('Failed to upload image');
+            throw error;
+        }
+    };
+
+    /**
+     * Validates the form data before submission
+     */
+    const validateForm = () => {
+        if (!formData.name.trim()) {
+            toast.error('Product name is required');
+            return false;
+        }
+        if (!formData.retailPrice || parseFloat(formData.retailPrice) <= 0) {
+            toast.error('Valid retail price is required');
+            return false;
+        }
+        if (!formData.wholesalePrice || parseFloat(formData.wholesalePrice) <= 0) {
+            toast.error('Valid wholesale price is required');
+            return false;
+        }
+        if (parseFloat(formData.wholesalePrice) >= parseFloat(formData.retailPrice)) {
+            toast.error('Wholesale price must be less than retail price');
+            return false;
+        }
+        if (!formData.description.trim()) {
+            toast.error('Product description is required');
+            return false;
+        }
+        if (!formData.category) {
+            toast.error('Please select a category');
+            return false;
+        }
+        if (formData.stock === '' || parseInt(formData.stock) < 0) {
+            toast.error('Valid stock quantity is required');
+            return false;
+        }
+        if (!formData.expiryDate) {
+            toast.error('Expiry date is required');
+            return false;
+        }
+        
+        // Validate expiry date is not in the past
+        const today = new Date();
+        const expiry = new Date(formData.expiryDate);
+        if (expiry < today) {
+            toast.error('Expiry date cannot be in the past');
+            return false;
+        }
+
+        // Validate that either image file or URL is provided
+        if (!selectedFile && !formData.imageUrl.trim()) {
+            toast.error('Please either upload an image or provide an image URL');
+            return false;
+        }
+
+        return true;
+    };
+
+    /**
+     * Handles form submission for updating the product
+     */
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        if (!validateForm()) return;
+
+        setIsLoading(true);
+
+        try {
+            let finalImageUrl = formData.imageUrl;
+
+            // Upload file if selected
+            if (selectedFile) {
+                finalImageUrl = await uploadImageFile();
+                if (!finalImageUrl) {
+                    throw new Error('Image upload failed');
+                }
+            }
+
+            const productData = {
+                ...formData,
+                retailPrice: parseFloat(formData.retailPrice),
+                wholesalePrice: parseFloat(formData.wholesalePrice),
+                stock: parseInt(formData.stock),
+                expiryDate: new Date(formData.expiryDate).toISOString(),
+                imageUrl: finalImageUrl
+            };
+
+            await api.put(`/products/${id}`, productData);
+            
+            toast.success('Product updated successfully!');
+            navigate(`/product/${id}`);
+        } catch (error) {
+            console.error('Error updating product:', error);
+            
+            if (error.response?.status === 401) {
+                toast.error('Please sign in to edit products');
+                navigate('/signin');
+            } else if (error.response?.status === 403) {
+                toast.error('You do not have permission to edit products');
+            } else if (error.code === 'ERR_NETWORK') {
+                toast.error('Cannot connect to server');
+            } else {
+                toast.error(error.response?.data?.message || 'Failed to update product');
+            }
+        } finally {
+            setIsLoading(false);
+            setUploadProgress(0);
+        }
+    };
+
+    /**
+     * Handles product deletion
+     */
+    const handleDelete = async () => {
+        if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+            return;
+        }
+
+        setIsDeleting(true);
+        try {
+            await api.delete(`/products/${id}`);
+            toast.success('Product deleted successfully!');
+            navigate('/');
+        } catch (error) {
+            console.error('Error deleting product:', error);
+            
+            if (error.response?.status === 401) {
+                toast.error('Please sign in to delete products');
+                navigate('/signin');
+            } else if (error.response?.status === 403) {
+                toast.error('You do not have permission to delete products');
+            } else {
+                toast.error(error.response?.data?.message || 'Failed to delete product');
+            }
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
+    /**
+     * Checks if product will trigger low stock notification
+     */
+    const isLowStock = () => {
+        return parseInt(formData.stock) < 10;
+    };
+
+    /**
+     * Checks if product will trigger expiry notification
+     */
+    const isNearExpiry = () => {
+        if (!formData.expiryDate) return false;
+        
+        const today = new Date();
+        const expiry = new Date(formData.expiryDate);
+        const daysUntilExpiry = Math.ceil((expiry - today) / (1000 * 60 * 60 * 24));
+        
+        return daysUntilExpiry <= 30;
+    };
+
+    /**
+     * Calculates days until expiry for display
+     */
+    const getDaysUntilExpiry = () => {
+        if (!formData.expiryDate) return null;
+        
+        const today = new Date();
+        const expiry = new Date(formData.expiryDate);
+        return Math.ceil((expiry - today) / (1000 * 60 * 60 * 24));
+    };
+
+    const daysUntilExpiry = getDaysUntilExpiry();
+    const showLowStockWarning = isLowStock();
+    const showExpiryWarning = isNearExpiry();
+
+    if (isLoading && !formData.name) {
+        return (
+            <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
+                <Navbar />
+                <div className="flex-1 flex items-center justify-center">
+                    <div className="w-12 h-12 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
+            <Navbar />
+            
+            <div className='flex-1 container mx-auto px-4 py-8 max-w-4xl'>
+                {/* Header Section */}
+                <div className='flex items-center gap-4 mb-8'>
+                    <Link to={`/product/${id}`} className="flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors duration-200">
+                        <ArrowLeft className="size-5" />
+                        <span className="font-medium">Back to Product</span>
+                    </Link>
+                </div>
+
+                <div className='text-center mb-8'>
+                    <h1 className='text-4xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-transparent mb-3'>
+                        Edit Product
+                    </h1>
+                    <p className='text-gray-600 text-lg'>Update the product information</p>
+                </div>
+
+                {/* Product Edit Card */}
+                <div className='bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100'>
+                    {/* Header Section with Gradient Background */}
+                    <div className='bg-gradient-to-br from-blue-600 to-blue-700 px-8 py-6'>
+                        <div className="flex items-center gap-4">
+                            <div className="inline-block bg-white/20 backdrop-blur-sm p-3 rounded-2xl shadow-xl">
+                                <Edit className="size-8 text-white" />
+                            </div>
+                            <div>
+                                <h2 className='text-2xl font-bold text-white'>Edit Product Information</h2>
+                                <p className='text-blue-100'>Update the details below</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {/* Form Section */}
+                    <div className='p-8'>
+                        <form onSubmit={handleSubmit} className='space-y-8'>
+                            {/* Product Name */}
+                            <div className='form-control'>
+                                <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+                                    <Package className="size-5 text-emerald-600" />
+                                    Product Name *
+                                </label>
+                                <input 
+                                    type='text' 
+                                    placeholder='Enter product name' 
+                                    className='input input-lg w-full border-2 border-gray-300 bg-gray-50 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 transition-all duration-200 text-gray-800 placeholder-gray-500'
+                                    value={formData.name}
+                                    onChange={(e) => handleInputChange('name', e.target.value)}
+                                    required
+                                />
+                            </div>
+
+                            {/* Pricing Section */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* Retail Price */}
+                                <div className='form-control'>
+                                    <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+                                        <DollarSign className="size-5 text-green-600" />
+                                        Retail Price (LKR) *
+                                    </label>
+                                    <input 
+                                        type='number' 
+                                        step='0.01'
+                                        min='0'
+                                        placeholder='0.00'
+                                        className='input input-lg w-full border-2 border-gray-300 bg-gray-50 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 transition-all duration-200 text-gray-800 placeholder-gray-500'
+                                        value={formData.retailPrice}
+                                        onChange={(e) => handleInputChange('retailPrice', e.target.value)}
+                                        required
+                                    />
+                                </div>
+
+                                {/* Wholesale Price */}
+                                <div className='form-control'>
+                                    <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+                                        <DollarSign className="size-5 text-blue-600" />
+                                        Wholesale Price (LKR) *
+                                    </label>
+                                    <input 
+                                        type='number' 
+                                        step='0.01'
+                                        min='0'
+                                        placeholder='0.00'
+                                        className='input input-lg w-full border-2 border-gray-300 bg-gray-50 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 transition-all duration-200 text-gray-800 placeholder-gray-500'
+                                        value={formData.wholesalePrice}
+                                        onChange={(e) => handleInputChange('wholesalePrice', e.target.value)}
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Price Comparison Note */}
+                            {formData.retailPrice && formData.wholesalePrice && (
+                                <div className={`p-4 rounded-xl border-2 ${
+                                    parseFloat(formData.wholesalePrice) < parseFloat(formData.retailPrice)
+                                        ? 'bg-green-50 border-green-200 text-green-700'
+                                        : 'bg-red-50 border-red-200 text-red-700'
+                                }`}>
+                                    <div className="flex items-center gap-2">
+                                        <DollarSign className="size-4" />
+                                        <span className="font-medium">
+                                            {parseFloat(formData.wholesalePrice) < parseFloat(formData.retailPrice)
+                                                ? `✓ Wholesale price is ${((1 - parseFloat(formData.wholesalePrice) / parseFloat(formData.retailPrice)) * 100).toFixed(1)}% lower than retail`
+                                                : '⚠️ Wholesale price should be lower than retail price'
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Category, Stock, and Expiry */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {/* Category */}
+                                <div className='form-control'>
+                                    <label className='block text-sm font-semibold text-gray-700 mb-2'>
+                                        Category *
+                                    </label>
+                                    <select 
+                                        className='select select-lg w-full border-2 border-gray-300 bg-gray-50 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 transition-all duration-200 text-gray-800'
+                                        value={formData.category}
+                                        onChange={(e) => handleInputChange('category', e.target.value)}
+                                        required
+                                    >
+                                        <option value="">Select a category</option>
+                                        {categories.map(category => (
+                                            <option key={category} value={category}>{category}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                {/* Stock Quantity */}
+                                <div className='form-control'>
+                                    <label className='block text-sm font-semibold text-gray-700 mb-2'>
+                                        Stock Quantity *
+                                    </label>
+                                    <input 
+                                        type='number' 
+                                        min='0'
+                                        placeholder='0'
+                                        className={`input input-lg w-full border-2 rounded-xl focus:ring-4 transition-all duration-200 text-gray-800 placeholder-gray-500 ${
+                                            showLowStockWarning
+                                                ? 'border-orange-300 bg-orange-50 focus:border-orange-500 focus:ring-orange-100'
+                                                : 'border-gray-300 bg-gray-50 focus:border-emerald-500 focus:ring-emerald-100'
+                                        }`}
+                                        value={formData.stock}
+                                        onChange={(e) => handleInputChange('stock', e.target.value)}
+                                        required
+                                    />
+                                    {showLowStockWarning && (
+                                        <div className="flex items-center gap-2 mt-2 text-orange-600 text-sm">
+                                            <AlertTriangle className="size-4" />
+                                            <span>Low stock! Managers will be notified.</span>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Expiry Date */}
+                                <div className='form-control'>
+                                    <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2'>
+                                        <Calendar className="size-5 text-purple-600" />
+                                        Expiry Date *
+                                    </label>
+                                    <input 
+                                        type='date' 
+                                        className={`input input-lg w-full border-2 rounded-xl focus:ring-4 transition-all duration-200 text-gray-800 ${
+                                            showExpiryWarning
+                                                ? 'border-orange-300 bg-orange-50 focus:border-orange-500 focus:ring-orange-100'
+                                                : 'border-gray-300 bg-gray-50 focus:border-emerald-500 focus:ring-emerald-100'
+                                        }`}
+                                        value={formData.expiryDate}
+                                        onChange={(e) => handleInputChange('expiryDate', e.target.value)}
+                                        min={new Date().toISOString().split('T')[0]}
+                                        required
+                                    />
+                                    {formData.expiryDate && (
+                                        <div className={`flex items-center gap-2 mt-2 text-sm ${
+                                            showExpiryWarning ? 'text-orange-600' : 'text-gray-600'
+                                        }`}>
+                                            <Calendar className="size-4" />
+                                            <span>
+                                                {showExpiryWarning 
+                                                    ? `Expires in ${daysUntilExpiry} days! Managers will be notified.`
+                                                    : `Expires in ${daysUntilExpiry} days`
+                                                }
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Product Description */}
+                            <div className='form-control'>
+                                <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+                                    <FileText className="size-5 text-emerald-600" />
+                                    Product Description *
+                                </label>
+                                <textarea
+                                    className='textarea textarea-lg w-full border-2 border-gray-300 bg-gray-50 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 transition-all duration-200 text-gray-800 placeholder-gray-500'
+                                    rows={4}
+                                    placeholder='Describe the product, usage instructions, benefits, etc...'
+                                    value={formData.description}
+                                    onChange={(e) => handleInputChange('description', e.target.value)}
+                                    required
+                                />
+                            </div>
+
+                            {/* Image Upload Section */}
+                            <div className='form-control'>
+                                <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+                                    <Upload className="size-5 text-emerald-600" />
+                                    Product Image *
+                                </label>
+                                
+                                <div className="space-y-4">
+                                    {/* File Upload */}
+                                    <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 bg-gray-50 hover:bg-gray-100 transition-all duration-200">
+                                        <input
+                                            type='file'
+                                            className='hidden'
+                                            id='productImage'
+                                            accept='image/jpeg,image/jpg,image/png,image/webp'
+                                            onChange={handleFileSelect}
+                                        />
+                                        
+                                        {!selectedFile ? (
+                                            <label htmlFor='productImage' className='cursor-pointer block text-center'>
+                                                <Upload className='size-12 text-gray-400 mx-auto mb-3' />
+                                                <p className='text-gray-600 text-lg mb-2'>Click to upload new product image</p>
+                                                <p className='text-sm text-gray-500'>Supports JPG, PNG, WebP (Max 5MB)</p>
+                                            </label>
+                                        ) : (
+                                            <div className="text-center">
+                                                <div className="flex items-center justify-between mb-3">
+                                                    <span className="text-gray-700 font-medium">
+                                                        {selectedFile.name}
+                                                    </span>
+                                                    <button
+                                                        type="button"
+                                                        onClick={handleRemoveFile}
+                                                        className="btn btn-sm btn-ghost text-red-600 hover:text-red-700 hover:bg-red-50"
+                                                    >
+                                                        <Trash2 className="size-4" />
+                                                    </button>
+                                                </div>
+                                                
+                                                {uploadProgress > 0 && uploadProgress < 100 && (
+                                                    <div className="w-full bg-gray-200 rounded-full h-2 mb-3">
+                                                        <div 
+                                                            className="bg-emerald-600 h-2 rounded-full transition-all duration-300"
+                                                            style={{ width: `${uploadProgress}%` }}
+                                                        ></div>
+                                                    </div>
+                                                )}
+                                                
+                                                <label 
+                                                    htmlFor='productImage'
+                                                    className='btn border-2 border-blue-500 text-blue-600 bg-transparent hover:bg-blue-50 px-4 py-2 transition-all duration-200'
+                                                >
+                                                    Change Image
+                                                </label>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* OR Separator */}
+                                    <div className="relative">
+                                        <div className="absolute inset-0 flex items-center">
+                                            <div className="w-full border-t border-gray-300"></div>
+                                        </div>
+                                        <div className="relative flex justify-center text-sm">
+                                            <span className="px-2 bg-white text-gray-500">OR</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Image URL Option */}
+                                    <div>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>
+                                            Enter Image URL
+                                        </label>
+                                        <input 
+                                            type='url' 
+                                            placeholder='https://example.com/product-image.jpg'
+                                            className='input input-lg w-full border-2 border-gray-300 bg-gray-50 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 transition-all duration-200 text-gray-800 placeholder-gray-500'
+                                            value={formData.imageUrl}
+                                            onChange={(e) => handleImageUrlChange(e.target.value)}
+                                            disabled={!!selectedFile}
+                                        />
+                                    </div>
+                                </div>
+                                
+                                {/* Image Preview */}
+                                {imagePreview && (
+                                    <div className="mt-4">
+                                        <label className='block text-sm font-semibold text-gray-700 mb-2'>
+                                            Image Preview
+                                        </label>
+                                        <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 bg-gray-50">
+                                            <img 
+                                                src={imagePreview} 
+                                                alt="Product preview" 
+                                                className="max-h-48 mx-auto rounded-lg shadow-md"
+                                                onError={(e) => {
+                                                    e.target.style.display = 'none';
+                                                    toast.error('Failed to load image');
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="flex gap-4 pt-6 border-t border-gray-200">
+                                <button 
+                                    type="button"
+                                    onClick={handleDelete}
+                                    className="btn border-2 border-red-300 text-red-700 bg-transparent hover:bg-red-50 flex-1 py-4 text-lg transition-all duration-200 flex items-center justify-center gap-2"
+                                    disabled={isLoading || isDeleting}
+                                >
+                                    {isDeleting ? (
+                                        <>
+                                            <div className="w-5 h-5 border-2 border-red-700 border-t-transparent rounded-full animate-spin"></div>
+                                            <span>Deleting...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Trash2 className="size-5" />
+                                            <span>Delete Product</span>
+                                        </>
+                                    )}
+                                </button>
+                                <button 
+                                    type="submit"
+                                    className="btn bg-gradient-to-r from-emerald-600 to-emerald-700 border-none text-white hover:from-emerald-700 hover:to-emerald-800 flex-1 py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+                                    disabled={isLoading || isDeleting}
+                                >
+                                    {isLoading ? (
+                                        <>
+                                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                            <span>Updating Product...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Save className="size-5" />
+                                            <span>Update Product</span>
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default EditProductPage;
