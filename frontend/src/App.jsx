@@ -16,6 +16,7 @@ import StaffOrdersPage from './pages/StaffOrdersPage';
 import OrderDetailPage from './pages/OrderDetailPage';
 
 
+
 // ✅ HELP & SUPPORT PAGES
 import HelpsupportPage from './pages/HelpsupportPage';
 import TicketsPage from './pages/TicketsPage';
@@ -24,6 +25,8 @@ import FeedbackPage from './pages/FeedbackPage';
 import CallbackPage from './pages/CallbackPage';
 import AgentDashboardPage from './pages/AgentDashboardPage';
 import StaffDashboardPage from './pages/StaffDashboardPage';
+import AgentChatPage from './pages/AgentChatPage'; // ✅ ADD THIS IMPORT
+
 
 
 /**
@@ -74,6 +77,16 @@ const App = () => {
           } 
         />
         
+        {/* ✅ Agent Chat - For Live Chat with Customers */}
+        <Route 
+          path="/agent/chat/:ticketID" 
+          element={
+            <ProtectedRoute allowedRoles={['Owner', 'Manager', 'Staff', 'Support Agent']}>
+              <AgentChatPage />
+            </ProtectedRoute>
+          } 
+        />
+        
         {/* ✅ Staff Dashboard - For Pharmacy Staff (Owner, Manager, Staff) */}
         <Route 
           path="/staff/dashboard" 
@@ -117,6 +130,7 @@ const App = () => {
     </div>
   )
 }
+
 
 
 export default App;

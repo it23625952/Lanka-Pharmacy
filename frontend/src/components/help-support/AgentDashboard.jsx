@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // ✅ ADDED
 import { helpSupportAPI } from '../../services/helpSupportAPI';
 import { 
   BarChart3, 
@@ -23,7 +24,10 @@ import {
   Timer
 } from 'lucide-react';
 
+
 const AgentDashboard = () => {
+  const navigate = useNavigate(); // ✅ ADDED
+  
   // State management
   const [dashboardData, setDashboardData] = useState({
     stats: null,
@@ -44,13 +48,16 @@ const AgentDashboard = () => {
     extension: '101'
   };
 
+
   useEffect(() => {
     loadDashboardData();
   }, [timeFilter]);
 
+
   const loadDashboardData = async (showRefresh = false) => {
     if (showRefresh) setRefreshing(true);
     else setLoading(true);
+
 
     try {
       const [statsResponse, activityResponse, performanceResponse] = await Promise.all([
@@ -58,6 +65,7 @@ const AgentDashboard = () => {
         helpSupportAPI.getRecentActivity(),
         helpSupportAPI.getPerformanceMetrics()
       ]);
+
 
       setDashboardData({
         stats: statsResponse.data,
@@ -72,9 +80,11 @@ const AgentDashboard = () => {
     }
   };
 
+
   const handleRefresh = () => {
     loadDashboardData(true);
   };
+
 
   const getStatusColor = (status) => {
     switch(status) {
@@ -86,6 +96,7 @@ const AgentDashboard = () => {
     }
   };
 
+
   const getPriorityColor = (priority) => {
     switch(priority) {
       case 'High': return 'text-red-700 bg-red-100';
@@ -94,6 +105,7 @@ const AgentDashboard = () => {
       default: return 'text-gray-700 bg-gray-100';
     }
   };
+
 
   if (loading) {
     return (
@@ -110,6 +122,7 @@ const AgentDashboard = () => {
       </div>
     );
   }
+
 
   return (
     <div className="max-w-7xl mx-auto p-6">
@@ -145,6 +158,7 @@ const AgentDashboard = () => {
         </div>
       </div>
 
+
       {/* Agent Info Card */}
       <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-lg p-6 mb-8">
         <div className="flex items-center justify-between">
@@ -168,6 +182,7 @@ const AgentDashboard = () => {
         </div>
       </div>
 
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         
@@ -189,6 +204,7 @@ const AgentDashboard = () => {
           </div>
         </div>
 
+
         <div className="bg-white p-6 rounded-lg border border-gray-200">
           <div className="flex items-center justify-between">
             <div>
@@ -207,6 +223,7 @@ const AgentDashboard = () => {
           </div>
         </div>
 
+
         <div className="bg-white p-6 rounded-lg border border-gray-200">
           <div className="flex items-center justify-between">
             <div>
@@ -222,6 +239,7 @@ const AgentDashboard = () => {
             </div>
           </div>
         </div>
+
 
         <div className="bg-white p-6 rounded-lg border border-gray-200">
           <div className="flex items-center justify-between">
@@ -239,7 +257,9 @@ const AgentDashboard = () => {
           </div>
         </div>
 
+
       </div>
+
 
       {/* Tabs */}
       <div className="flex border-b border-gray-200 mb-6">
@@ -280,6 +300,7 @@ const AgentDashboard = () => {
         </button>
       </div>
 
+
       {/* Tab Content */}
       
       {/* My Tickets Tab */}
@@ -308,6 +329,7 @@ const AgentDashboard = () => {
               </button>
             </div>
           </div>
+
 
           {/* Recent Tickets */}
           <div className="bg-white border border-gray-200 rounded-lg">
@@ -352,7 +374,12 @@ const AgentDashboard = () => {
                       <button className="text-emerald-600 hover:text-emerald-800">
                         <Eye className="w-4 h-4" />
                       </button>
-                      <button className="text-green-600 hover:text-green-800">
+                      {/* ✅ UPDATED CHAT BUTTON */}
+                      <button 
+                        onClick={() => navigate(`/agent/chat/${ticket.ticketID}`)}
+                        className="text-green-600 hover:text-green-800"
+                        title="Open Chat"
+                      >
                         <MessageCircle className="w-4 h-4" />
                       </button>
                     </div>
@@ -368,6 +395,7 @@ const AgentDashboard = () => {
           </div>
         </div>
       )}
+
 
       {/* Live Chat Queue Tab */}
       {activeTab === 'chat' && (
@@ -405,6 +433,7 @@ const AgentDashboard = () => {
               </div>
             </div>
           </div>
+
 
           {/* Chat Queue */}
           <div className="bg-white border border-gray-200 rounded-lg">
@@ -451,6 +480,7 @@ const AgentDashboard = () => {
         </div>
       )}
 
+
       {/* Performance Tab */}
       {activeTab === 'performance' && (
         <div className="space-y-6">
@@ -471,6 +501,7 @@ const AgentDashboard = () => {
                   <div className="bg-green-600 h-2 rounded-full" style={{ width: '80%' }}></div>
                 </div>
 
+
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600">Response Time Target</span>
                   <span className="font-semibold text-green-600">✓ 2.3 min</span>
@@ -478,6 +509,7 @@ const AgentDashboard = () => {
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div className="bg-green-600 h-2 rounded-full" style={{ width: '95%' }}></div>
                 </div>
+
 
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600">Customer Satisfaction</span>
@@ -487,6 +519,7 @@ const AgentDashboard = () => {
                   <div className="bg-green-600 h-2 rounded-full" style={{ width: '96%' }}></div>
                 </div>
 
+
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600">Chat Sessions</span>
                   <span className="font-semibold">12 sessions</span>
@@ -495,8 +528,10 @@ const AgentDashboard = () => {
                   <div className="bg-emerald-600 h-2 rounded-full" style={{ width: '75%' }}></div>
                 </div>
 
+
               </div>
             </div>
+
 
             {/* Weekly Trends */}
             <div className="bg-white border border-gray-200 rounded-lg p-6">
@@ -511,6 +546,7 @@ const AgentDashboard = () => {
                   <span className="text-green-800 font-bold">+5%</span>
                 </div>
 
+
                 <div className="flex items-center justify-between p-3 bg-emerald-50 rounded-lg">
                   <div className="flex items-center space-x-2">
                     <Clock className="w-5 h-5 text-emerald-600" />
@@ -518,6 +554,7 @@ const AgentDashboard = () => {
                   </div>
                   <span className="text-emerald-800 font-bold">-0.3m</span>
                 </div>
+
 
                 <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
                   <div className="flex items-center space-x-2">
@@ -527,6 +564,7 @@ const AgentDashboard = () => {
                   <span className="text-purple-800 font-bold">+12%</span>
                 </div>
 
+
                 <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
                   <div className="flex items-center space-x-2">
                     <Target className="w-5 h-5 text-yellow-600" />
@@ -535,10 +573,13 @@ const AgentDashboard = () => {
                   <span className="text-yellow-800 font-bold">94%</span>
                 </div>
 
+
               </div>
             </div>
 
+
           </div>
+
 
           {/* Achievements */}
           <div className="bg-white border border-gray-200 rounded-lg p-6">
@@ -555,6 +596,7 @@ const AgentDashboard = () => {
                 </div>
               </div>
 
+
               <div className="flex items-center space-x-3 p-4 bg-green-50 border border-green-200 rounded-lg">
                 <div className="bg-green-500 p-2 rounded-full">
                   <CheckCircle className="w-5 h-5 text-white" />
@@ -564,6 +606,7 @@ const AgentDashboard = () => {
                   <p className="text-sm text-green-600">95% first-contact resolution</p>
                 </div>
               </div>
+
 
               <div className="flex items-center space-x-3 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
                 <div className="bg-emerald-500 p-2 rounded-full">
@@ -575,14 +618,18 @@ const AgentDashboard = () => {
                 </div>
               </div>
 
+
             </div>
           </div>
+
 
         </div>
       )}
 
+
     </div>
   );
 };
+
 
 export default AgentDashboard;
