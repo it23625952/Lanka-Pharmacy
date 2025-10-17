@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+<<<<<<< HEAD
 /**
  * Mongoose schema for Order entities
  * Manages medication orders linked to prescriptions with full order lifecycle
@@ -124,3 +125,18 @@ orderSchema.pre('save', async function (next) {
 const Order = mongoose.model('Order', orderSchema);
 
 export default Order;
+=======
+const orderSchema = new mongoose.Schema({
+  userId: { type: String, required: true },
+  items: [
+    {
+      productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+      quantity: { type: Number, required: true }
+    }
+  ],
+  status: { type: String, default: 'Pending' }, // e.g., Pending, Confirmed, Shipped
+  createdAt: { type: Date, default: Date.now }
+});
+
+export default mongoose.model('Order', orderSchema);
+>>>>>>> 20812727a0e85cc7b0aef4707d73931e91e077b2

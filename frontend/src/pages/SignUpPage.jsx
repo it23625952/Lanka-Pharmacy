@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import toast from 'react-hot-toast';
+<<<<<<< HEAD
 import { useNavigate, Link } from 'react-router';
 import api from '../lib/axios';
 import { Eye, EyeOff, User, Mail, Lock, ArrowLeft, CheckCircle, X } from 'lucide-react';
 import Logo from '../components/Logo.jpg'
+=======
+import axios from 'axios';
+import { useNavigate } from 'react-router';
+import api from '../lib/axios';
+import { Eye, EyeOff } from 'lucide-react';
+>>>>>>> 20812727a0e85cc7b0aef4707d73931e91e077b2
 
 const SignUpPage = () => {
     const [name, setName] = useState("");
@@ -24,10 +31,13 @@ const SignUpPage = () => {
         special: /[@$!%*?&]/.test(password),
     };
 
+<<<<<<< HEAD
     // Validation state for form submission
     const allRequirementsMet = Object.values(passwordChecks).every(check => check);
     const passwordsMatch = password && password === confirmPassword;
 
+=======
+>>>>>>> 20812727a0e85cc7b0aef4707d73931e91e077b2
     const navigate = useNavigate();
 
     /**
@@ -65,6 +75,10 @@ const SignUpPage = () => {
         // Validate password confirmation
         if (password !== confirmPassword) {
             toast.error("Passwords do not match");
+<<<<<<< HEAD
+=======
+            setLoading(false);
+>>>>>>> 20812727a0e85cc7b0aef4707d73931e91e077b2
             return;
         }
 
@@ -84,7 +98,11 @@ const SignUpPage = () => {
                 navigate("/");
             } else {
                 toast.success("Account created, please log in.");
+<<<<<<< HEAD
                 navigate("/signin");
+=======
+                navigate("/signIn"); // Fixed typo from "sifnIn" to "signIn"
+>>>>>>> 20812727a0e85cc7b0aef4707d73931e91e077b2
             }
         } catch (error) {
             console.log("Signup error: ", error);
@@ -105,6 +123,7 @@ const SignUpPage = () => {
         }
     }
 
+<<<<<<< HEAD
     /**
      * Reusable component for password requirement items
      * @param {Object} props - Component props
@@ -187,10 +206,55 @@ const SignUpPage = () => {
                                             onChange={(e) => setEmail(e.target.value)}
                                         />
                                     </div>
+=======
+    return (
+        <div className='min-h-screen bg-base-200 flex flex-col'>
+            <Navbar />
+            <div className='flex-1 flex items-center justify-center p-4'>
+                <div className='w-full max-w-md'>
+                    {/* Sign Up Card */}
+                    <div className='card bg-base-100 shadow-xl border border-base-300'>
+                        <div className='card-body p-6 sm:p-8'>
+                            {/* Header Section */}
+                            <div className='text-center mb-6'>
+                                <h2 className='text-2xl font-bold text-base-content'>Create Account</h2>
+                                <p className='text-base-content/60 mt-2'>Join Lanka Pharmacy today</p>
+                            </div>
+                            
+                            {/* Registration Form */}
+                            <form onSubmit={handleSubmit} className='space-y-4'>
+                                {/* Name Field */}
+                                <div className='form-control'>
+                                    <label className='label'>
+                                        <span className='label-text font-medium'>Full Name</span>
+                                    </label>
+                                    <input 
+                                        type='text' 
+                                        placeholder='Enter your full name' 
+                                        className='input input-bordered input-md focus:input-primary transition-colors' 
+                                        value={name} 
+                                        onChange={(e) => setName(e.target.value)}
+                                    />
+                                </div>
+
+                                {/* Email Field */}
+                                <div className='form-control'>
+                                    <label className='label'>
+                                        <span className='label-text font-medium'>Email Address</span>
+                                    </label>
+                                    <input 
+                                        type='email' 
+                                        placeholder='your.email@example.com' 
+                                        className='input input-bordered input-md focus:input-primary transition-colors' 
+                                        value={email} 
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    />
+>>>>>>> 20812727a0e85cc7b0aef4707d73931e91e077b2
                                 </div>
 
                                 {/* Password Field with Strength Indicator */}
                                 <div className='form-control'>
+<<<<<<< HEAD
                                     <label className='block text-sm font-semibold text-gray-700 mb-2'>
                                         Password
                                     </label>
@@ -288,10 +352,89 @@ const SignUpPage = () => {
                                         ) : (
                                             'Create Account'
                                         )}
+=======
+                                    <label className='label'>
+                                        <span className='label-text font-medium'>Password</span>
+                                    </label>
+                                    <div className="relative">
+                                        <input 
+                                            type={showPassword ? 'text' : 'password'}
+                                            placeholder='Create a strong password' 
+                                            className='input input-bordered input-md focus:input-primary transition-colors w-full' 
+                                            value={password} 
+                                            onChange={(e) => setPassword(e.target.value)}
+                                        />
+                                        {/* Password Visibility Toggle */}
+                                        <button
+                                            type="button"
+                                            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
+                                            onClick={() => setShowPassword((prev) => !prev)}
+                                            tabIndex={-1}
+                                            aria-label={showPassword ? "Hide password" : "Show password"}
+                                        >
+                                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                        </button>
+                                    </div>
+                                    {/* Password strength indicators with visual feedback */}
+                                    <ul className="mt-2 ml-1 text-xs space-y-1">
+                                        <li className={passwordChecks.length ? "text-green-600" : "text-gray-500"}>
+                                            {passwordChecks.length ? "✓" : "○"} At least 8 characters
+                                        </li>
+                                        <li className={passwordChecks.upper ? "text-green-600" : "text-gray-500"}>
+                                            {passwordChecks.upper ? "✓" : "○"} One uppercase letter
+                                        </li>
+                                        <li className={passwordChecks.lower ? "text-green-600" : "text-gray-500"}>
+                                            {passwordChecks.lower ? "✓" : "○"} One lowercase letter
+                                        </li>
+                                        <li className={passwordChecks.number ? "text-green-600" : "text-gray-500"}>
+                                            {passwordChecks.number ? "✓" : "○"} One number
+                                        </li>
+                                        <li className={passwordChecks.special ? "text-green-600" : "text-gray-500"}>
+                                            {passwordChecks.special ? "✓" : "○"} One special character (@$!%*?&)
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                {/* Confirm Password Field */}
+                                <div className='form-control'>
+                                    <label className='label'>
+                                        <span className='label-text font-medium'>Confirm Password</span>
+                                    </label>
+                                    <div className="relative">
+                                        <input 
+                                            type={showConfirmPassword ? 'text' : 'password'}
+                                            placeholder='Confirm your password' 
+                                            className='input input-bordered input-md focus:input-primary transition-colors w-full' 
+                                            value={confirmPassword} 
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                        />
+                                        {/* Confirm Password Visibility Toggle */}
+                                        <button
+                                            type="button"
+                                            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500"
+                                            onClick={() => setShowConfirmPassword((prev) => !prev)}
+                                            tabIndex={-1}
+                                            aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                                        >
+                                            {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Submit Button */}
+                                <div className='form-control mt-6'>
+                                    <button 
+                                        type='submit' 
+                                        className='btn btn-primary btn-md w-full'
+                                        disabled={loading}
+                                    >
+                                        {loading ? 'Creating Account...' : 'Create Account'}
+>>>>>>> 20812727a0e85cc7b0aef4707d73931e91e077b2
                                     </button>
                                 </div>
 
                                 {/* Sign In Link */}
+<<<<<<< HEAD
                                 <div className='text-center pt-6 border-t border-gray-200'>
                                     <p className='text-gray-600'>
                                         Already have an account?{' '}
@@ -308,6 +451,19 @@ const SignUpPage = () => {
                     <div className="text-center mt-6 text-sm text-gray-500">
                         <p>🔒 Your data is secure and encrypted</p>
                     </div>
+=======
+                                <div className='text-center mt-4'>
+                                    <p className='text-base-content/70 text-sm'>
+                                        Already have an account?{' '}
+                                        <a href='/signIn' className='link link-primary font-medium'>
+                                            Sign In
+                                        </a>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+>>>>>>> 20812727a0e85cc7b0aef4707d73931e91e077b2
                 </div>
             </div>
         </div>
