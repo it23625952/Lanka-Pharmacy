@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Mail, ArrowLeft, CheckCircle, Send } from 'lucide-react';
+=======
 =======
 import { Mail, ArrowLeft } from 'lucide-react';
 >>>>>>> 20812727a0e85cc7b0aef4707d73931e91e077b2
@@ -34,6 +36,7 @@ const ForgotPasswordPage = () => {
     }
   };
 
+<<<<<<< HEAD
 <<<<<<< HEAD
   /**
    * Handles resending the password reset email
@@ -166,6 +169,7 @@ const ForgotPasswordPage = () => {
                       className='w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all duration-200 text-gray-800'
                       value={email}
 =======
+=======
   return (
     <div className='min-h-screen bg-base-200 flex flex-col'>
       <Navbar />
@@ -212,6 +216,7 @@ const ForgotPasswordPage = () => {
                     />
                   </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
                 </div>
 
                 {/* Submit Button */}
@@ -256,6 +261,7 @@ const ForgotPasswordPage = () => {
               </a>
             </p>
           </div>
+=======
 =======
 
                   {/* Submit Button */}

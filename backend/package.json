@@ -20,10 +20,12 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "mongoose": "^8.17.2",
     "multer": "^2.0.2",
     "node-cron": "^4.2.1",
     "nodemailer": "^7.0.9"
+=======
 =======
     "mongoose": "^8.17.2"
 >>>>>>> 20812727a0e85cc7b0aef4707d73931e91e077b2

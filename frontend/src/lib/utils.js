@@ -18,7 +18,9 @@ export function formatDate(date) {
         year: 'numeric',   // Full year (e.g., 2024)
     });
 <<<<<<< HEAD
+<<<<<<< HEAD
 };
+=======
 =======
 }
 >>>>>>> 20812727a0e85cc7b0aef4707d73931e91e077b2

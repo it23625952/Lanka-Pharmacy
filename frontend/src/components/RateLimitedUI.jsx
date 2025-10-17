@@ -1,10 +1,12 @@
 import React from 'react';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Clock, AlertTriangle, RefreshCw } from "lucide-react";
 
 /**
  * Rate limit warning UI component
  * Displays when user has made too many requests with temporary restriction details
+=======
 =======
 import { Clock } from "lucide-react";
 
@@ -20,6 +22,7 @@ const RateLimitedUI = () => {
   return (
     <div 
       role="alert" 
+<<<<<<< HEAD
 <<<<<<< HEAD
       className="bg-amber-50 border-2 border-amber-200 rounded-2xl shadow-xl max-w-2xl mx-auto p-8"
       aria-live="polite"
@@ -105,6 +108,7 @@ const RateLimitedUI = () => {
                 lp.hatton.sup@gmail.com
               </a>
             </p>
+=======
 =======
       className="alert alert-warning bg-warning/10 border-warning/50 shadow-lg max-w-2xl mx-auto"
       aria-live="polite"
