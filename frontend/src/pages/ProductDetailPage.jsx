@@ -29,6 +29,21 @@ const ProductDetailPage = () => {
     const [isInWishlist, setIsInWishlist] = useState(false);
     const [addingToCart, setAddingToCart] = useState(false);
 
+    // Construct full image URL for frontend
+    const getImageUrl = (url) => {
+        if (!url) return null;
+        
+        // If it's already a full URL, return as is
+        if (url.startsWith('http')) return url;
+        
+        // If it's a relative path, prepend the backend URL
+        if (url.startsWith('/')) {
+            return `http://localhost:5001${url}`; // Your backend runs on port 5001
+        }
+        
+        return url;
+    };
+
     // Mock related products (in real app, fetch from API)
     const relatedProducts = [
         {
@@ -237,9 +252,13 @@ const ProductDetailPage = () => {
                         {/* Main Image */}
                         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
                             <img 
-                                src={product.imageUrl || '/api/placeholder/600/600'} 
+                                src={getImageUrl(product.imageUrl) || '/api/placeholder/600/600'} 
                                 alt={product.name}
                                 className="w-full h-96 object-contain rounded-lg"
+                                onError={(e) => {
+                                    console.error('Failed to load product image:', product.imageUrl);
+                                    e.target.style.display = 'none';
+                                }}
                             />
                         </div>
 
@@ -254,9 +273,13 @@ const ProductDetailPage = () => {
                                     }`}
                                 >
                                     <img 
-                                        src={img} 
+                                        src={getImageUrl(img)} 
                                         alt={`${product.name} view ${index + 1}`}
                                         className="w-full h-full object-cover"
+                                        onError={(e) => {
+                                            console.error('Failed to load thumbnail:', img);
+                                            e.target.style.display = 'none';
+                                        }}
                                     />
                                 </button>
                             ))}
@@ -520,9 +543,13 @@ const ProductDetailPage = () => {
                         {relatedProducts.map((relatedProduct) => (
                             <div key={relatedProduct._id} className="bg-white rounded-2xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 overflow-hidden">
                                 <img 
-                                    src={relatedProduct.imageUrl} 
+                                    src={getImageUrl(relatedProduct.imageUrl)} 
                                     alt={relatedProduct.name}
                                     className="w-full h-48 object-cover"
+                                    onError={(e) => {
+                                        console.error('Failed to load related product image:', relatedProduct.imageUrl);
+                                        e.target.style.display = 'none';
+                                    }}
                                 />
                                 <div className="p-4">
                                     <div className="text-sm text-blue-600 font-medium mb-1">

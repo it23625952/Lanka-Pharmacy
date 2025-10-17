@@ -11,7 +11,6 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import UploadPrescriptionPage from './pages/UploadPrescriptionPage';
 import UploadSuccessPage from './pages/UploadSuccessPage';
-import ProtectedRoute from './components/ProtectedRoute';
 import StaffPrescriptionsPage from './pages/StaffPrescriptionsPage';
 import CustomerPrescriptionsPage from './pages/CustomerPrescriptionsPage';
 import CustomerOrdersPage from './pages/CustomerOrdersPage';
@@ -30,7 +29,6 @@ import Attendance from "./pages/Attendance";
 import Salary from "./pages/Salary";
 import Reports from "./pages/Reports";
 import CreateProductPage from "./pages/CreateProductPage";
-import ProductDetailPage from "./pages/ProductDetailPage";
 
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
@@ -61,20 +59,17 @@ function App() {
         <Route path="/product/:id" element={<ProductDetailPage />} />
 
         {/* Staff routes */}
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/staff" element={<StaffList />} />
-            <Route path="/staff/add" element={<AddStaff />} />
-            <Route path="/staff/edit/:id" element={<EditStaff />} />
-            <Route path="/staff/:id" element={<StaffProfile />} />
-            <Route path="/roles" element={<Roles />} />
-            <Route path="/attendance" element={<Attendance />} />
-            <Route path="/salary" element={<Salary />} />
-            <Route path="/reports" element={<Reports />} />
-            <Route path="/create-product" element={<CreateProductPage />} />
-            <Route path="/product/:id" element={<ProductDetailPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/staff" element={<StaffList />} />
+        <Route path="/staff/add" element={<AddStaff />} />
+        <Route path="/staff/edit/:id" element={<EditStaff />} />
+        <Route path="/staff/:id" element={<StaffProfile />} />
+        <Route path="/roles" element={<Roles />} />
+        <Route path="/attendance" element={<Attendance />} />
+        <Route path="/salary" element={<Salary />} />
+        <Route path="/reports" element={<Reports />} />
               
-              {/* Shopping cart flow routes */}
-        
+        {/* Shopping cart flow routes */}
         <Route path="/cart" element={<CartPage />} />
         <Route path="/cart-page" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
