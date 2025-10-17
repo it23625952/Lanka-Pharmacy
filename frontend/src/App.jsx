@@ -1,5 +1,8 @@
 import React from 'react';
 import { Route, Routes } from 'react-router';
+import Sidebar from "./components/Sidebar";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 import HomePage from './pages/HomePage';
 import SignUpPage from './pages/SignUpPage';
 import SignInPage from './pages/SignInPage';
@@ -16,10 +19,26 @@ import StaffOrdersPage from './pages/StaffOrdersPage';
 import OrderDetailPage from './pages/OrderDetailPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 
-/**
- * Main application component defining the routing structure
- */
-const App = () => {
+// Staff management
+import Dashboard from "./pages/Dashboard";
+import StaffList from "./pages/StaffList";
+import AddStaff from "./pages/AddStaff";
+import EditStaff from "./pages/EditStaff";
+import StaffProfile from "./pages/StaffProfile";
+import Roles from "./pages/Roles";
+import Attendance from "./pages/Attendance";
+import Salary from "./pages/Salary";
+import Reports from "./pages/Reports";
+import CreateProductPage from "./pages/CreateProductPage";
+import ProductDetailPage from "./pages/ProductDetailPage";
+
+import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
+import ConfirmationPage from './pages/ConfirmationPage';
+import ViewOrderPage from './pages/ViewOrderPage';
+import EditOrderPage from './pages/EditOrderPage';
+
+function App() {
   return (
     <div>
       <Routes>
@@ -40,6 +59,25 @@ const App = () => {
 
         <Route path="/create-product" element={<CreateProductPage />} />
         <Route path="/product/:id" element={<ProductDetailPage />} />
+
+        {/* Staff routes */}
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/staff" element={<StaffList />} />
+            <Route path="/staff/add" element={<AddStaff />} />
+            <Route path="/staff/edit/:id" element={<EditStaff />} />
+            <Route path="/staff/:id" element={<StaffProfile />} />
+            <Route path="/roles" element={<Roles />} />
+            <Route path="/attendance" element={<Attendance />} />
+            <Route path="/salary" element={<Salary />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/create-product" element={<CreateProductPage />} />
+            <Route path="/product/:id" element={<ProductDetailPage />} />
+              
+              {/* Shopping cart flow routes */}
+        
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/cart-page" element={<CartPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
         
         {/* Staff protected routes */}
         <Route 
@@ -70,7 +108,7 @@ const App = () => {
         />
       </Routes>
     </div>
-  )
+  );
 }
 
 export default App;
