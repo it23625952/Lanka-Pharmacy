@@ -1,6 +1,5 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import Sidebar from "./components/Sidebar";
+import { Routes, Route, Navigate } from "react-router";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Public routes
@@ -34,9 +33,6 @@ import ProductDetailPage from "./pages/ProductDetailPage";
 function App() {
   return (
     <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <Sidebar />
-
       {/* Main content */}
       <div className="flex-1 ml-80 bg-gray-100 min-h-screen">
         <main className="p-6">
