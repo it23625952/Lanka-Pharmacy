@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route, Routes } from 'react-router';
 import Sidebar from "./components/Sidebar";
+import React from "react";
+import { Routes, Route, Navigate } from "react-router";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import HomePage from './pages/HomePage';
@@ -68,6 +70,9 @@ function App() {
         <Route path="/attendance" element={<Attendance />} />
         <Route path="/salary" element={<Salary />} />
         <Route path="/reports" element={<Reports />} />
+
+        <Route path="/create-product" element={<CreateProductPage />} />
+        <Route path="/product/:id" element={<ProductDetailPage />} />
               
         {/* Shopping cart flow routes */}
         <Route path="/cart" element={<CartPage />} />
@@ -101,6 +106,35 @@ function App() {
             </ProtectedRoute>
           } 
         />
+
+        {/* Protected routes */}
+        <Route
+          path="/staff/prescriptions"
+          element={
+            <ProtectedRoute allowedRoles={["Owner","Manager","Staff"]}>
+              <StaffPrescriptionsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/staff/orders"
+          element={
+            <ProtectedRoute allowedRoles={["Owner","Manager","Staff"]}>
+              <StaffOrdersPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/staff/orders/:id"
+          element={
+            <ProtectedRoute allowedRoles={["Owner","Manager","Staff"]}>
+              <OrderDetailPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Default route */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );

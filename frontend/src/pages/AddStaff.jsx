@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import api from "../lib/axios";
 import StaffForm from "../components/StaffForm";
 
