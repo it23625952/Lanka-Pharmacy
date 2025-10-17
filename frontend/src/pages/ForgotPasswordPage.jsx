@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { Mail, ArrowLeft, CheckCircle, Send } from 'lucide-react';
-=======
-=======
-import { Mail, ArrowLeft } from 'lucide-react';
->>>>>>> 20812727a0e85cc7b0aef4707d73931e91e077b2
 import api from '../lib/axios';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router';
@@ -36,8 +30,6 @@ const ForgotPasswordPage = () => {
     }
   };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
   /**
    * Handles resending the password reset email
    */
@@ -168,55 +160,10 @@ const ForgotPasswordPage = () => {
                       placeholder='your.email@example.com'
                       className='w-full pl-12 pr-4 py-3.5 border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 outline-none transition-all duration-200 text-gray-800'
                       value={email}
-=======
-=======
-  return (
-    <div className='min-h-screen bg-base-200 flex flex-col'>
-      <Navbar />
-      
-      <div className='flex-1 flex items-center justify-center p-4'>
-        <div className='w-full max-w-md'>
-          {/* Password Reset Request Card */}
-          <div className='card bg-base-100 shadow-xl border border-base-300'>
-            <div className='card-body p-6 sm:p-8'>
-              
-              {/* Back to Sign In link */}
-              <Link to="/signin" className="btn btn-ghost btn-sm mb-4 self-start">
-                <ArrowLeft className="size-4" />
-                Back to Sign In
-              </Link>
-
-              {/* Header Section */}
-              <div className='text-center mb-6'>
-                <div className="bg-primary/10 p-3 rounded-full inline-block mb-4">
-                  <Mail className="size-8 text-primary" />
-                </div>
-                <h2 className='text-2xl font-bold text-base-content'>Reset Password</h2>
-                <p className='text-base-content/60 mt-2'>
-                  {emailSent ? 'Check your email' : 'Enter your email to receive a reset link'}
-                </p>
-              </div>
-
-              {/* Conditional rendering based on email sent state */}
-              {!emailSent ? (
-                // Password Reset Request Form
-                <form onSubmit={handleSubmit} className='space-y-4'>
-                  <div className='form-control'>
-                    <label className='label'>
-                      <span className='label-text font-medium'>Email Address</span>
-                    </label>
-                    <input 
-                      type='email' 
-                      placeholder='your.email@example.com' 
-                      className='input input-bordered input-md' 
-                      value={email} 
->>>>>>> 20812727a0e85cc7b0aef4707d73931e91e077b2
                       onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                   </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
                 </div>
 
                 {/* Submit Button */}
@@ -261,45 +208,6 @@ const ForgotPasswordPage = () => {
               </a>
             </p>
           </div>
-=======
-=======
-
-                  {/* Submit Button */}
-                  <div className='form-control mt-6'>
-                    <button 
-                      type='submit' 
-                      className='btn btn-primary btn-md w-full gap-2'
-                      disabled={isLoading}
-                    >
-                      {isLoading ? (
-                        <span className="loading loading-spinner loading-xs"></span>
-                      ) : (
-                        <Mail className="size-4" />
-                      )}
-                      {isLoading ? 'Sending...' : 'Send Reset Link'}
-                    </button>
-                  </div>
-                </form>
-              ) : (
-                // Success State after email sent
-                <div className="text-center py-4">
-                  <div className="alert alert-success mb-4">
-                    <span>✓ Check your email for the reset link</span>
-                  </div>
-                  <p className="text-base-content/70 text-sm mb-4">
-                    If you don't see the email, check your spam folder or try again.
-                  </p>
-                  <button 
-                    onClick={() => setEmailSent(false)}
-                    className="btn btn-outline btn-sm"
-                  >
-                    Send Another Link
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
->>>>>>> 20812727a0e85cc7b0aef4707d73931e91e077b2
         </div>
       </div>
     </div>
