@@ -31,6 +31,12 @@ import Reports from "./pages/Reports";
 import CreateProductPage from "./pages/CreateProductPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 
+import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
+import ConfirmationPage from './pages/ConfirmationPage';
+import ViewOrderPage from './pages/ViewOrderPage';
+import EditOrderPage from './pages/EditOrderPage';
+
 function App() {
   return (
     <div className="flex min-h-screen">
@@ -66,6 +72,12 @@ function App() {
             <Route path="/reports" element={<Reports />} />
             <Route path="/create-product" element={<CreateProductPage />} />
             <Route path="/product/:id" element={<ProductDetailPage />} />
+              
+              {/* Shopping cart flow routes */}
+        
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/cart-page" element={<CartPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
 
             {/* Protected routes */}
             <Route
