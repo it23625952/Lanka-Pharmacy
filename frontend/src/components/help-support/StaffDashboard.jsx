@@ -173,8 +173,8 @@ const StaffDashboard = () => {
                 +12% this month
               </p>
             </div>
-            <div className="bg-blue-100 p-3 rounded-full">
-              <Users className="w-6 h-6 text-blue-600" />
+            <div className="bg-emerald-100 p-3 rounded-full">
+              <Users className="w-6 h-6 text-emerald-600" />
             </div>
           </div>
         </div>
@@ -356,7 +356,7 @@ const StaffDashboard = () => {
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <Globe className="w-4 h-4 text-blue-600" />
+                    <Globe className="w-4 h-4 text-emerald-600" />
                     <span className="text-sm text-gray-600">API Health</span>
                   </div>
                   <span className="font-semibold text-green-600">Healthy</span>
@@ -390,8 +390,8 @@ const StaffDashboard = () => {
               ].map(agent => (
                 <div key={agent.name} className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-center space-x-3 mb-3">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                      <User className="w-4 h-4 text-blue-600" />
+                    <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
+                      <User className="w-4 h-4 text-emerald-600" />
                     </div>
                     <div>
                       <h4 className="font-medium text-gray-900">{agent.name}</h4>
@@ -440,12 +440,12 @@ const StaffDashboard = () => {
                   <TrendingUp className="w-8 h-8 text-green-600" />
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-emerald-50 rounded-lg">
                   <div>
-                    <p className="text-sm text-blue-700">Retention Value</p>
-                    <p className="text-2xl font-bold text-blue-800">₹8,90,000</p>
+                    <p className="text-sm text-emerald-700">Retention Value</p>
+                    <p className="text-2xl font-bold text-emerald-800">₹8,90,000</p>
                   </div>
-                  <Shield className="w-8 h-8 text-blue-600" />
+                  <Shield className="w-8 h-8 text-emerald-600" />
                 </div>
 
                 <div className="flex items-center justify-between p-4 bg-purple-50 rounded-lg">
@@ -477,9 +477,9 @@ const StaffDashboard = () => {
                   <span className="text-gray-600">Avg Resolution Time</span>
                   <div className="flex items-center space-x-2">
                     <div className="w-20 bg-gray-200 rounded-full h-2">
-                      <div className="bg-blue-600 h-2 rounded-full" style={{ width: '72%' }}></div>
+                      <div className="bg-emerald-600 h-2 rounded-full" style={{ width: '72%' }}></div>
                     </div>
-                    <span className="font-semibold text-blue-600">4.2h</span>
+                    <span className="font-semibold text-emerald-600">4.2h</span>
                   </div>
                 </div>
 
@@ -524,15 +524,15 @@ const StaffDashboard = () => {
                 {dashboardData.interactions?.topCustomersByVolume?.slice(0, 5).map((customer, index) => (
                   <div key={customer._id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                        <span className="text-sm font-medium text-blue-600">#{index + 1}</span>
+                      <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
+                        <span className="text-sm font-medium text-emerald-600">#{index + 1}</span>
                       </div>
                       <div>
                         <p className="font-medium text-gray-900">Customer {customer._id}</p>
                         <p className="text-sm text-gray-600">{customer.ticketCount} tickets</p>
                       </div>
                     </div>
-                    <button className="text-blue-600 hover:text-blue-800">
+                    <button className="text-emerald-600 hover:text-emerald-800">
                       <Eye className="w-4 h-4" />
                     </button>
                   </div>
@@ -559,13 +559,13 @@ const StaffDashboard = () => {
 
                 <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                   <div className="flex items-center space-x-3">
-                    <Award className="w-5 h-5 text-blue-600" />
+                    <Award className="w-5 h-5 text-emerald-600" />
                     <div>
                       <p className="font-medium text-gray-900">Repeat Customers</p>
                       <p className="text-sm text-gray-600">Loyalty rate</p>
                     </div>
                   </div>
-                  <span className="text-xl font-bold text-blue-600">73%</span>
+                  <span className="text-xl font-bold text-emerald-600">73%</span>
                 </div>
 
                 <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
@@ -591,7 +591,7 @@ const StaffDashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               
               <div className="text-center p-4 border border-gray-200 rounded-lg">
-                <MessageSquare className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+                <MessageSquare className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
                 <p className="text-2xl font-bold text-gray-900">45%</p>
                 <p className="text-sm text-gray-600">Live Chat</p>
               </div>
@@ -646,8 +646,8 @@ const StaffDashboard = () => {
             </div>
 
             <div className="bg-white border border-gray-200 rounded-lg p-6 text-center">
-              <TrendingUp className="w-12 h-12 text-blue-500 mx-auto mb-4" />
-              <p className="text-3xl font-bold text-blue-600 mb-2">+5.2%</p>
+              <TrendingUp className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
+              <p className="text-3xl font-bold text-emerald-600 mb-2">+5.2%</p>
               <p className="text-gray-600">Monthly Growth</p>
               <p className="text-sm text-gray-500 mt-2">vs. last month</p>
             </div>
@@ -699,7 +699,7 @@ const StaffDashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               
               <div className="text-center p-4 border border-gray-200 rounded-lg">
-                <Phone className="w-8 h-8 text-blue-600 mx-auto mb-3" />
+                <Phone className="w-8 h-8 text-emerald-600 mx-auto mb-3" />
                 <p className="text-2xl font-bold text-gray-900">
                   {dashboardData.callbacks?.pendingCallbacksByPriority?.reduce((sum, item) => sum + item.count, 0) || 0}
                 </p>

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { Plus, UserPlus, LogOut, LogIn, User, ShoppingCart, Upload, FileText, ClipboardList, Menu, X, Phone, Mail, Clock, Package } from 'lucide-react';
+import { Plus, UserPlus, LogOut, LogIn, User, ShoppingCart, Upload, FileText, ClipboardList, Menu, X, Phone, Mail, Clock, Package, MessageCircle, Headphones } from 'lucide-react';
 import api from '../lib/axios';
 import Logo from './Logo.jpg';
+
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -11,6 +12,7 @@ const Navbar = () => {
   const [isLoadingUser, setIsLoadingUser] = useState(false);
   const isLoggedIn = !!localStorage.getItem('token');
   const navigate = useNavigate();
+
 
   // Handle scroll effect for navbar styling
   useEffect(() => {
@@ -21,12 +23,14 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+
   // Fetch user data when logged in status changes
   useEffect(() => {
     if (isLoggedIn) {
       fetchUserData();
     }
   }, [isLoggedIn]);
+
 
   /**
    * Fetches user profile data from the API
@@ -48,6 +52,7 @@ const Navbar = () => {
     }
   };
 
+
   /**
    * Handles user logout by clearing token and redirecting
    */
@@ -56,6 +61,7 @@ const Navbar = () => {
     setUserData(null);
     navigate("/");
   };
+
 
   /**
    * Generates user initials for avatar display
@@ -70,6 +76,7 @@ const Navbar = () => {
       .toUpperCase()
       .slice(0, 2);
   };
+
 
   return (
     <>
@@ -93,6 +100,7 @@ const Navbar = () => {
         </div>
       </div>
 
+
       {/* Main Navigation Bar */}
       <nav className={`sticky top-0 z-50 transition-all duration-300 ${
         isScrolled ? 'bg-white shadow-lg' : 'bg-white shadow-md'
@@ -113,6 +121,7 @@ const Navbar = () => {
               </div>
             </Link>
 
+
             {/* Desktop Navigation Links */}
             <div className="hidden lg:flex items-center gap-2">
               <Link to="/" className="px-4 py-2 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all duration-200 font-medium">
@@ -124,7 +133,14 @@ const Navbar = () => {
               <Link to="/" className="px-4 py-2 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all duration-200 font-medium">
                 Services
               </Link>
+              
+              {/* HELP & SUPPORT LINK */}
+              <Link to="/help-support" className="px-4 py-2 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all duration-200 font-medium flex items-center gap-2">
+                <Headphones className="size-4" />
+                Help & Support
+              </Link>
             </div>
+
 
             {/* Right Action Buttons and User Menu */}
             <div className="flex items-center gap-3">
@@ -137,6 +153,7 @@ const Navbar = () => {
                 <span>Upload Prescription</span>
               </Link>
 
+
               {/* Shopping Cart with Item Count */}
               <button className="relative p-2.5 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all duration-200">
                 <ShoppingCart className="size-5" />
@@ -144,6 +161,7 @@ const Navbar = () => {
                   0
                 </span>
               </button>
+
 
               {/* User Menu for Authenticated Users */}
               {isLoggedIn ? (
@@ -168,6 +186,7 @@ const Navbar = () => {
                       </p>
                     </div>
                     <div className="p-2">
+                      
                       <Link to="/profile" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
                         <User className="size-4" />
                         My Profile
@@ -180,9 +199,17 @@ const Navbar = () => {
                         <Package className="size-4" />
                         My Orders
                       </Link>
-                      {/* Staff Dashboard Link - Only for authorized roles */}
+                      
+                      {/* HELP & SUPPORT - In User Dropdown */}
+                      <Link to="/help-support" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
+                        <Headphones className="size-4" />
+                        Help & Support
+                      </Link>
+                      
+                      {/* Staff Management Links - Only for authorized roles */}
                       {userData?.role && ['Owner', 'Manager', 'Staff'].includes(userData.role) && (
                         <>
+                          <div className="border-t border-gray-100 my-2"></div>
                           <Link to="/staff/prescriptions" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
                             <ClipboardList className="size-4" />
                             Manage Prescriptions
@@ -193,6 +220,7 @@ const Navbar = () => {
                           </Link>
                         </>
                       )}
+                      
                       <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 mt-2 border-t border-gray-100 flex items-center gap-2">
                         <LogOut className="size-4" />
                         Logout
@@ -214,6 +242,7 @@ const Navbar = () => {
                 </>
               )}
 
+
               {/* Mobile Menu Toggle Button */}
               <button 
                 className="lg:hidden p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
@@ -224,6 +253,7 @@ const Navbar = () => {
             </div>
           </div>
         </div>
+
 
         {/* Mobile Menu Overlay */}
         {isMobileMenuOpen && (
@@ -239,6 +269,12 @@ const Navbar = () => {
                 Services
               </Link>
               
+              {/* HELP & SUPPORT - Mobile Menu */}
+              <Link to="/help-support" className="block px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 font-medium flex items-center gap-2">
+                <Headphones className="size-4" />
+                Help & Support
+              </Link>
+              
               {/* Mobile User Menu for Authenticated Users */}
               {isLoggedIn ? (
                 <>
@@ -248,6 +284,7 @@ const Navbar = () => {
                       <p className="text-sm text-gray-600">{userData.email}</p>
                     </div>
                   )}
+                  
                   <Link to="/profile" className="block px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 font-medium">
                     My Profile
                   </Link>
@@ -258,6 +295,7 @@ const Navbar = () => {
                     <Package className="size-4" />
                     My Orders
                   </Link>
+                  
                   {userData?.role && ['Owner', 'Manager', 'Staff'].includes(userData.role) && (
                     <>
                       <Link to="/staff/prescriptions" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
@@ -270,6 +308,7 @@ const Navbar = () => {
                       </Link>
                     </>
                   )}
+                  
                   <button onClick={handleLogout} className="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 font-medium">
                     Logout
                   </button>
@@ -298,5 +337,6 @@ const Navbar = () => {
     </>
   );
 };
+
 
 export default Navbar;

@@ -81,7 +81,7 @@ const AgentDashboard = () => {
       case 'Open': return 'text-red-600 bg-red-50 border-red-200';
       case 'In Progress': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
       case 'Resolved': return 'text-green-600 bg-green-50 border-green-200';
-      case 'Pending': return 'text-blue-600 bg-blue-50 border-blue-200';
+      case 'Pending': return 'text-emerald-600 bg-emerald-50 border-emerald-200';
       default: return 'text-gray-600 bg-gray-50 border-gray-200';
     }
   };
@@ -126,7 +126,7 @@ const AgentDashboard = () => {
           <select
             value={timeFilter}
             onChange={(e) => setTimeFilter(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500"
           >
             <option value="today">Today</option>
             <option value="week">This Week</option>
@@ -137,7 +137,7 @@ const AgentDashboard = () => {
           <button
             onClick={handleRefresh}
             disabled={refreshing}
-            className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="flex items-center space-x-2 bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 disabled:opacity-50"
           >
             <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
             <span>Refresh</span>
@@ -146,7 +146,7 @@ const AgentDashboard = () => {
       </div>
 
       {/* Agent Info Card */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg p-6 mb-8">
+      <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-lg p-6 mb-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <div className="bg-white bg-opacity-20 p-3 rounded-full">
@@ -183,8 +183,8 @@ const AgentDashboard = () => {
                 +15% from yesterday
               </p>
             </div>
-            <div className="bg-blue-100 p-3 rounded-full">
-              <BarChart3 className="w-6 h-6 text-blue-600" />
+            <div className="bg-emerald-100 p-3 rounded-full">
+              <BarChart3 className="w-6 h-6 text-emerald-600" />
             </div>
           </div>
         </div>
@@ -228,7 +228,7 @@ const AgentDashboard = () => {
             <div>
               <p className="text-sm text-gray-600 mb-1">Active Chats</p>
               <p className="text-2xl font-bold text-gray-900">3</p>
-              <p className="text-xs text-blue-600 flex items-center mt-1">
+              <p className="text-xs text-emerald-600 flex items-center mt-1">
                 <MessageCircle className="w-3 h-3 mr-1" />
                 2 waiting in queue
               </p>
@@ -247,7 +247,7 @@ const AgentDashboard = () => {
           onClick={() => setActiveTab('overview')}
           className={`px-6 py-3 font-medium text-sm border-b-2 ${
             activeTab === 'overview'
-              ? 'text-blue-600 border-blue-600'
+              ? 'text-emerald-600 border-emerald-600'
               : 'text-gray-500 border-transparent hover:text-gray-700'
           }`}
         >
@@ -259,7 +259,7 @@ const AgentDashboard = () => {
           onClick={() => setActiveTab('chat')}
           className={`px-6 py-3 font-medium text-sm border-b-2 ${
             activeTab === 'chat'
-              ? 'text-blue-600 border-blue-600'
+              ? 'text-emerald-600 border-emerald-600'
               : 'text-gray-500 border-transparent hover:text-gray-700'
           }`}
         >
@@ -271,7 +271,7 @@ const AgentDashboard = () => {
           onClick={() => setActiveTab('performance')}
           className={`px-6 py-3 font-medium text-sm border-b-2 ${
             activeTab === 'performance'
-              ? 'text-blue-600 border-blue-600'
+              ? 'text-emerald-600 border-emerald-600'
               : 'text-gray-500 border-transparent hover:text-gray-700'
           }`}
         >
@@ -290,9 +290,9 @@ const AgentDashboard = () => {
           <div className="bg-white border border-gray-200 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <button className="flex items-center space-x-2 p-3 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors">
-                <Search className="w-5 h-5 text-blue-600" />
-                <span className="text-blue-700 font-medium">Search Tickets</span>
+              <button className="flex items-center space-x-2 p-3 bg-emerald-50 border border-emerald-200 rounded-lg hover:bg-emerald-100 transition-colors">
+                <Search className="w-5 h-5 text-emerald-600" />
+                <span className="text-emerald-700 font-medium">Search Tickets</span>
               </button>
               <button className="flex items-center space-x-2 p-3 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 transition-colors">
                 <MessageCircle className="w-5 h-5 text-green-600" />
@@ -349,7 +349,7 @@ const AgentDashboard = () => {
                     </div>
                     
                     <div className="flex items-center space-x-2">
-                      <button className="text-blue-600 hover:text-blue-800">
+                      <button className="text-emerald-600 hover:text-emerald-800">
                         <Eye className="w-4 h-4" />
                       </button>
                       <button className="text-green-600 hover:text-green-800">
@@ -399,9 +399,9 @@ const AgentDashboard = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600 mb-1">Avg Wait Time</p>
-                  <p className="text-3xl font-bold text-blue-600">1.2m</p>
+                  <p className="text-3xl font-bold text-emerald-600">1.2m</p>
                 </div>
-                <Timer className="w-8 h-8 text-blue-600" />
+                <Timer className="w-8 h-8 text-emerald-600" />
               </div>
             </div>
           </div>
@@ -422,8 +422,8 @@ const AgentDashboard = () => {
                 <div key={chat.id} className="p-6 hover:bg-gray-50">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <User className="w-5 h-5 text-blue-600" />
+                      <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
+                        <User className="w-5 h-5 text-emerald-600" />
                       </div>
                       <div>
                         <h4 className="font-medium text-gray-900">{chat.customer}</h4>
@@ -492,7 +492,7 @@ const AgentDashboard = () => {
                   <span className="font-semibold">12 sessions</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-blue-600 h-2 rounded-full" style={{ width: '75%' }}></div>
+                  <div className="bg-emerald-600 h-2 rounded-full" style={{ width: '75%' }}></div>
                 </div>
 
               </div>
@@ -511,12 +511,12 @@ const AgentDashboard = () => {
                   <span className="text-green-800 font-bold">+5%</span>
                 </div>
 
-                <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-emerald-50 rounded-lg">
                   <div className="flex items-center space-x-2">
-                    <Clock className="w-5 h-5 text-blue-600" />
-                    <span className="text-blue-800 font-medium">Response Time</span>
+                    <Clock className="w-5 h-5 text-emerald-600" />
+                    <span className="text-emerald-800 font-medium">Response Time</span>
                   </div>
-                  <span className="text-blue-800 font-bold">-0.3m</span>
+                  <span className="text-emerald-800 font-bold">-0.3m</span>
                 </div>
 
                 <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
@@ -565,13 +565,13 @@ const AgentDashboard = () => {
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <div className="bg-blue-500 p-2 rounded-full">
+              <div className="flex items-center space-x-3 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+                <div className="bg-emerald-500 p-2 rounded-full">
                   <MessageSquare className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <p className="font-medium text-blue-800">Chat Master</p>
-                  <p className="text-sm text-blue-600">50+ successful chat sessions</p>
+                  <p className="font-medium text-emerald-800">Chat Master</p>
+                  <p className="text-sm text-emerald-600">50+ successful chat sessions</p>
                 </div>
               </div>
 

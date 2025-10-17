@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router';
+import { Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import SignUpPage from './pages/SignUpPage';
 import SignInPage from './pages/SignInPage';
@@ -14,6 +14,17 @@ import CustomerPrescriptionsPage from './pages/CustomerPrescriptionsPage';
 import CustomerOrdersPage from './pages/CustomerOrdersPage';
 import StaffOrdersPage from './pages/StaffOrdersPage';
 import OrderDetailPage from './pages/OrderDetailPage';
+
+
+// ✅ HELP & SUPPORT PAGES
+import HelpsupportPage from './pages/HelpsupportPage';
+import TicketsPage from './pages/TicketsPage';
+import ChatPage from './pages/ChatPage';
+import FeedbackPage from './pages/FeedbackPage';
+import CallbackPage from './pages/CallbackPage';
+import AgentDashboardPage from './pages/AgentDashboardPage';
+import StaffDashboardPage from './pages/StaffDashboardPage';
+
 
 /**
  * Main application component defining the routing structure
@@ -37,7 +48,45 @@ const App = () => {
         <Route path="/my-orders" element={<CustomerOrdersPage />} />
         <Route path="/orders/:id" element={<OrderDetailPage />} />
         
-        {/* Staff protected routes */}
+        
+        {/* 🎯 HELP & SUPPORT ROUTES - Customer Side */}
+      
+        {/* Main Help & Support Hub */}
+        <Route path="/help-support" element={<HelpsupportPage />} />
+        
+        {/* Customer Support Features */}
+        <Route path="/help-support/tickets" element={<TicketsPage />} />
+        <Route path="/help-support/chat" element={<ChatPage />} />
+        <Route path="/help-support/chat/:ticketId" element={<ChatPage />} />
+        <Route path="/help-support/feedback" element={<FeedbackPage />} />
+        <Route path="/help-support/callback" element={<CallbackPage />} />
+        
+        
+        {/* 🎯 HELP & SUPPORT ROUTES - Staff/Agent Side */}
+        
+        {/* ✅ Agent Dashboard - For Support Agents & Staff */}
+        <Route 
+          path="/agent/dashboard" 
+          element={
+            <ProtectedRoute allowedRoles={['Owner', 'Manager', 'Staff', 'Support Agent']}>
+              <AgentDashboardPage />
+            </ProtectedRoute>
+          } 
+        />
+        
+        {/* ✅ Staff Dashboard - For Pharmacy Staff (Owner, Manager, Staff) */}
+        <Route 
+          path="/staff/dashboard" 
+          element={
+            <ProtectedRoute allowedRoles={['Owner', 'Manager', 'Staff']}>
+              <StaffDashboardPage />
+            </ProtectedRoute>
+          } 
+        />
+        
+        
+        {/* PHARMACY STAFF PROTECTED ROUTES */}
+        
         <Route 
           path="/staff/prescriptions" 
           element={
@@ -68,5 +117,6 @@ const App = () => {
     </div>
   )
 }
+
 
 export default App;

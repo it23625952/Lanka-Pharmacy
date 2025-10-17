@@ -69,7 +69,7 @@ const CallbackSystem = () => {
   const getStatusColor = (status) => {
     switch(status) {
       case 'Pending': return 'text-yellow-600 bg-yellow-100';
-      case 'Scheduled': return 'text-blue-600 bg-blue-100';
+      case 'Scheduled': return 'text-emerald-600 bg-emerald-100';
       case 'Completed': return 'text-green-600 bg-green-100';
       case 'Cancelled': return 'text-red-600 bg-red-100';
       default: return 'text-gray-600 bg-gray-100';

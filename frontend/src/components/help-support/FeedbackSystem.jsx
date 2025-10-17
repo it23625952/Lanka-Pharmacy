@@ -106,7 +106,7 @@ const FeedbackSystem = () => {
     <div className="max-w-2xl mx-auto p-6">
       {/* Header */}
       <div className="text-center mb-8">
-        <MessageCircle className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+        <MessageCircle className="w-12 h-12 text-emerald-600 mx-auto mb-4" />
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Share Your Feedback</h2>
         <p className="text-gray-600">
           Help us improve our pharmacy services by sharing your experience
@@ -144,7 +144,7 @@ const FeedbackSystem = () => {
               required
               value={feedbackForm.category}
               onChange={(e) => setFeedbackForm({...feedbackForm, category: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
             >
               <option value="">Select a category</option>
               {categories.map(cat => (
@@ -163,7 +163,7 @@ const FeedbackSystem = () => {
               rows={5}
               value={feedbackForm.feedbackText}
               onChange={(e) => setFeedbackForm({...feedbackForm, feedbackText: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
               placeholder="Tell us about your experience, what we did well, and how we can improve..."
             />
           </div>
@@ -175,7 +175,7 @@ const FeedbackSystem = () => {
                 type="checkbox"
                 checked={feedbackForm.anonymous}
                 onChange={(e) => setFeedbackForm({...feedbackForm, anonymous: e.target.checked})}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
               />
               <span className="ml-2 text-sm text-gray-700">Submit feedback anonymously</span>
             </label>
@@ -185,7 +185,7 @@ const FeedbackSystem = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+            className="w-full bg-emerald-600 text-white py-3 px-4 rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           >
             {loading ? (
               <>
@@ -203,27 +203,27 @@ const FeedbackSystem = () => {
       </div>
 
       {/* Benefits Section */}
-      <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-blue-900 mb-3">Your feedback helps us:</h3>
-        <ul className="space-y-2 text-sm text-blue-800">
+      <div className="mt-8 bg-emerald-50 border border-emerald-200 rounded-lg p-6">
+        <h3 className="text-lg font-semibold text-emerald-900 mb-3">Your feedback helps us:</h3>
+        <ul className="space-y-2 text-sm text-emerald-800">
           <li className="flex items-center">
-            <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+            <div className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></div>
             Improve prescription processing accuracy and speed
           </li>
           <li className="flex items-center">
-            <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+            <div className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></div>
             Enhance our delivery and customer service experience
           </li>
           <li className="flex items-center">
-            <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+            <div className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></div>
             Better train our pharmacy staff and support team
           </li>
           <li className="flex items-center">
-            <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+            <div className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></div>
             Upgrade our website and mobile app functionality
           </li>
           <li className="flex items-center">
-            <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+            <div className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></div>
             Ensure the highest quality of medications and health products
           </li>
         </ul>

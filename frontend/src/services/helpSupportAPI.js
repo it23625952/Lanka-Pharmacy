@@ -25,9 +25,9 @@ export const helpSupportAPI = {
   requestCallback: (callbackData) => api.post('/callbacks', callbackData),
   getCustomerCallbacks: (customerID) => api.get(`/callbacks/customer/${customerID}`),
   
-  // Part 4: Chat
+  // Part 4: Chat - ✅ FIXED TO MATCH YOUR BACKEND
   getChatHistory: (ticketID) => api.get(`/chats/history/${ticketID}`),
-  sendChatMessage: (messageData) => api.post('/chats/send', messageData),
+  sendChatMessage: (messageData) => api.post('/messages/:ticketID', messageData),
   
   // Part 5: Agent Dashboard
   getDashboardStats: () => api.get('/dashboard/stats'),
@@ -40,5 +40,14 @@ export const helpSupportAPI = {
   getInteractionPatterns: () => api.get('/staff-dashboard/interactions'),
   getCallbackMetrics: () => api.get('/staff-dashboard/callbacks'),
 };
+
+// Error interceptor
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error('API Error:', error.response?.data || error.message);
+    return Promise.reject(error);
+  }
+);
 
 export default api;

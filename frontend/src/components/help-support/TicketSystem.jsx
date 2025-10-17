@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { helpSupportAPI } from '../../services/helpSupportAPI';
-import { Ticket, Plus, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import { Ticket, Plus, Clock, CheckCircle, AlertCircle, MessageCircle } from 'lucide-react';
 
 const TicketSystem = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('create');
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -66,6 +68,16 @@ const TicketSystem = () => {
     }
   };
 
+  // ✅ START CHAT FUNCTION
+  const handleStartChat = (ticketId) => {
+    try {
+      navigate(`/help-support/chat/${ticketId}`);
+    } catch (error) {
+      console.error('Error starting chat:', error);
+      alert('Failed to start chat. Please try again.');
+    }
+  };
+
   const getStatusColor = (status) => {
     switch(status) {
       case 'Open': return 'bg-red-100 text-red-700';
@@ -100,7 +112,7 @@ const TicketSystem = () => {
             onClick={() => setActiveTab('create')}
             className={`flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-lg transition-all shadow-md ${
               activeTab === 'create'
-                ? 'bg-blue-600 text-white shadow-xl scale-105'
+                ? 'bg-emerald-600 text-white shadow-xl scale-105'
                 : 'bg-white text-gray-700 hover:bg-gray-50'
             }`}
           >
@@ -111,7 +123,7 @@ const TicketSystem = () => {
             onClick={() => setActiveTab('list')}
             className={`flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-lg transition-all shadow-md ${
               activeTab === 'list'
-                ? 'bg-blue-600 text-white shadow-xl scale-105'
+                ? 'bg-emerald-600 text-white shadow-xl scale-105'
                 : 'bg-white text-gray-700 hover:bg-gray-50'
             }`}
           >
@@ -133,7 +145,7 @@ const TicketSystem = () => {
                   value={ticketForm.subject}
                   onChange={(e) => setTicketForm({ ...ticketForm, subject: e.target.value })}
                   placeholder="Brief description of your issue"
-                  className="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none"
+                  className="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all outline-none"
                 />
               </div>
 
@@ -144,7 +156,7 @@ const TicketSystem = () => {
                     required
                     value={ticketForm.category}
                     onChange={(e) => setTicketForm({ ...ticketForm, category: e.target.value })}
-                    className="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none"
+                    className="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all outline-none"
                   >
                     <option value="">Select category</option>
                     {categories.map(cat => (
@@ -158,7 +170,7 @@ const TicketSystem = () => {
                   <select
                     value={ticketForm.priority}
                     onChange={(e) => setTicketForm({ ...ticketForm, priority: e.target.value })}
-                    className="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none"
+                    className="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all outline-none"
                   >
                     <option value="Low">Low</option>
                     <option value="Medium">Medium</option>
@@ -175,14 +187,14 @@ const TicketSystem = () => {
                   value={ticketForm.description}
                   onChange={(e) => setTicketForm({ ...ticketForm, description: e.target.value })}
                   placeholder="Please provide detailed information about your issue, including order numbers, prescription details, etc."
-                  className="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none resize-none"
+                  className="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all outline-none resize-none"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl text-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-6 rounded-xl text-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
@@ -205,7 +217,7 @@ const TicketSystem = () => {
           <div>
             {loading ? (
               <div className="text-center py-20">
-                <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                <div className="w-16 h-16 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
                 <p className="mt-6 text-gray-600 text-lg font-semibold">Loading tickets...</p>
               </div>
             ) : tickets.length === 0 ? (
@@ -215,7 +227,7 @@ const TicketSystem = () => {
                 <p className="text-gray-600 text-lg mb-8">You haven't submitted any support requests</p>
                 <button
                   onClick={() => setActiveTab('create')}
-                  className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transition-all"
+                  className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transition-all"
                 >
                   <Plus className="w-5 h-5" />
                   Create Your First Ticket
@@ -260,14 +272,14 @@ const TicketSystem = () => {
                     
                     <p className="text-gray-700 mb-6 leading-relaxed">{ticket.description}</p>
                     
-                    <div className="flex gap-3">
-                      <button className="px-6 py-2 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold rounded-lg transition-all">
-                        View Details
-                      </button>
-                      <button className="px-6 py-2 border-2 border-green-600 text-green-600 hover:bg-green-50 font-semibold rounded-lg transition-all">
-                        Start Chat
-                      </button>
-                    </div>
+                    {/* ✅ ONLY START CHAT BUTTON */}
+                    <button
+                      onClick={() => handleStartChat(ticket.ticketID)}
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg"
+                    >
+                      <MessageCircle className="w-5 h-5" />
+                      Start Chat
+                    </button>
                   </div>
                 ))}
               </div>

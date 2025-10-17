@@ -10,7 +10,7 @@ const ChatWidget = () => {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-2xl transition-all duration-200 hover:scale-110"
+        className="fixed bottom-6 right-6 z-50 bg-emerald-600 hover:bg-emerald-700 text-white p-4 rounded-full shadow-2xl transition-all duration-200 hover:scale-110"
       >
         <MessageCircle className="w-6 h-6" />
       </button>
@@ -22,7 +22,7 @@ const ChatWidget = () => {
       isMinimized ? 'w-80 h-16' : 'w-96 h-[32rem]'
     }`}>
       {/* Widget Header */}
-      <div className="bg-blue-600 text-white p-3 rounded-t-lg flex items-center justify-between">
+      <div className="bg-emerald-600 text-white p-3 rounded-t-lg flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <MessageCircle className="w-5 h-5" />
           <span className="font-medium">Live Support</span>
@@ -30,13 +30,13 @@ const ChatWidget = () => {
         <div className="flex items-center space-x-1">
           <button
             onClick={() => setIsMinimized(!isMinimized)}
-            className="text-white hover:bg-blue-700 p-1 rounded"
+            className="text-white hover:bg-emerald-700 p-1 rounded"
           >
             {isMinimized ? <Maximize2 className="w-4 h-4" /> : <Minimize2 className="w-4 h-4" />}
           </button>
           <button
             onClick={() => setIsOpen(false)}
-            className="text-white hover:bg-blue-700 p-1 rounded"
+            className="text-white hover:bg-emerald-700 p-1 rounded"
           >
             <X className="w-4 h-4" />
           </button>
