@@ -9,8 +9,8 @@ const orderSchema = new mongoose.Schema(
     {
         orderNumber: {
             type: String,
-            required: true,
-            unique: true
+            unique: true,
+            sparse: true // Allow null/undefined for unique constraint
         },
         customer: {
             type: mongoose.Schema.Types.ObjectId,
@@ -97,7 +97,8 @@ const orderSchema = new mongoose.Schema(
  * Format: ORDYYMMDDXXX (e.g., ORD241215001)
  */
 orderSchema.pre('save', async function (next) {
-    if (this.isNew) {
+    // Only generate order number for new documents
+    if (this.isNew && !this.orderNumber) {
         const date = new Date();
         const year = date.getFullYear().toString().slice(-2);
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
