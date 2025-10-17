@@ -9,7 +9,6 @@ export default {
   theme: {
     extend: {},
   },
-<<<<<<< HEAD
   plugins: [
     require('daisyui'),  
   ],
@@ -19,10 +18,5 @@ export default {
     base: true,
     styled: true,
     utils: true,
-=======
-  plugins: [daisyui],
-  daisyui: {
-    themes: ["corporate"],
->>>>>>> cart
   },
 }
