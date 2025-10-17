@@ -37,6 +37,8 @@ import CheckoutPage from './pages/CheckoutPage';
 import ConfirmationPage from './pages/ConfirmationPage';
 import ViewOrderPage from './pages/ViewOrderPage';
 import EditOrderPage from './pages/EditOrderPage';
+import PaymentPage from "./pages/PaymentPage";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 
 function App() {
   return (
@@ -76,8 +78,10 @@ function App() {
               
         {/* Shopping cart flow routes */}
         <Route path="/cart" element={<CartPage />} />
-        <Route path="/cart-page" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/view-order" element={<ViewOrderPage />} />
+        <Route path="/edit-order/:id" element={<EditOrderPage />} />
+        <Route path="/confirmation" element={<ConfirmationPage />} />
         
         {/* Staff protected routes */}
         <Route 
@@ -107,31 +111,35 @@ function App() {
           } 
         />
 
-        {/* Protected routes */}
-        <Route
-          path="/staff/prescriptions"
-          element={
-            <ProtectedRoute allowedRoles={["Owner","Manager","Staff"]}>
-              <StaffPrescriptionsPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/staff/orders"
-          element={
-            <ProtectedRoute allowedRoles={["Owner","Manager","Staff"]}>
-              <StaffOrdersPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/staff/orders/:id"
-          element={
-            <ProtectedRoute allowedRoles={["Owner","Manager","Staff"]}>
-              <OrderDetailPage />
-            </ProtectedRoute>
-          }
-        />
+        {/* payment routes */}
+    <Route path="/payment" element={<PaymentPage />} />
+    <Route path="/payment-success" element={<PaymentSuccessPage />} />
+
+            {/* Protected routes */}
+            <Route
+              path="/staff/prescriptions"
+              element={
+                <ProtectedRoute allowedRoles={["Owner","Manager","Staff"]}>
+                  <StaffPrescriptionsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/staff/orders"
+              element={
+                <ProtectedRoute allowedRoles={["Owner","Manager","Staff"]}>
+                  <StaffOrdersPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/staff/orders/:id"
+              element={
+                <ProtectedRoute allowedRoles={["Owner","Manager","Staff"]}>
+                  <OrderDetailPage />
+                </ProtectedRoute>
+              }
+            />
 
         {/* Default route */}
         <Route path="*" element={<Navigate to="/" replace />} />

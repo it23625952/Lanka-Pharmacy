@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router';
 import axios from 'axios';
 import { ArrowLeft, MapPin, User, Phone, Home, Package, CheckCircle, CreditCard, Shield } from 'lucide-react';
+import Navbar from '../components/Navbar';
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
@@ -86,7 +87,7 @@ const CheckoutPage = () => {
       };
 
       localStorage.setItem('pendingOrder', JSON.stringify(order));
-      navigate('/view-order');
+      navigate('/confirmationpage');
       setIsSubmitting(false);
     }, 1500);
   };
@@ -102,6 +103,8 @@ const CheckoutPage = () => {
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
+      <Navbar />
+
       {/* Navigation Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="container mx-auto px-4 py-4">
