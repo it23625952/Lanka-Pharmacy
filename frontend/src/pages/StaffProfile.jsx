@@ -1,18 +1,5 @@
-/*import React from "react";
-
-function StaffProfile() {
-  return (
-    <div>
-      <h2>Staff Profile Page</h2>
-      <p>Display staff profile details here.</p>
-    </div>
-  );
-}
-
-export default StaffProfile;*/
-
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router";
 import api from "../lib/axios";
 
 function StaffProfile() {

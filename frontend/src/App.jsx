@@ -1,6 +1,5 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router";
-import Sidebar from "./components/Sidebar";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Public routes
@@ -43,50 +42,43 @@ import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 
 function App() {
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <Sidebar />
+    <div>
+      <Routes>
+        {/* Public routes */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/signUp" element={<SignUpPage />} />
+        <Route path="/signIn" element={<SignInPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+        <Route path="/upload-prescription" element={<UploadPrescriptionPage />} />
+        <Route path="/upload-success" element={<UploadSuccessPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/my-prescriptions" element={<CustomerPrescriptionsPage />} />
+        <Route path="/my-orders" element={<CustomerOrdersPage />} />
+        <Route path="/orders/:id" element={<OrderDetailPage />} />
 
-      {/* Main content */}
-      <div className="flex-1 ml-80 bg-gray-100 min-h-screen">
-        <main className="p-6">
-          <Routes>
-            {/* Public routes */}
-            <Route path="/" element={<HomePage />} />
-            <Route path="/signUp" element={<SignUpPage />} />
-            <Route path="/signIn" element={<SignInPage />} />
-            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-            <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-            <Route path="/upload-prescription" element={<UploadPrescriptionPage />} />
-            <Route path="/upload-success" element={<UploadSuccessPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/my-prescriptions" element={<CustomerPrescriptionsPage />} />
-            <Route path="/my-orders" element={<CustomerOrdersPage />} />
-            <Route path="/orders/:id" element={<OrderDetailPage />} />
-
-            {/* Staff routes */}
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/staff" element={<StaffList />} />
-            <Route path="/staff/add" element={<AddStaff />} />
-            <Route path="/staff/edit/:id" element={<EditStaff />} />
-            <Route path="/staff/:id" element={<StaffProfile />} />
-            <Route path="/roles" element={<Roles />} />
-            <Route path="/attendance" element={<Attendance />} />
-            <Route path="/salary" element={<Salary />} />
-            <Route path="/reports" element={<Reports />} />
-            <Route path="/create-product" element={<CreateProductPage />} />
-            <Route path="/product/:id" element={<ProductDetailPage />} />
+        {/* Staff routes */}
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/staff" element={<StaffList />} />
+        <Route path="/staff/add" element={<AddStaff />} />
+        <Route path="/staff/edit/:id" element={<EditStaff />} />
+        <Route path="/staff/:id" element={<StaffProfile />} />
+        <Route path="/roles" element={<Roles />} />
+        <Route path="/attendance" element={<Attendance />} />
+        <Route path="/salary" element={<Salary />} />
+        <Route path="/reports" element={<Reports />} />
+        <Route path="/create-product" element={<CreateProductPage />} />
+        <Route path="/product/:id" element={<ProductDetailPage />} />
               
-              {/* Shopping cart flow routes */}
-        
+        {/* Shopping cart flow routes */}
         <Route path="/cart" element={<CartPage />} />
         <Route path="/cart-page" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
 
-{/* payment routes */}
+        {/* payment routes */}
     <Route path="/payment" element={<PaymentPage />} />
     <Route path="/payment-success" element={<PaymentSuccessPage />} />
-    
+
             {/* Protected routes */}
             <Route
               path="/staff/prescriptions"
@@ -113,11 +105,9 @@ function App() {
               }
             />
 
-            {/* Default route */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </main>
-      </div>
+        {/* Default route */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </div>
   );
 }
