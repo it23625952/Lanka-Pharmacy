@@ -71,6 +71,9 @@ const Navbar = () => {
       .slice(0, 2);
   };
 
+  // Check if user has permission to create products
+  const canCreateProducts = userData?.role && ['Owner', 'Manager', 'Staff'].includes(userData.role);
+
   return (
     <>
       {/* Top Info Bar with contact information */}
@@ -79,7 +82,7 @@ const Navbar = () => {
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
               <Phone className="size-4" />
-              <span>+94 51 222 5523</span>
+              <span>+94 11 234 5678</span>
             </div>
             <div className="hidden md:flex items-center gap-2">
               <Mail className="size-4" />
@@ -128,6 +131,17 @@ const Navbar = () => {
 
             {/* Right Action Buttons and User Menu */}
             <div className="flex items-center gap-3">
+              {/* Create Product Button - Only for staff roles */}
+              {canCreateProducts && (
+                <Link 
+                  to="/create-product"
+                  className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl transition-all duration-200 font-medium"
+                >
+                  <Plus className="size-4" />
+                  <span>Add Product</span>
+                </Link>
+              )}
+
               {/* Upload Prescription - Primary Call to Action */}
               <Link 
                 to="/upload-prescription"
@@ -183,19 +197,30 @@ const Navbar = () => {
                         <Package className="size-4" />
                         My Orders
                       </Link>
-                      {/* Staff Dashboard Link - Only for authorized roles */}
-                      {userData?.role && ['Owner', 'Manager', 'Staff'].includes(userData.role) && (
+                      
+                      {/* Staff Management Links - Only for authorized roles */}
+                      {canCreateProducts && (
                         <>
-                          <Link to="/staff/prescriptions" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
-                            <ClipboardList className="size-4" />
-                            Manage Prescriptions
-                          </Link>
-                          <Link to="/staff/orders" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
-                            <Package className="size-4" />
-                            Manage Orders
-                          </Link>
+                          <div className="border-t border-gray-100 mt-2 pt-2">
+                            <div className="px-4 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                              Staff Management
+                            </div>
+                            <Link to="/create-product" className="w-full text-left px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 flex items-center gap-2">
+                              <Plus className="size-4" />
+                              Add Product
+                            </Link>
+                            <Link to="/staff/prescriptions" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
+                              <FileText className="size-4" />
+                              Manage Prescriptions
+                            </Link>
+                            <Link to="/staff/orders" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
+                              <Package className="size-4" />
+                              Manage Orders
+                            </Link>
+                          </div>
                         </>
                       )}
+                      
                       <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 mt-2 border-t border-gray-100 flex items-center gap-2">
                         <LogOut className="size-4" />
                         Logout
@@ -206,11 +231,11 @@ const Navbar = () => {
               ) : (
                 /* Authentication Buttons for Non-Logged In Users */
                 <>
-                  <Link to="/signin" className="hidden md:flex items-center gap-2 px-5 py-2.5 border-2 border-emerald-600 text-emerald-600 rounded-xl hover:bg-emerald-50 transition-all duration-200 font-medium">
+                  <Link to="/signIn" className="hidden md:flex items-center gap-2 px-5 py-2.5 border-2 border-emerald-600 text-emerald-600 rounded-xl hover:bg-emerald-50 transition-all duration-200 font-medium">
                     <LogIn className="size-4" />
                     Sign In
                   </Link>
-                  <Link to="/signup" className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-xl hover:from-emerald-700 hover:to-emerald-800 shadow-lg hover:shadow-xl transition-all duration-200 font-medium">
+                  <Link to="/signUp" className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-xl hover:from-emerald-700 hover:to-emerald-800 shadow-lg hover:shadow-xl transition-all duration-200 font-medium">
                     <UserPlus className="size-4" />
                     Sign Up
                   </Link>
@@ -255,6 +280,7 @@ const Navbar = () => {
                     <div className="px-4 py-3 bg-emerald-50 rounded-lg border border-emerald-200">
                       <p className="font-semibold text-gray-800">{userData.name}</p>
                       <p className="text-sm text-gray-600">{userData.email}</p>
+                      <p className="text-xs text-emerald-600 font-medium">{userData.role}</p>
                     </div>
                   )}
                   <Link to="/profile" className="block px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 font-medium">
@@ -267,18 +293,30 @@ const Navbar = () => {
                     <Package className="size-4" />
                     My Orders
                   </Link>
-                  {userData?.role && ['Owner', 'Manager', 'Staff'].includes(userData.role) && (
+                  
+                  {/* Mobile Staff Management Links */}
+                  {canCreateProducts && (
                     <>
-                      <Link to="/staff/prescriptions" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
-                        <ClipboardList className="size-4" />
-                        Manage Prescriptions
-                      </Link>
-                      <Link to="/staff/orders" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
-                        <Package className="size-4" />
-                        Manage Orders
-                      </Link>
+                      <div className="border-t border-gray-200 mt-2 pt-2">
+                        <div className="px-4 py-1 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                          Staff Management
+                        </div>
+                        <Link to="/create-product" className="w-full text-left px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 flex items-center gap-2">
+                          <Plus className="size-4" />
+                          Add Product
+                        </Link>
+                        <Link to="/staff/prescriptions" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
+                          <FileText className="size-4" />
+                          Manage Prescriptions
+                        </Link>
+                        <Link to="/staff/orders" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
+                          <Package className="size-4" />
+                          Manage Orders
+                        </Link>
+                      </div>
                     </>
                   )}
+                  
                   <button onClick={handleLogout} className="w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 font-medium">
                     Logout
                   </button>
@@ -286,17 +324,25 @@ const Navbar = () => {
               ) : (
                 /* Mobile Authentication Buttons */
                 <>
-                  <Link to="/signin" className="block px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 font-medium">
+                  <Link to="/signIn" className="block px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 font-medium">
                     Sign In
                   </Link>
-                  <Link to="/signup" className="block px-4 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 rounded-lg transition-all duration-200 font-medium text-center">
+                  <Link to="/signUp" className="block px-4 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 rounded-lg transition-all duration-200 font-medium text-center">
                     Sign Up
                   </Link>
                 </>
               )}
               
+              {/* Mobile Create Product Button - Only for staff roles */}
+              {canCreateProducts && (
+                <Link to="/create-product" className="px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-medium text-center flex items-center justify-center gap-2">
+                  <Plus className="size-4" />
+                  Add Product
+                </Link>
+              )}
+              
               {/* Mobile Upload Prescription Button */}
-              <Link to="/upload-prescription" className="px-4 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-lg hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 font-medium mt-4 text-center flex items-center justify-center gap-2">
+              <Link to="/upload-prescription" className="px-4 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-lg hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 font-medium text-center flex items-center justify-center gap-2">
                 <Upload className="size-4" />
                 Upload Prescription
               </Link>
