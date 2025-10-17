@@ -1,6 +1,3 @@
-import React from 'react';
-import { Route, Routes } from 'react-router';
-import Sidebar from "./components/Sidebar";
 import React from "react";
 import { Routes, Route, Navigate } from "react-router";
 import ProtectedRoute from "./components/ProtectedRoute";

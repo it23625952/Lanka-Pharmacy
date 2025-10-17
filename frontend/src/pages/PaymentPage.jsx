@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router';
 import { ArrowLeft, CreditCard, User, Phone, Lock, Shield, CheckCircle } from 'lucide-react';
 
 const PaymentPage = () => {
@@ -146,7 +146,7 @@ const PaymentPage = () => {
             <div className='space-y-6'>
               {/* Name on Card */}
               <div>
-                <label className='block text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
+                <label className='text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
                   <User className="size-5 text-emerald-600" />
                   Name on Card
                 </label>
@@ -172,7 +172,7 @@ const PaymentPage = () => {
 
               {/* Phone Number */}
               <div>
-                <label className='block text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
+                <label className='text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
                   <Phone className="size-5 text-emerald-600" />
                   Phone Number
                 </label>
@@ -199,7 +199,7 @@ const PaymentPage = () => {
 
               {/* Card Number */}
               <div>
-                <label className='block text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
+                <label className='text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
                   <CreditCard className="size-5 text-emerald-600" />
                   Card Number
                 </label>
@@ -255,7 +255,7 @@ const PaymentPage = () => {
                 </div>
 
                 <div>
-                  <label className='block text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
+                  <label className='text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
                     <Lock className="size-5 text-emerald-600" />
                     CVV
                   </label>
