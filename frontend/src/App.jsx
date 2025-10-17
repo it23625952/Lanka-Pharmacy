@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router";
 import Sidebar from "./components/Sidebar";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -17,6 +17,8 @@ import CustomerPrescriptionsPage from "./pages/CustomerPrescriptionsPage";
 import CustomerOrdersPage from "./pages/CustomerOrdersPage";
 import StaffOrdersPage from "./pages/StaffOrdersPage";
 import OrderDetailPage from "./pages/OrderDetailPage";
+import Payment from "./pages/PaymentPage";
+import PaymentSuccess from "./pages/PaymentSuccessPage";
 
 // Staff management
 import Dashboard from "./pages/Dashboard";
@@ -36,6 +38,8 @@ import CheckoutPage from './pages/CheckoutPage';
 import ConfirmationPage from './pages/ConfirmationPage';
 import ViewOrderPage from './pages/ViewOrderPage';
 import EditOrderPage from './pages/EditOrderPage';
+import PaymentPage from "./pages/PaymentPage";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 
 function App() {
   return (
@@ -79,6 +83,10 @@ function App() {
         <Route path="/cart-page" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
 
+{/* payment routes */}
+    <Route path="/payment" element={<PaymentPage />} />
+    <Route path="/payment-success" element={<PaymentSuccessPage />} />
+    
             {/* Protected routes */}
             <Route
               path="/staff/prescriptions"
