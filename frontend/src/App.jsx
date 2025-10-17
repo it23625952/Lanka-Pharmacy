@@ -1,21 +1,24 @@
+import React from 'react';
+import { Route, Routes } from 'react-router';
+import Sidebar from "./components/Sidebar";
 import React from "react";
 import { Routes, Route, Navigate } from "react-router";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-// Public routes
-import HomePage from "./pages/HomePage";
-import SignUpPage from "./pages/SignUpPage";
-import SignInPage from "./pages/SignInPage";
-import ProfilePage from "./pages/ProfilePage";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
-import UploadPrescriptionPage from "./pages/UploadPrescriptionPage";
-import UploadSuccessPage from "./pages/UploadSuccessPage";
-import StaffPrescriptionsPage from "./pages/StaffPrescriptionsPage";
-import CustomerPrescriptionsPage from "./pages/CustomerPrescriptionsPage";
-import CustomerOrdersPage from "./pages/CustomerOrdersPage";
-import StaffOrdersPage from "./pages/StaffOrdersPage";
-import OrderDetailPage from "./pages/OrderDetailPage";
+import HomePage from './pages/HomePage';
+import SignUpPage from './pages/SignUpPage';
+import SignInPage from './pages/SignInPage';
+import ProfilePage from './pages/ProfilePage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
+import UploadPrescriptionPage from './pages/UploadPrescriptionPage';
+import UploadSuccessPage from './pages/UploadSuccessPage';
+import StaffPrescriptionsPage from './pages/StaffPrescriptionsPage';
+import CustomerPrescriptionsPage from './pages/CustomerPrescriptionsPage';
+import CustomerOrdersPage from './pages/CustomerOrdersPage';
+import StaffOrdersPage from './pages/StaffOrdersPage';
+import OrderDetailPage from './pages/OrderDetailPage';
+import ProductDetailPage from './pages/ProductDetailPage';
 
 // Staff management
 import Dashboard from "./pages/Dashboard";
@@ -28,7 +31,6 @@ import Attendance from "./pages/Attendance";
 import Salary from "./pages/Salary";
 import Reports from "./pages/Reports";
 import CreateProductPage from "./pages/CreateProductPage";
-import ProductDetailPage from "./pages/ProductDetailPage";
 
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
@@ -50,10 +52,15 @@ function App() {
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
         <Route path="/upload-prescription" element={<UploadPrescriptionPage />} />
         <Route path="/upload-success" element={<UploadSuccessPage />} />
+        
+        {/* Authenticated user routes */}
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/my-prescriptions" element={<CustomerPrescriptionsPage />} />
         <Route path="/my-orders" element={<CustomerOrdersPage />} />
         <Route path="/orders/:id" element={<OrderDetailPage />} />
+
+        <Route path="/create-product" element={<CreateProductPage />} />
+        <Route path="/product/:id" element={<ProductDetailPage />} />
 
         {/* Staff routes */}
         <Route path="/dashboard" element={<Dashboard />} />
@@ -65,6 +72,7 @@ function App() {
         <Route path="/attendance" element={<Attendance />} />
         <Route path="/salary" element={<Salary />} />
         <Route path="/reports" element={<Reports />} />
+
         <Route path="/create-product" element={<CreateProductPage />} />
         <Route path="/product/:id" element={<ProductDetailPage />} />
               
@@ -74,6 +82,34 @@ function App() {
         <Route path="/view-order" element={<ViewOrderPage />} />
         <Route path="/edit-order/:id" element={<EditOrderPage />} />
         <Route path="/confirmation" element={<ConfirmationPage />} />
+        
+        {/* Staff protected routes */}
+        <Route 
+          path="/staff/prescriptions" 
+          element={
+            <ProtectedRoute allowedRoles={['Owner', 'Manager', 'Staff']}>
+              <StaffPrescriptionsPage />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/staff/orders" 
+          element={
+            <ProtectedRoute allowedRoles={['Owner', 'Manager', 'Staff']}>
+              <StaffOrdersPage />
+            </ProtectedRoute>
+          } 
+        />
+        
+        <Route 
+          path="/staff/orders/:id" 
+          element={
+            <ProtectedRoute allowedRoles={['Owner', 'Manager', 'Staff']}>
+              <OrderDetailPage />
+            </ProtectedRoute>
+          } 
+        />
 
         {/* payment routes */}
     <Route path="/payment" element={<PaymentPage />} />
