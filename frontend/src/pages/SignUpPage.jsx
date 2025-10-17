@@ -84,11 +84,7 @@ const SignUpPage = () => {
                 navigate("/");
             } else {
                 toast.success("Account created, please log in.");
-<<<<<<< HEAD
-                navigate("/signIn");
-=======
                 navigate("/signin");
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
             }
         } catch (error) {
             console.log("Signup error: ", error);

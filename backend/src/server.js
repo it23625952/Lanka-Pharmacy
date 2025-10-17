@@ -23,10 +23,6 @@ import { fileURLToPath } from "url";
 // Load environment variables
 dotenv.config();
 
-// Get __dirname equivalent for ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 // Validate required environment variables
 const requiredEnvVars = ['JWT_SECRET', 'MONGO_URI'];
 requiredEnvVars.forEach(envVar => {
@@ -44,11 +40,8 @@ app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true
 }));
-app.use(express.json());
-app.use(rateLimiter);
-
-// Static file serving for uploaded files - use the correct path
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.json()); // Parse JSON request bodies
+app.use(rateLimiter); // Apply rate limiting to all routes
 
 // Static file serving for uploaded files
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
@@ -69,4 +62,7 @@ connectDB().then(() => {
     app.listen(PORT, () => {
         console.log(`✅ Server is running on port ${PORT}`);
     });
+}).catch(err => {
+    console.error("❌ Database connection failed:", err);
+    process.exit(1);
 });

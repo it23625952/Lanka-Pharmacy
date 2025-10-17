@@ -1,14 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router';
-<<<<<<< HEAD
-import { ShoppingCart, Eye, Package, ImageOff, Edit, Trash2 } from 'lucide-react';
-
-const ProductCard = ({ product, viewMode = 'grid', onEdit, onDelete, showAdminActions = false }) => {
-  const { _id, name, retailPrice, description, category, stock, imageUrl } = product;
-  const [imageError, setImageError] = useState(false);
-
-  // Function to get proper image URL
-=======
 import { ShoppingCart, Eye, Package } from 'lucide-react';
 
 /**
@@ -24,7 +15,6 @@ const ProductCard = ({ product, viewMode = 'grid' }) => {
   const { _id, name, retailPrice, description, category, stock, imageUrl } = product;
 
   // Construct full image URL for frontend
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
   const getImageUrl = (url) => {
     if (!url) return null;
     
@@ -33,23 +23,12 @@ const ProductCard = ({ product, viewMode = 'grid' }) => {
     
     // If it's a relative path, prepend the backend URL
     if (url.startsWith('/')) {
-<<<<<<< HEAD
-      // Use window.location.origin for the current domain or hardcode your backend URL
-      const backendUrl = window.location.origin.includes('localhost') 
-        ? 'http://localhost:5001' 
-        : window.location.origin; // For production, use same domain
-      return `${backendUrl}${url}`;
-=======
       return `http://localhost:5001${url}`; // Your backend runs on port 5001
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
     }
     
     return url;
   };
 
-<<<<<<< HEAD
-  const finalImageUrl = getImageUrl(imageUrl);
-=======
   const fullImageUrl = getImageUrl(imageUrl);
 
   // Handle image loading errors
@@ -57,7 +36,6 @@ const ProductCard = ({ product, viewMode = 'grid' }) => {
     console.error(`Failed to load image: ${fullImageUrl}`);
     e.target.style.display = 'none';
   };
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
 
   // Grid View Layout
   if (viewMode === 'grid') {
@@ -65,19 +43,6 @@ const ProductCard = ({ product, viewMode = 'grid' }) => {
       <div className="group bg-white rounded-2xl shadow-lg border border-gray-200 hover:shadow-2xl hover:border-emerald-200 transition-all duration-300 overflow-hidden">
         {/* Product Image */}
         <div className="relative h-48 bg-gradient-to-br from-emerald-50 to-teal-50 overflow-hidden">
-<<<<<<< HEAD
-          {finalImageUrl && !imageError ? (
-            <img 
-              src={finalImageUrl} 
-              alt={name}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              onError={() => setImageError(true)}
-            />
-          ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center text-gray-400">
-              <Package className="size-16 mb-2" />
-              <span className="text-sm">No image</span>
-=======
           {fullImageUrl ? (
             <img 
               src={fullImageUrl} 
@@ -88,7 +53,6 @@ const ProductCard = ({ product, viewMode = 'grid' }) => {
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <Package className="size-16 text-emerald-400" />
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
             </div>
           )}
           
@@ -103,52 +67,14 @@ const ProductCard = ({ product, viewMode = 'grid' }) => {
 
           {/* Quick Actions Overlay */}
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-<<<<<<< HEAD
-            <div className="flex flex-col gap-2">
-              <Link
-                to={`/product/${_id}`}
-                className="btn btn-sm bg-white text-emerald-600 border-none hover:bg-emerald-50 shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2"
-=======
             <div className="flex gap-2">
               <Link
                 to={`/product/${_id}`}
                 className="btn btn-sm bg-white text-emerald-600 border-none hover:bg-emerald-50 shadow-md hover:shadow-lg transition-all duration-200"
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
               >
                 <Eye className="size-4" />
                 View Details
               </Link>
-<<<<<<< HEAD
-              
-              {/* Admin Actions */}
-              {showAdminActions && (
-                <div className="flex gap-2">
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      onEdit?.(product);
-                    }}
-                    className="btn btn-sm bg-blue-500 text-white border-none hover:bg-blue-600 shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2"
-                  >
-                    <Edit className="size-3" />
-                    Edit
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      onDelete?.(product);
-                    }}
-                    className="btn btn-sm bg-red-500 text-white border-none hover:bg-red-600 shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2"
-                  >
-                    <Trash2 className="size-3" />
-                    Delete
-                  </button>
-                </div>
-              )}
-=======
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
             </div>
           </div>
         </div>
@@ -197,26 +123,6 @@ const ProductCard = ({ product, viewMode = 'grid' }) => {
               Add to Cart
             </button>
           </div>
-<<<<<<< HEAD
-
-          {/* Admin Actions for Grid View (outside overlay) */}
-          {showAdminActions && (
-            <div className="flex gap-2 mt-3 pt-3 border-t border-gray-100">
-              <button
-                onClick={() => onEdit?.(product)}
-                className="btn btn-sm border-2 border-blue-500 text-blue-600 bg-transparent hover:bg-blue-50 flex-1 gap-2"
-              >
-                <Edit className="size-3" />
-                Edit
-              </button>
-              <button
-                onClick={() => onDelete?.(product)}
-                className="btn btn-sm border-2 border-red-500 text-red-600 bg-transparent hover:bg-red-50 flex-1 gap-2"
-              >
-                <Trash2 className="size-3" />
-                Delete
-              </button>
-=======
         </div>
       </div>
     );
@@ -238,7 +144,6 @@ const ProductCard = ({ product, viewMode = 'grid' }) => {
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <Package className="size-8 text-emerald-400" />
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
             </div>
           )}
         </div>
@@ -312,121 +217,6 @@ const ProductCard = ({ product, viewMode = 'grid' }) => {
           </div>
         </div>
       </div>
-<<<<<<< HEAD
-    );
-  }
-
-  // List View Layout
-  return (
-    <div className="group bg-white rounded-2xl shadow-lg border border-gray-200 hover:shadow-xl hover:border-emerald-200 transition-all duration-300 p-6">
-      <div className="flex items-start gap-4">
-        {/* Product Image */}
-        <div className="flex-shrink-0 w-24 h-24 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl overflow-hidden">
-          {finalImageUrl && !imageError ? (
-            <img 
-              src={finalImageUrl} 
-              alt={name}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              onError={() => setImageError(true)}
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <Package className="size-8 text-emerald-400" />
-            </div>
-          )}
-        </div>
-
-        {/* Product Info */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between mb-2">
-            <div className="flex-1">
-              {/* Category and Stock */}
-              <div className="flex items-center gap-3 mb-2">
-                {category && (
-                  <div className="bg-blue-50 text-blue-700 text-xs font-medium px-2 py-1 rounded-full border border-blue-200">
-                    {category}
-                  </div>
-                )}
-                <div className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                  stock > 0 
-                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' 
-                    : 'bg-red-100 text-red-800 border border-red-200'
-                }`}>
-                  {stock > 0 ? `${stock} in stock` : 'Out of stock'}
-                </div>
-              </div>
-
-              {/* Product Name */}
-              <h3 className="font-bold text-gray-800 text-xl mb-2 group-hover:text-emerald-700 transition-colors duration-200">
-                {name}
-              </h3>
-
-              {/* Product Description */}
-              {description && (
-                <p className="text-gray-600 mb-4 line-clamp-2">
-                  {description}
-                </p>
-              )}
-            </div>
-          </div>
-
-          {/* Price and Actions */}
-          <div className="flex items-center justify-between">
-            <div className="flex flex-col">
-              <span className="text-2xl font-bold text-emerald-600">
-                LKR {retailPrice?.toFixed(2)}
-              </span>
-              <span className="text-sm text-gray-500">
-                Retail Price
-              </span>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <Link
-                to={`/product/${_id}`}
-                className="btn border-2 border-emerald-500 text-emerald-600 bg-transparent hover:bg-emerald-50 gap-2 transition-all duration-200"
-              >
-                <Eye className="size-4" />
-                View Details
-              </Link>
-              
-              <button 
-                className={`btn gap-2 transition-all duration-200 ${
-                  stock > 0 
-                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 border-none text-white hover:from-emerald-600 hover:to-emerald-700 shadow-md hover:shadow-lg' 
-                    : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-                }`}
-                disabled={stock === 0}
-              >
-                <ShoppingCart className="size-4" />
-                Add to Cart
-              </button>
-
-              {/* Admin Actions for List View */}
-              {showAdminActions && (
-                <div className="flex items-center gap-2 ml-4 pl-4 border-l border-gray-200">
-                  <button
-                    onClick={() => onEdit?.(product)}
-                    className="btn btn-sm border-2 border-blue-500 text-blue-600 bg-transparent hover:bg-blue-50 gap-2"
-                  >
-                    <Edit className="size-3" />
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => onDelete?.(product)}
-                    className="btn btn-sm border-2 border-red-500 text-red-600 bg-transparent hover:bg-red-50 gap-2"
-                  >
-                    <Trash2 className="size-3" />
-                    Delete
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-=======
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
     </div>
   );
 };

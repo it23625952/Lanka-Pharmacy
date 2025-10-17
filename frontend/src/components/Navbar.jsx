@@ -82,11 +82,7 @@ const Navbar = () => {
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
               <Phone className="size-4" />
-<<<<<<< HEAD
-              <span>+94 51 222 5523</span>
-=======
               <span>+94 11 234 5678</span>
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
             </div>
             <div className="hidden md:flex items-center gap-2">
               <Mail className="size-4" />
@@ -155,25 +151,16 @@ const Navbar = () => {
                 <span>Upload Prescription</span>
               </Link>
 
-<<<<<<< HEAD
-              {/* Shopping Cart with Item Count */}
-              <button className="relative p-2.5 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all duration-200">
-=======
               {/* Shopping Cart with Item Count - Link to Cart Page */}
               <Link 
                 to="/cart" 
                 className="relative p-2.5 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all duration-200"
               >
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                 <ShoppingCart className="size-5" />
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-semibold">
                   0
                 </span>
-<<<<<<< HEAD
-              </button>
-=======
               </Link>
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
 
               {/* User Menu for Authenticated Users */}
               {isLoggedIn ? (
@@ -210,19 +197,6 @@ const Navbar = () => {
                         <Package className="size-4" />
                         My Orders
                       </Link>
-<<<<<<< HEAD
-                      {/* Staff Dashboard Link - Only for authorized roles */}
-                      {userData?.role && ['Owner', 'Manager', 'Staff'].includes(userData.role) && (
-                        <>
-                          <Link to="/staff/prescriptions" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
-                            <ClipboardList className="size-4" />
-                            Manage Prescriptions
-                          </Link>
-                          <Link to="/staff/orders" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
-                            <Package className="size-4" />
-                            Manage Orders
-                          </Link>
-=======
                       
                       {/* Staff Management Links - Only for authorized roles */}
                       {canCreateProducts && (
@@ -244,7 +218,6 @@ const Navbar = () => {
                               Manage Orders
                             </Link>
                           </div>
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                         </>
                       )}
                       
@@ -294,15 +267,12 @@ const Navbar = () => {
                 Services
               </Link>
               
-<<<<<<< HEAD
-=======
               {/* Cart Link in Mobile Menu */}
               <Link to="/cart" className="block px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 font-medium flex items-center gap-2">
                 <ShoppingCart className="size-4" />
                 Shopping Cart
               </Link>
               
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
               {/* Mobile User Menu for Authenticated Users */}
               {isLoggedIn ? (
                 <>
@@ -323,18 +293,6 @@ const Navbar = () => {
                     <Package className="size-4" />
                     My Orders
                   </Link>
-<<<<<<< HEAD
-                  {userData?.role && ['Owner', 'Manager', 'Staff'].includes(userData.role) && (
-                    <>
-                      <Link to="/staff/prescriptions" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
-                        <ClipboardList className="size-4" />
-                        Manage Prescriptions
-                      </Link>
-                      <Link to="/staff/orders" className="w-full text-left px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 flex items-center gap-2">
-                        <Package className="size-4" />
-                        Manage Orders
-                      </Link>
-=======
                   
                   {/* Mobile Staff Management Links */}
                   {canCreateProducts && (
@@ -356,7 +314,6 @@ const Navbar = () => {
                           Manage Orders
                         </Link>
                       </div>
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                     </>
                   )}
                   

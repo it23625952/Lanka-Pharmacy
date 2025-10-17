@@ -14,13 +14,7 @@ import {
     Plus,
     Minus,
     Check,
-<<<<<<< HEAD
-    AlertTriangle,
-    Edit,
-    Trash2
-=======
     AlertTriangle
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
 } from 'lucide-react';
 import api from '../lib/axios';
 import toast from 'react-hot-toast';
@@ -34,10 +28,6 @@ const ProductDetailPage = () => {
     const [selectedImage, setSelectedImage] = useState(0);
     const [isInWishlist, setIsInWishlist] = useState(false);
     const [addingToCart, setAddingToCart] = useState(false);
-<<<<<<< HEAD
-    const [isDeleting, setIsDeleting] = useState(false);
-    const [showAdminActions, setShowAdminActions] = useState(false); // Set based on user role
-=======
 
     // Construct full image URL for frontend
     const getImageUrl = (url) => {
@@ -53,7 +43,6 @@ const ProductDetailPage = () => {
         
         return url;
     };
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
 
     // Mock related products (in real app, fetch from API)
     const relatedProducts = [
@@ -110,11 +99,6 @@ const ProductDetailPage = () => {
 
     useEffect(() => {
         fetchProduct();
-<<<<<<< HEAD
-        // In real app, check user role from context/state
-        setShowAdminActions(true); // Set this based on actual user role check
-=======
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
     }, [id]);
 
     const fetchProduct = async () => {
@@ -168,39 +152,6 @@ const ProductDetailPage = () => {
         }
     };
 
-<<<<<<< HEAD
-    const handleEditProduct = () => {
-        navigate(`/edit-product/${id}`);
-    };
-
-    const handleDeleteProduct = async () => {
-        if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
-            return;
-        }
-
-        setIsDeleting(true);
-        try {
-            await api.delete(`/products/${id}`);
-            toast.success('Product deleted successfully!');
-            navigate('/');
-        } catch (error) {
-            console.error('Error deleting product:', error);
-            
-            if (error.response?.status === 401) {
-                toast.error('Please sign in to delete products');
-                navigate('/signin');
-            } else if (error.response?.status === 403) {
-                toast.error('You do not have permission to delete products');
-            } else {
-                toast.error(error.response?.data?.message || 'Failed to delete product');
-            }
-        } finally {
-            setIsDeleting(false);
-        }
-    };
-
-=======
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
     const increaseQuantity = () => {
         if (quantity < (product?.stock || 10)) {
             setQuantity(quantity + 1);
@@ -242,25 +193,6 @@ const ProductDetailPage = () => {
         ));
     };
 
-<<<<<<< HEAD
-    // Function to get proper image URL
-    const getImageUrl = (url) => {
-        if (!url) return null;
-        
-        if (url.startsWith('http')) return url;
-        
-        if (url.startsWith('/')) {
-            const backendUrl = window.location.origin.includes('localhost') 
-                ? 'http://localhost:5001' 
-                : window.location.origin;
-            return `${backendUrl}${url}`;
-        }
-        
-        return url;
-    };
-
-=======
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
     if (loading) {
         return (
             <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
@@ -289,10 +221,6 @@ const ProductDetailPage = () => {
     const stockStatus = getStockStatus();
     const expiryStatus = getExpiryStatus();
     const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
-<<<<<<< HEAD
-    const finalImageUrl = getImageUrl(product.imageUrl);
-=======
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
 
     return (
         <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
@@ -309,42 +237,6 @@ const ProductDetailPage = () => {
                 </div>
 
                 {/* Back Button */}
-<<<<<<< HEAD
-                <div className="flex items-center justify-between mb-6">
-                    <button 
-                        onClick={() => navigate(-1)}
-                        className="flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors"
-                    >
-                        <ArrowLeft className="size-5" />
-                        <span>Back</span>
-                    </button>
-
-                    {/* Admin Actions */}
-                    {showAdminActions && (
-                        <div className="flex items-center gap-3">
-                            <button
-                                onClick={handleEditProduct}
-                                className="btn border-2 border-blue-500 text-blue-600 bg-transparent hover:bg-blue-50 gap-2 transition-all duration-200"
-                            >
-                                <Edit className="size-4" />
-                                Edit Product
-                            </button>
-                            <button
-                                onClick={handleDeleteProduct}
-                                disabled={isDeleting}
-                                className="btn border-2 border-red-500 text-red-600 bg-transparent hover:bg-red-50 gap-2 transition-all duration-200"
-                            >
-                                {isDeleting ? (
-                                    <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-                                ) : (
-                                    <Trash2 className="size-4" />
-                                )}
-                                {isDeleting ? 'Deleting...' : 'Delete Product'}
-                            </button>
-                        </div>
-                    )}
-                </div>
-=======
                 <button 
                     onClick={() => navigate(-1)}
                     className="flex items-center gap-2 text-gray-600 hover:text-emerald-600 mb-6 transition-colors"
@@ -352,7 +244,6 @@ const ProductDetailPage = () => {
                     <ArrowLeft className="size-5" />
                     <span>Back</span>
                 </button>
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
 
                 {/* Main Product Section */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
@@ -361,31 +252,19 @@ const ProductDetailPage = () => {
                         {/* Main Image */}
                         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
                             <img 
-<<<<<<< HEAD
-                                src={finalImageUrl || '/api/placeholder/600/600'} 
-                                alt={product.name}
-                                className="w-full h-96 object-contain rounded-lg"
-                                onError={(e) => {
-                                    e.target.src = '/api/placeholder/600/600';
-=======
                                 src={getImageUrl(product.imageUrl) || '/api/placeholder/600/600'} 
                                 alt={product.name}
                                 className="w-full h-96 object-contain rounded-lg"
                                 onError={(e) => {
                                     console.error('Failed to load product image:', product.imageUrl);
                                     e.target.style.display = 'none';
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                 }}
                             />
                         </div>
 
                         {/* Image Thumbnails */}
                         <div className="flex gap-3 overflow-x-auto">
-<<<<<<< HEAD
-                            {[finalImageUrl, '/api/placeholder/300/300', '/api/placeholder/300/300'].map((img, index) => (
-=======
                             {[product.imageUrl, '/api/placeholder/300/300', '/api/placeholder/300/300'].map((img, index) => (
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                 <button
                                     key={index}
                                     onClick={() => setSelectedImage(index)}
@@ -394,20 +273,12 @@ const ProductDetailPage = () => {
                                     }`}
                                 >
                                     <img 
-<<<<<<< HEAD
-                                        src={img} 
-                                        alt={`${product.name} view ${index + 1}`}
-                                        className="w-full h-full object-cover"
-                                        onError={(e) => {
-                                            e.target.src = '/api/placeholder/300/300';
-=======
                                         src={getImageUrl(img)} 
                                         alt={`${product.name} view ${index + 1}`}
                                         className="w-full h-full object-cover"
                                         onError={(e) => {
                                             console.error('Failed to load thumbnail:', img);
                                             e.target.style.display = 'none';
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                         }}
                                     />
                                 </button>
@@ -672,11 +543,6 @@ const ProductDetailPage = () => {
                         {relatedProducts.map((relatedProduct) => (
                             <div key={relatedProduct._id} className="bg-white rounded-2xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 overflow-hidden">
                                 <img 
-<<<<<<< HEAD
-                                    src={relatedProduct.imageUrl} 
-                                    alt={relatedProduct.name}
-                                    className="w-full h-48 object-cover"
-=======
                                     src={getImageUrl(relatedProduct.imageUrl)} 
                                     alt={relatedProduct.name}
                                     className="w-full h-48 object-cover"
@@ -684,7 +550,6 @@ const ProductDetailPage = () => {
                                         console.error('Failed to load related product image:', relatedProduct.imageUrl);
                                         e.target.style.display = 'none';
                                     }}
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                 />
                                 <div className="p-4">
                                     <div className="text-sm text-blue-600 font-medium mb-1">

@@ -1,18 +1,10 @@
-<<<<<<< HEAD
-import { Eye, Clock, CheckCircle, XCircle, FileText, ShoppingCart, Trash2, Calendar, Hash, Tag } from 'lucide-react';
-=======
 import { Eye, Clock, CheckCircle, XCircle, FileText, ShoppingCart, Trash2, Calendar, Hash } from 'lucide-react';
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
 import React, { useState } from 'react';
 import api from '../lib/axios';
 import toast from 'react-hot-toast';
 import DeletePrescriptionModal from './DeletePrescriptionModal';
 
-<<<<<<< HEAD
-const CustomerPrescriptionCard = ({ prescription, onSelect, onCreateOrder, onDelete, userRole }) => {
-=======
 const CustomerPrescriptionCard = ({ prescription, onSelect, onCreateOrder, onDelete }) => {
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
     const [isDeleting, setIsDeleting] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -43,32 +35,6 @@ const CustomerPrescriptionCard = ({ prescription, onSelect, onCreateOrder, onDel
         }
     };
 
-<<<<<<< HEAD
-    // Calculate total amount based on user role
-    const calculateTotalAmount = () => {
-        if (!prescription.products || prescription.products.length === 0) return 0;
-        
-        return prescription.products.reduce((total, item) => {
-            let price = 0;
-            
-            // Use wholesale price for wholesale customers, retail for others
-            if (userRole === 'Wholesale Customer' && item.productId?.wholesalePrice) {
-                price = item.productId.wholesalePrice;
-            } else if (item.productId?.retailPrice) {
-                price = item.productId.retailPrice;
-            }
-            
-            return total + (price * item.quantity);
-        }, 0);
-    };
-
-    // Get price label based on role
-    const getPriceLabel = () => {
-        return userRole === 'Wholesale Customer' ? 'Wholesale Price' : 'Retail Price';
-    };
-
-=======
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
     const handleViewClick = () => {
         if (onSelect) {
             onSelect(prescription);
@@ -111,12 +77,6 @@ const CustomerPrescriptionCard = ({ prescription, onSelect, onCreateOrder, onDel
         setShowDeleteModal(false);
     };
 
-<<<<<<< HEAD
-    const totalAmount = calculateTotalAmount();
-    const priceLabel = getPriceLabel();
-
-=======
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
     return (
         <>
             <div className='bg-white rounded-3xl shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300'>
@@ -151,50 +111,6 @@ const CustomerPrescriptionCard = ({ prescription, onSelect, onCreateOrder, onDel
                                 </div>
                             </div>
 
-<<<<<<< HEAD
-                        {/* Price Information */}
-                        {prescription.status === 'Verified' && prescription.products && prescription.products.length > 0 && (
-                            <div className="bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl p-4 border border-emerald-200">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <Tag className="size-5 text-emerald-600" />
-                                        <span className="font-semibold text-emerald-800">{priceLabel}:</span>
-                                    </div>
-                                    <div className="text-right">
-                                        <div className="text-2xl font-bold text-emerald-700">
-                                            LKR {totalAmount.toFixed(2)}
-                                        </div>
-                                        <div className="text-sm text-emerald-600">
-                                            {userRole === 'Wholesale Customer' ? 'Wholesale rates applied' : 'Standard retail pricing'}
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                {/* Product Breakdown */}
-                                <div className="mt-3 space-y-2">
-                                    {prescription.products.map((item, index) => {
-                                        const itemPrice = userRole === 'Wholesale Customer' 
-                                            ? (item.productId?.wholesalePrice || item.productId?.retailPrice || 0)
-                                            : (item.productId?.retailPrice || 0);
-                                        const itemTotal = itemPrice * item.quantity;
-                                        
-                                        return (
-                                            <div key={index} className="flex justify-between items-center text-sm">
-                                                <span className="text-gray-700">
-                                                    {item.productId?.name} × {item.quantity}
-                                                </span>
-                                                <span className="font-medium text-emerald-700">
-                                                    LKR {itemTotal.toFixed(2)}
-                                                </span>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        )}
-
-=======
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                             {/* Verification Date */}
                             {prescription.verifiedAt && (
                                 <div className="flex items-center gap-3 text-lg text-gray-600">
@@ -228,11 +144,7 @@ const CustomerPrescriptionCard = ({ prescription, onSelect, onCreateOrder, onDel
                             </button>
 
                             {/* Create Order Button */}
-<<<<<<< HEAD
-                            {onCreateOrder && prescription.status === 'Verified' && !prescription.order && prescription.status === 'Verified' && !prescription.order && (
-=======
                             {onCreateOrder && prescription.status === 'Verified' && !prescription.order && (
->>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                 <button 
                                     className='btn bg-gradient-to-r from-emerald-500 to-emerald-600 border-none text-white hover:from-emerald-600 hover:to-emerald-700 gap-3 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center min-h-[52px] px-6 rounded-2xl font-semibold text-lg'
                                     onClick={handleCreateOrderClick}
