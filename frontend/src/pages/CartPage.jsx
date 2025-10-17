@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router';
 import { ShoppingCart, Plus, Minus, Trash2, ArrowRight, Package, ArrowLeft } from 'lucide-react';
+import Navbar from '../components/Navbar';
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -55,6 +56,8 @@ const CartPage = () => {
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
+      <Navbar />
+      
       {/* Navigation Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="container mx-auto px-4 py-4">

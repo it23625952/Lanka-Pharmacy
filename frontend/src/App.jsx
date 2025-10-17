@@ -16,8 +16,6 @@ import CustomerPrescriptionsPage from "./pages/CustomerPrescriptionsPage";
 import CustomerOrdersPage from "./pages/CustomerOrdersPage";
 import StaffOrdersPage from "./pages/StaffOrdersPage";
 import OrderDetailPage from "./pages/OrderDetailPage";
-import Payment from "./pages/PaymentPage";
-import PaymentSuccess from "./pages/PaymentSuccessPage";
 
 // Staff management
 import Dashboard from "./pages/Dashboard";
@@ -72,8 +70,10 @@ function App() {
               
         {/* Shopping cart flow routes */}
         <Route path="/cart" element={<CartPage />} />
-        <Route path="/cart-page" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/view-order" element={<ViewOrderPage />} />
+        <Route path="/edit-order/:id" element={<EditOrderPage />} />
+        <Route path="/confirmation" element={<ConfirmationPage />} />
 
         {/* payment routes */}
     <Route path="/payment" element={<PaymentPage />} />
