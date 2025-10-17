@@ -8,6 +8,7 @@ import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import prescriptionRoutes from "./routes/prescriptionRoutes.js";
 import orderRoutes from './routes/orderRoutes.js';
+import cartRoutes from "./routes/cartRoutes.js";
 
 // Configuration imports
 import { connectDB } from "./config/db.js";
@@ -43,6 +44,7 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/prescriptions", prescriptionRoutes);
+app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 
 // Database connection and server startup
