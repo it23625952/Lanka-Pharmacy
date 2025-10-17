@@ -14,6 +14,7 @@ import CustomerPrescriptionsPage from './pages/CustomerPrescriptionsPage';
 import CustomerOrdersPage from './pages/CustomerOrdersPage';
 import StaffOrdersPage from './pages/StaffOrdersPage';
 import OrderDetailPage from './pages/OrderDetailPage';
+import ProductDetailPage from './pages/ProductDetailPage';
 
 /**
  * Main application component defining the routing structure
@@ -36,6 +37,9 @@ const App = () => {
         <Route path="/my-prescriptions" element={<CustomerPrescriptionsPage />} />
         <Route path="/my-orders" element={<CustomerOrdersPage />} />
         <Route path="/orders/:id" element={<OrderDetailPage />} />
+
+        <Route path="/create-product" element={<CreateProductPage />} />
+        <Route path="/product/:id" element={<ProductDetailPage />} />
         
         {/* Staff protected routes */}
         <Route 
