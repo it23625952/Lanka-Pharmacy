@@ -162,3 +162,32 @@ export async function deleteProduct(req, res) {
         res.status(500).json({ "message": "Server error" });
     }
 }
+
+/**
+ * Handles product image upload
+ * @param {Object} req - Request object with file
+ * @param {Object} res - Response object
+ * @returns {Promise<void>} JSON response with image URL or error
+ */
+export const uploadProductImage = async (req, res) => {
+    try {
+        console.log('Uploading product image...', req.file);
+        
+        if (!req.file) {
+            return res.status(400).json({ message: "No image file provided" });
+        }
+
+        // Construct the image URL for frontend access
+        const imageUrl = `/uploads/products/${req.file.filename}`;
+        
+        console.log('Image uploaded successfully:', imageUrl);
+        
+        res.status(200).json({
+            message: "Image uploaded successfully",
+            imageUrl: imageUrl
+        });
+    } catch (error) {
+        console.error("Error uploading product image:", error);
+        res.status(500).json({ message: "Server error while uploading image" });
+    }
+};

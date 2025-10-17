@@ -46,7 +46,7 @@ const SignInPage = () => {
 
         setLoading(true);
         try {
-            const res = await api.post('users/auth/signIn', {
+            const res = await api.post('users/auth/signin', {
                 email,
                 password
             });

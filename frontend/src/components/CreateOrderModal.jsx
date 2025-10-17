@@ -35,23 +35,40 @@ const CreateOrderModal = ({ prescription, isOpen, onClose, onSuccess }) => {
 
     const handleCreateOrder = async () => {
         if (!formData.shippingAddress.trim()) {
-            toast.error('Please provide a shipping address');
+            toast.error('Please enter a shipping address');
             return;
         }
 
         setIsCreating(true);
         try {
-            await api.post('/orders/create-from-prescription', {
+            console.log('=== CREATING ORDER FROM PRESCRIPTION ===');
+            console.log('Prescription:', prescription);
+            console.log('Shipping address:', formData.shippingAddress);
+            console.log('Payment method:', formData.paymentMethod);
+            
+            const response = await api.post('/orders/create-from-prescription', {
                 prescriptionId: prescription._id,
-                ...formData
+                shippingAddress: formData.shippingAddress, // Changed from deliveryAddress to shippingAddress
+                paymentMethod: formData.paymentMethod,
+                notes: formData.notes
             });
 
+            console.log('Order creation response:', response.data);
             toast.success('Order created successfully!');
             onSuccess();
             onClose();
         } catch (error) {
             console.error('Error creating order:', error);
-            toast.error(error.response?.data?.message || 'Failed to create order');
+            console.error('Error response data:', error.response?.data);
+            console.error('Error config:', error.config);
+            
+            if (error.response?.status === 500) {
+                toast.error('Server error while creating order. Please check backend logs.');
+            } else if (error.response?.data?.message) {
+                toast.error(error.response.data.message);
+            } else {
+                toast.error('Failed to create order. Please try again.');
+            }
         } finally {
             setIsCreating(false);
         }

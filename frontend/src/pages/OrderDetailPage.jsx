@@ -1,9 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
+<<<<<<< HEAD
 import { Package, Clock, CheckCircle, XCircle, Truck, User, Mail, Phone, MapPin, Calendar, ArrowLeft } from 'lucide-react';
 import api from '../lib/axios';
 import toast from 'react-hot-toast';
 import { useParams, useNavigate, Link } from 'react-router';
+=======
+import { ArrowLeft } from 'lucide-react';
+import api from '../lib/axios';
+import toast from 'react-hot-toast';
+import { useParams, useNavigate, Link } from 'react-router';
+import OrderStatusCard from '../components/OrderStatusCard';
+import OrderItemsCard from '../components/OrderItemsCard';
+import CustomerInfoCard from '../components/CustomerInfoCard';
+import OrderInfoCard from '../components/OrderInfoCard';
+import OrderNotesCard from '../components/OrderNotesCard';
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
 
 const OrderDetailPage = () => {
     const [order, setOrder] = useState(null);
@@ -20,7 +32,11 @@ const OrderDetailPage = () => {
         try {
             setIsLoading(true);
             const response = await api.get(`/orders/${id}`);
+<<<<<<< HEAD
             setOrder(response.data);
+=======
+            setOrder(response.data.order);
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
         } catch (error) {
             console.error('Error fetching order:', error);
             toast.error('Failed to load order details');
@@ -44,6 +60,7 @@ const OrderDetailPage = () => {
         }
     };
 
+<<<<<<< HEAD
     const getStatusIcon = (status) => {
         switch (status) {
             case 'Pending': return <Clock className="size-8 text-yellow-600" />;
@@ -68,6 +85,8 @@ const OrderDetailPage = () => {
         }
     };
 
+=======
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
     if (isLoading) {
         return (
             <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
@@ -121,6 +140,7 @@ const OrderDetailPage = () => {
                 <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
                     {/* Main Content */}
                     <div className='lg:col-span-2 space-y-8'>
+<<<<<<< HEAD
                         {/* Order Status Card */}
                         <div className='bg-white rounded-3xl shadow-2xl border border-gray-100 p-8'>
                             <div className='flex items-center justify-between mb-8'>
@@ -207,10 +227,20 @@ const OrderDetailPage = () => {
                                 <strong className="text-gray-800 text-2xl">LKR {order.totalAmount?.toFixed(2)}</strong>
                             </div>
                         </div>
+=======
+                        <OrderStatusCard
+                            order={order}
+                            isStaff={isStaff}
+                            isUpdating={isUpdating}
+                            onStatusUpdate={updateOrderStatus}
+                        />
+                        <OrderItemsCard order={order} />
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                     </div>
 
                     {/* Sidebar Information */}
                     <div className='space-y-8'>
+<<<<<<< HEAD
                         {/* Customer Information */}
                         <div className='bg-white rounded-3xl shadow-2xl border border-gray-100 p-8'>
                             <h2 className='text-2xl font-bold text-gray-800 mb-6'>Customer Information</h2>
@@ -266,6 +296,11 @@ const OrderDetailPage = () => {
                                 <p className='text-gray-700 text-lg leading-relaxed'>{order.notes}</p>
                             </div>
                         )}
+=======
+                        <CustomerInfoCard order={order} />
+                        <OrderInfoCard order={order} isStaff={isStaff} />
+                        <OrderNotesCard order={order} />
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                     </div>
                 </div>
             </div>

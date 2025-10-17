@@ -6,17 +6,14 @@ import SignInPage from './pages/SignInPage';
 import ProfilePage from './pages/ProfilePage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
-import CreateProductPage from './pages/CreateProductPage';
-import ProductDetailPage from './pages/ProductDetailPage';
 import UploadPrescriptionPage from './pages/UploadPrescriptionPage';
 import UploadSuccessPage from './pages/UploadSuccessPage';
+import ProtectedRoute from './components/ProtectedRoute';
 import StaffPrescriptionsPage from './pages/StaffPrescriptionsPage';
 import CustomerPrescriptionsPage from './pages/CustomerPrescriptionsPage';
-import ProtectedRoute from './components/ProtectedRoute';
 import CustomerOrdersPage from './pages/CustomerOrdersPage';
 import StaffOrdersPage from './pages/StaffOrdersPage';
 import OrderDetailPage from './pages/OrderDetailPage';
-import EditProductPage from './pages/EditProductPage';
 
 /**
  * Main application component defining the routing structure
@@ -39,10 +36,6 @@ const App = () => {
         <Route path="/my-prescriptions" element={<CustomerPrescriptionsPage />} />
         <Route path="/my-orders" element={<CustomerOrdersPage />} />
         <Route path="/orders/:id" element={<OrderDetailPage />} />
-        
-        {/* Product routes */}
-        <Route path="/create-product" element={<CreateProductPage />} />
-        <Route path="/product/:id" element={<ProductDetailPage />} />
         
         {/* Staff protected routes */}
         <Route 
@@ -71,10 +64,6 @@ const App = () => {
             </ProtectedRoute>
           } 
         />
-      
-        <Route path="/product/:id" element={<ProductDetailPage />} />
-
-        <Route path="/edit-product/:id" element={<EditProductPage />} />
       </Routes>
     </div>
   )

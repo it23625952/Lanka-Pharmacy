@@ -378,7 +378,11 @@ const CreateProductPage = () => {
                         <form onSubmit={handleSubmit} className='space-y-8'>
                             {/* Product Name */}
                             <div className='form-control'>
+<<<<<<< HEAD
                                 <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+=======
+                                <label className='text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                     <Package className="size-5 text-emerald-600" />
                                     Product Name *
                                 </label>
@@ -396,7 +400,11 @@ const CreateProductPage = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {/* Retail Price */}
                                 <div className='form-control'>
+<<<<<<< HEAD
                                     <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+=======
+                                    <label className='text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                         <DollarSign className="size-5 text-green-600" />
                                         Retail Price (LKR) *
                                     </label>
@@ -414,7 +422,11 @@ const CreateProductPage = () => {
 
                                 {/* Wholesale Price */}
                                 <div className='form-control'>
+<<<<<<< HEAD
                                     <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+=======
+                                    <label className='text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                         <DollarSign className="size-5 text-blue-600" />
                                         Wholesale Price (LKR) *
                                     </label>
@@ -498,7 +510,11 @@ const CreateProductPage = () => {
 
                                 {/* Expiry Date */}
                                 <div className='form-control'>
+<<<<<<< HEAD
                                     <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2'>
+=======
+                                    <label className='text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2'>
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                         <Calendar className="size-5 text-purple-600" />
                                         Expiry Date *
                                     </label>
@@ -532,7 +548,11 @@ const CreateProductPage = () => {
 
                             {/* Product Description */}
                             <div className='form-control'>
+<<<<<<< HEAD
                                 <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+=======
+                                <label className='text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                     <FileText className="size-5 text-emerald-600" />
                                     Product Description *
                                 </label>
@@ -548,7 +568,11 @@ const CreateProductPage = () => {
 
                             {/* Image Upload Section */}
                             <div className='form-control'>
+<<<<<<< HEAD
                                 <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+=======
+                                <label className='text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                     <Image className="size-5 text-emerald-600" />
                                     Product Image *
                                 </label>

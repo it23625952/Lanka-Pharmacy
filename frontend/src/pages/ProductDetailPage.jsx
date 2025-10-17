@@ -14,9 +14,13 @@ import {
     Plus,
     Minus,
     Check,
+<<<<<<< HEAD
     AlertTriangle,
     Edit,
     Trash2
+=======
+    AlertTriangle
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
 } from 'lucide-react';
 import api from '../lib/axios';
 import toast from 'react-hot-toast';
@@ -30,8 +34,26 @@ const ProductDetailPage = () => {
     const [selectedImage, setSelectedImage] = useState(0);
     const [isInWishlist, setIsInWishlist] = useState(false);
     const [addingToCart, setAddingToCart] = useState(false);
+<<<<<<< HEAD
     const [isDeleting, setIsDeleting] = useState(false);
     const [showAdminActions, setShowAdminActions] = useState(false); // Set based on user role
+=======
+
+    // Construct full image URL for frontend
+    const getImageUrl = (url) => {
+        if (!url) return null;
+        
+        // If it's already a full URL, return as is
+        if (url.startsWith('http')) return url;
+        
+        // If it's a relative path, prepend the backend URL
+        if (url.startsWith('/')) {
+            return `http://localhost:5001${url}`; // Your backend runs on port 5001
+        }
+        
+        return url;
+    };
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
 
     // Mock related products (in real app, fetch from API)
     const relatedProducts = [
@@ -88,8 +110,11 @@ const ProductDetailPage = () => {
 
     useEffect(() => {
         fetchProduct();
+<<<<<<< HEAD
         // In real app, check user role from context/state
         setShowAdminActions(true); // Set this based on actual user role check
+=======
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
     }, [id]);
 
     const fetchProduct = async () => {
@@ -143,6 +168,7 @@ const ProductDetailPage = () => {
         }
     };
 
+<<<<<<< HEAD
     const handleEditProduct = () => {
         navigate(`/edit-product/${id}`);
     };
@@ -173,6 +199,8 @@ const ProductDetailPage = () => {
         }
     };
 
+=======
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
     const increaseQuantity = () => {
         if (quantity < (product?.stock || 10)) {
             setQuantity(quantity + 1);
@@ -214,6 +242,7 @@ const ProductDetailPage = () => {
         ));
     };
 
+<<<<<<< HEAD
     // Function to get proper image URL
     const getImageUrl = (url) => {
         if (!url) return null;
@@ -230,6 +259,8 @@ const ProductDetailPage = () => {
         return url;
     };
 
+=======
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
     if (loading) {
         return (
             <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
@@ -258,7 +289,10 @@ const ProductDetailPage = () => {
     const stockStatus = getStockStatus();
     const expiryStatus = getExpiryStatus();
     const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
+<<<<<<< HEAD
     const finalImageUrl = getImageUrl(product.imageUrl);
+=======
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
 
     return (
         <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
@@ -275,6 +309,7 @@ const ProductDetailPage = () => {
                 </div>
 
                 {/* Back Button */}
+<<<<<<< HEAD
                 <div className="flex items-center justify-between mb-6">
                     <button 
                         onClick={() => navigate(-1)}
@@ -309,6 +344,15 @@ const ProductDetailPage = () => {
                         </div>
                     )}
                 </div>
+=======
+                <button 
+                    onClick={() => navigate(-1)}
+                    className="flex items-center gap-2 text-gray-600 hover:text-emerald-600 mb-6 transition-colors"
+                >
+                    <ArrowLeft className="size-5" />
+                    <span>Back</span>
+                </button>
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
 
                 {/* Main Product Section */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
@@ -317,18 +361,31 @@ const ProductDetailPage = () => {
                         {/* Main Image */}
                         <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
                             <img 
+<<<<<<< HEAD
                                 src={finalImageUrl || '/api/placeholder/600/600'} 
                                 alt={product.name}
                                 className="w-full h-96 object-contain rounded-lg"
                                 onError={(e) => {
                                     e.target.src = '/api/placeholder/600/600';
+=======
+                                src={getImageUrl(product.imageUrl) || '/api/placeholder/600/600'} 
+                                alt={product.name}
+                                className="w-full h-96 object-contain rounded-lg"
+                                onError={(e) => {
+                                    console.error('Failed to load product image:', product.imageUrl);
+                                    e.target.style.display = 'none';
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                 }}
                             />
                         </div>
 
                         {/* Image Thumbnails */}
                         <div className="flex gap-3 overflow-x-auto">
+<<<<<<< HEAD
                             {[finalImageUrl, '/api/placeholder/300/300', '/api/placeholder/300/300'].map((img, index) => (
+=======
+                            {[product.imageUrl, '/api/placeholder/300/300', '/api/placeholder/300/300'].map((img, index) => (
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                 <button
                                     key={index}
                                     onClick={() => setSelectedImage(index)}
@@ -337,11 +394,20 @@ const ProductDetailPage = () => {
                                     }`}
                                 >
                                     <img 
+<<<<<<< HEAD
                                         src={img} 
                                         alt={`${product.name} view ${index + 1}`}
                                         className="w-full h-full object-cover"
                                         onError={(e) => {
                                             e.target.src = '/api/placeholder/300/300';
+=======
+                                        src={getImageUrl(img)} 
+                                        alt={`${product.name} view ${index + 1}`}
+                                        className="w-full h-full object-cover"
+                                        onError={(e) => {
+                                            console.error('Failed to load thumbnail:', img);
+                                            e.target.style.display = 'none';
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                         }}
                                     />
                                 </button>
@@ -606,9 +672,19 @@ const ProductDetailPage = () => {
                         {relatedProducts.map((relatedProduct) => (
                             <div key={relatedProduct._id} className="bg-white rounded-2xl shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300 overflow-hidden">
                                 <img 
+<<<<<<< HEAD
                                     src={relatedProduct.imageUrl} 
                                     alt={relatedProduct.name}
                                     className="w-full h-48 object-cover"
+=======
+                                    src={getImageUrl(relatedProduct.imageUrl)} 
+                                    alt={relatedProduct.name}
+                                    className="w-full h-48 object-cover"
+                                    onError={(e) => {
+                                        console.error('Failed to load related product image:', relatedProduct.imageUrl);
+                                        e.target.style.display = 'none';
+                                    }}
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                 />
                                 <div className="p-4">
                                     <div className="text-sm text-blue-600 font-medium mb-1">

@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
+<<<<<<< HEAD
 import { X, CheckCircle, Search, Plus, Minus, FileText, Package, User } from 'lucide-react';
+=======
+import { X, CheckCircle, Search, Plus, Minus, FileText, Package, User, Image as ImageIcon } from 'lucide-react';
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
 import api from '../lib/axios';
 import toast from 'react-hot-toast';
 
@@ -10,12 +14,23 @@ const VerifyPrescriptionModal = ({ prescription, isOpen, onClose, onSuccess }) =
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [notes, setNotes] = useState('');
+<<<<<<< HEAD
 
     useEffect(() => {
         if (isOpen) {
             fetchProducts();
         }
     }, [isOpen]);
+=======
+    const [imageError, setImageError] = useState(false);
+
+    useEffect(() => {
+        if (isOpen && prescription) {
+            fetchProducts();
+            setImageError(false);
+        }
+    }, [isOpen, prescription]);
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
 
     const fetchProducts = async () => {
         try {
@@ -30,6 +45,23 @@ const VerifyPrescriptionModal = ({ prescription, isOpen, onClose, onSuccess }) =
         }
     };
 
+<<<<<<< HEAD
+=======
+    // Use the same image URL construction as PrescriptionModal with null checks
+    const getImageUrl = () => {
+        if (!prescription || !prescription.prescriptionImage) return null;
+        
+        if (prescription.prescriptionImage.startsWith('http')) {
+            return prescription.prescriptionImage;
+        }
+        
+        const imagePath = prescription.prescriptionImage.replace(/\\/g, '/');
+        return `http://localhost:5001/${imagePath}`;
+    };
+
+    const imageUrl = getImageUrl();
+
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -100,7 +132,16 @@ const VerifyPrescriptionModal = ({ prescription, isOpen, onClose, onSuccess }) =
 
         setIsSubmitting(true);
         try {
+<<<<<<< HEAD
             await api.put(`/prescriptions/${prescription._id}/verify`, {
+=======
+            // Debug: Log the prescription ID and endpoint
+            console.log('Prescription ID:', prescription._id);
+            console.log('Selected products:', selectedProducts);
+            
+            // Make sure the endpoint matches your backend route
+            const response = await api.put(`/prescriptions/${prescription._id}/verify`, {
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                 products: selectedProducts.map(p => ({
                     productId: p.productId,
                     quantity: p.quantity,
@@ -109,18 +150,48 @@ const VerifyPrescriptionModal = ({ prescription, isOpen, onClose, onSuccess }) =
                 notes
             });
 
+<<<<<<< HEAD
+=======
+            console.log('Verification response:', response.data);
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
             toast.success('Prescription verified successfully!');
             onSuccess();
             onClose();
         } catch (error) {
             console.error('Error verifying prescription:', error);
+<<<<<<< HEAD
             toast.error(error.response?.data?.message || 'Failed to verify prescription');
+=======
+            console.error('Error details:', {
+                status: error.response?.status,
+                statusText: error.response?.statusText,
+                data: error.response?.data,
+                url: error.config?.url
+            });
+            
+            if (error.response?.status === 404) {
+                toast.error('Verification endpoint not found. Please check the API route.');
+            } else if (error.response?.data?.message) {
+                toast.error(error.response.data.message);
+            } else {
+                toast.error('Failed to verify prescription. Please try again.');
+            }
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
         } finally {
             setIsSubmitting(false);
         }
     };
 
+<<<<<<< HEAD
     if (!isOpen) return null;
+=======
+    const handleImageError = () => {
+        setImageError(true);
+    };
+
+    // Don't render if not open or prescription is null
+    if (!isOpen || !prescription) return null;
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
@@ -134,7 +205,13 @@ const VerifyPrescriptionModal = ({ prescription, isOpen, onClose, onSuccess }) =
                             </div>
                             <div>
                                 <h3 className="text-2xl font-bold text-white">Verify Prescription</h3>
+<<<<<<< HEAD
                                 <p className="text-emerald-100">Processing prescription for {prescription.customerName}</p>
+=======
+                                <p className="text-emerald-100">
+                                    Processing prescription for {prescription.customer?.name || prescription.customerName || 'Customer'}
+                                </p>
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                             </div>
                         </div>
                         <button 
@@ -153,14 +230,24 @@ const VerifyPrescriptionModal = ({ prescription, isOpen, onClose, onSuccess }) =
                             <FileText className="size-5" />
                             Prescription Details
                         </h4>
+<<<<<<< HEAD
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-emerald-700">
+=======
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-emerald-700">
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-white border border-emerald-200 rounded-xl flex items-center justify-center">
                                     <User className="size-5 text-emerald-600" />
                                 </div>
                                 <div>
                                     <p className="text-sm text-emerald-600">Customer</p>
+<<<<<<< HEAD
                                     <p className="font-semibold">{prescription.customerName}</p>
+=======
+                                    <p className="font-semibold">
+                                        {prescription.customer?.name || prescription.customerName || 'Not provided'}
+                                    </p>
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                 </div>
                             </div>
                             {prescription.doctorName && (
@@ -180,13 +267,58 @@ const VerifyPrescriptionModal = ({ prescription, isOpen, onClose, onSuccess }) =
                                 </div>
                                 <div>
                                     <p className="text-sm text-emerald-600">Reference ID</p>
+<<<<<<< HEAD
                                     <p className="font-mono font-semibold text-sm">{prescription._id?.slice(-8)}</p>
+=======
+                                    <p className="font-mono font-semibold text-sm">
+                                        {prescription._id ? prescription._id.slice(-8) : 'N/A'}
+                                    </p>
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                 </div>
                             </div>
                         </div>
                     </div>
 
+<<<<<<< HEAD
                     <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+=======
+                    <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                        {/* Prescription Image Panel - Always Visible */}
+                        <div className="space-y-6">
+                            <h4 className="text-xl font-semibold text-gray-800 flex items-center gap-3">
+                                <ImageIcon className="size-6 text-emerald-600" />
+                                Prescription Image
+                            </h4>
+                            
+                            {imageUrl && !imageError ? (
+                                <div className="border-2 border-gray-200 rounded-2xl overflow-hidden bg-gray-50">
+                                    <img 
+                                        src={imageUrl} 
+                                        alt={`Prescription for ${prescription.customer?.name || prescription.customerName || 'Customer'}`}
+                                        className="w-full h-auto max-h-[400px] object-contain"
+                                        onError={handleImageError}
+                                    />
+                                </div>
+                            ) : (
+                                <div className="text-center py-16 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-300">
+                                    <ImageIcon className="size-16 text-gray-400 mx-auto mb-4" />
+                                    <p className="text-gray-500 text-lg">No prescription image available</p>
+                                </div>
+                            )}
+                            
+                            {/* Image Information */}
+                            <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4">
+                                <div className="flex items-center gap-3">
+                                    <FileText className="size-5 text-blue-600" />
+                                    <div>
+                                        <p className="text-blue-800 font-medium text-sm">Reference this image</p>
+                                        <p className="text-blue-700 text-sm">While adding products to match the prescribed medications</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                         {/* Product Selection Panel */}
                         <div className="space-y-6">
                             <h4 className="text-xl font-semibold text-gray-800 flex items-center gap-3">
@@ -230,7 +362,11 @@ const VerifyPrescriptionModal = ({ prescription, isOpen, onClose, onSuccess }) =
                                                         <span className="text-emerald-600 font-semibold flex items-center gap-1">
                                                             LKR {product.retailPrice?.toFixed(2)}
                                                         </span>
+<<<<<<< HEAD
                                                         {product.stockQuantity && (
+=======
+                                                        {product.stockQuantity !== undefined && (
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                                             <span className={`text-sm px-2 py-1 rounded-full ${
                                                                 product.stockQuantity > 10 
                                                                     ? 'bg-green-100 text-green-800' 
@@ -273,7 +409,11 @@ const VerifyPrescriptionModal = ({ prescription, isOpen, onClose, onSuccess }) =
                                 <div className="text-center py-12 text-gray-500 border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50">
                                     <Package className="size-16 text-gray-400 mx-auto mb-4" />
                                     <p className="text-lg text-gray-600">No products selected</p>
+<<<<<<< HEAD
                                     <p className="text-sm text-gray-400 mt-1">Add products from the left panel</p>
+=======
+                                    <p className="text-sm text-gray-400 mt-1">Add products from the middle panel</p>
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                 </div>
                             ) : (
                                 <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
@@ -283,7 +423,10 @@ const VerifyPrescriptionModal = ({ prescription, isOpen, onClose, onSuccess }) =
                                                 <div className="flex-1">
                                                     <div className="font-semibold text-gray-800 text-lg">{item.productName}</div>
                                                     <div className="text-emerald-600 font-semibold flex items-center gap-1 mt-1">
+<<<<<<< HEAD
                                                         <DollarSign className="size-4" />
+=======
+>>>>>>> 3629bc058dd523a30a13d914a487001cb3767493
                                                         LKR {item.retailPrice?.toFixed(2)} each
                                                     </div>
                                                 </div>
