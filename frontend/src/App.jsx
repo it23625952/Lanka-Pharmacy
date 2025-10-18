@@ -36,6 +36,7 @@ import ViewOrderPage from './pages/ViewOrderPage';
 import EditOrderPage from './pages/EditOrderPage';
 import PaymentPage from "./pages/PaymentPage";
 import PaymentSuccessPage from "./pages/PaymentSuccessPage";
+import OrderVolumeDashboard from "./pages/OrderVolumeDashboard";
 
 function App() {
   return (
@@ -69,6 +70,7 @@ function App() {
         <Route path="/attendance" element={<Attendance />} />
         <Route path="/salary" element={<Salary />} />
         <Route path="/reports" element={<Reports />} />
+        <Route path="/staff/orders/dashboard" element={<OrderVolumeDashboard />} />
 
         <Route path="/create-product" element={<CreateProductPage />} />
         <Route path="/product/:id" element={<ProductDetailPage />} />
