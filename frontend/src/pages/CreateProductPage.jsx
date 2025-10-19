@@ -495,39 +495,6 @@ const CreateProductPage = () => {
                                         </div>
                                     )}
                                 </div>
-
-                                {/* Expiry Date */}
-                                <div className='form-control'>
-                                    <label className='text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2'>
-                                        <Calendar className="size-5 text-purple-600" />
-                                        Expiry Date *
-                                    </label>
-                                    <input 
-                                        type='date' 
-                                        className={`input input-lg w-full border-2 rounded-xl focus:ring-4 transition-all duration-200 text-gray-800 ${
-                                            showExpiryWarning
-                                                ? 'border-orange-300 bg-orange-50 focus:border-orange-500 focus:ring-orange-100'
-                                                : 'border-gray-300 bg-gray-50 focus:border-emerald-500 focus:ring-emerald-100'
-                                        }`}
-                                        value={formData.expiryDate}
-                                        onChange={(e) => handleInputChange('expiryDate', e.target.value)}
-                                        min={new Date().toISOString().split('T')[0]}
-                                        required
-                                    />
-                                    {formData.expiryDate && (
-                                        <div className={`flex items-center gap-2 mt-2 text-sm ${
-                                            showExpiryWarning ? 'text-orange-600' : 'text-gray-600'
-                                        }`}>
-                                            <Calendar className="size-4" />
-                                            <span>
-                                                {showExpiryWarning 
-                                                    ? `Expires in ${daysUntilExpiry} days! Managers will be notified.`
-                                                    : `Expires in ${daysUntilExpiry} days`
-                                                }
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
                             </div>
 
                             {/* Product Description */}

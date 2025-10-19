@@ -388,7 +388,7 @@ const EditProductPage = () => {
                         <form onSubmit={handleSubmit} className='space-y-8'>
                             {/* Product Name */}
                             <div className='form-control'>
-                                <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+                                <label className='text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
                                     <Package className="size-5 text-emerald-600" />
                                     Product Name *
                                 </label>
@@ -406,7 +406,7 @@ const EditProductPage = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {/* Retail Price */}
                                 <div className='form-control'>
-                                    <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+                                    <label className='text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
                                         <DollarSign className="size-5 text-green-600" />
                                         Retail Price (LKR) *
                                     </label>
@@ -424,7 +424,7 @@ const EditProductPage = () => {
 
                                 {/* Wholesale Price */}
                                 <div className='form-control'>
-                                    <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+                                    <label className='text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
                                         <DollarSign className="size-5 text-blue-600" />
                                         Wholesale Price (LKR) *
                                     </label>
@@ -505,44 +505,11 @@ const EditProductPage = () => {
                                         </div>
                                     )}
                                 </div>
-
-                                {/* Expiry Date */}
-                                <div className='form-control'>
-                                    <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2'>
-                                        <Calendar className="size-5 text-purple-600" />
-                                        Expiry Date *
-                                    </label>
-                                    <input 
-                                        type='date' 
-                                        className={`input input-lg w-full border-2 rounded-xl focus:ring-4 transition-all duration-200 text-gray-800 ${
-                                            showExpiryWarning
-                                                ? 'border-orange-300 bg-orange-50 focus:border-orange-500 focus:ring-orange-100'
-                                                : 'border-gray-300 bg-gray-50 focus:border-emerald-500 focus:ring-emerald-100'
-                                        }`}
-                                        value={formData.expiryDate}
-                                        onChange={(e) => handleInputChange('expiryDate', e.target.value)}
-                                        min={new Date().toISOString().split('T')[0]}
-                                        required
-                                    />
-                                    {formData.expiryDate && (
-                                        <div className={`flex items-center gap-2 mt-2 text-sm ${
-                                            showExpiryWarning ? 'text-orange-600' : 'text-gray-600'
-                                        }`}>
-                                            <Calendar className="size-4" />
-                                            <span>
-                                                {showExpiryWarning 
-                                                    ? `Expires in ${daysUntilExpiry} days! Managers will be notified.`
-                                                    : `Expires in ${daysUntilExpiry} days`
-                                                }
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
                             </div>
 
                             {/* Product Description */}
                             <div className='form-control'>
-                                <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+                                <label className='text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
                                     <FileText className="size-5 text-emerald-600" />
                                     Product Description *
                                 </label>
@@ -558,7 +525,7 @@ const EditProductPage = () => {
 
                             {/* Image Upload Section */}
                             <div className='form-control'>
-                                <label className='block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+                                <label className='text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
                                     <Upload className="size-5 text-emerald-600" />
                                     Product Image *
                                 </label>
