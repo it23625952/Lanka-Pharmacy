@@ -34,6 +34,7 @@ const VerifyPrescriptionModal = ({ prescription, isOpen, onClose, onSuccess }) =
 
     // Use the same image URL construction as PrescriptionModal with null checks
     const getImageUrl = () => {
+        // Add null check for prescription
         if (!prescription || !prescription.prescriptionImage) return null;
         
         if (prescription.prescriptionImage.startsWith('http')) {
@@ -111,6 +112,12 @@ const VerifyPrescriptionModal = ({ prescription, isOpen, onClose, onSuccess }) =
     const handleSubmit = async () => {
         if (selectedProducts.length === 0) {
             toast.error('Please add at least one product');
+            return;
+        }
+
+        // Add prescription null check
+        if (!prescription || !prescription._id) {
+            toast.error('Invalid prescription data');
             return;
         }
 
