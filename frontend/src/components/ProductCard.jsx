@@ -14,26 +14,9 @@ import { ShoppingCart, Eye, Package } from 'lucide-react';
 const ProductCard = ({ product, viewMode = 'grid' }) => {
   const { _id, name, retailPrice, description, category, stock, imageUrl } = product;
 
-  // Construct full image URL for frontend
-  const getImageUrl = (url) => {
-    if (!url) return null;
-    
-    // If it's already a full URL, return as is
-    if (url.startsWith('http')) return url;
-    
-    // If it's a relative path, prepend the backend URL
-    if (url.startsWith('/')) {
-      return `http://localhost:5001${url}`; // Your backend runs on port 5001
-    }
-    
-    return url;
-  };
-
-  const fullImageUrl = getImageUrl(imageUrl);
-
   // Handle image loading errors
   const handleImageError = (e) => {
-    console.error(`Failed to load image: ${fullImageUrl}`);
+    console.error(`Failed to load image: ${imageUrl}`);
     e.target.style.display = 'none';
   };
 
@@ -43,9 +26,9 @@ const ProductCard = ({ product, viewMode = 'grid' }) => {
       <div className="group bg-white rounded-2xl shadow-lg border border-gray-200 hover:shadow-2xl hover:border-emerald-200 transition-all duration-300 overflow-hidden">
         {/* Product Image */}
         <div className="relative h-48 bg-gradient-to-br from-emerald-50 to-teal-50 overflow-hidden">
-          {fullImageUrl ? (
+          {imageUrl ? (
             <img 
-              src={fullImageUrl} 
+              src={imageUrl} 
               alt={name}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               onError={handleImageError}
@@ -134,9 +117,9 @@ const ProductCard = ({ product, viewMode = 'grid' }) => {
       <div className="flex items-start gap-4">
         {/* Product Image */}
         <div className="flex-shrink-0 w-24 h-24 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl overflow-hidden">
-          {fullImageUrl ? (
+          {imageUrl ? (
             <img 
-              src={fullImageUrl} 
+              src={imageUrl} 
               alt={name}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               onError={handleImageError}
