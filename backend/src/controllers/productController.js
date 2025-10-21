@@ -1,4 +1,5 @@
 import Product from "../models/Product.js";
+import path from "path";
 
 /**
  * Retrieves all products from the database.
@@ -47,16 +48,31 @@ export async function getProductById(req, res) {
  */
 export async function createProduct(req, res) {
     try {
-        const { name, retailPrice, wholesalePrice, description, imageUrl } = req.body;
-        const newProduct = new Product({ name, retailPrice, wholesalePrice, description, imageUrl });
+        const { name, retailPrice, wholesalePrice, description, imageUrl, category, stock, expiryDate } = req.body;
+        
+        console.log('Creating product with data:', req.body);
+        
+        const newProduct = new Product({ 
+            name, 
+            retailPrice, 
+            wholesalePrice, 
+            description, 
+            imageUrl, 
+            category, 
+            stock,
+            expiryDate: new Date(expiryDate)
+        });
 
         await newProduct.save();
+        
+        console.log('Product created successfully:', newProduct._id);
+        
         res.status(201).json(newProduct);
     } catch (error) {
         console.error("Error creating product:", error);
         res.status(500).json({ "message": "Server error" });
     }
-}
+};
 
 /**
  * Updates an existing product by its ID.
@@ -68,10 +84,19 @@ export async function createProduct(req, res) {
  */
 export async function updateProduct(req, res) {
     try {
-        const { name, retailPrice, wholesalePrice, description, imageUrl } = req.body;
+        const { name, retailPrice, wholesalePrice, description, imageUrl, category, stock, expiryDate } = req.body;
         const updatedProduct = await Product.findByIdAndUpdate(
             req.params.id,
-            { name, retailPrice, wholesalePrice, description, imageUrl },
+            { 
+                name, 
+                retailPrice, 
+                wholesalePrice, 
+                description, 
+                imageUrl, 
+                category, 
+                stock,
+                expiryDate: new Date(expiryDate)
+            },
             { new: true } // Returns the updated document
         );
 
@@ -79,7 +104,7 @@ export async function updateProduct(req, res) {
             return res.status(404).json({ "message": "Product not found" });
         }
 
-        res.status(200).json({ "message": "Product updated successfully" });
+        res.status(200).json(updatedProduct); // Return the updated product
     } catch (error) {
         console.error("Error updating product: ", error);
         res.status(500).json({ "message": "Server error" });
@@ -108,3 +133,32 @@ export async function deleteProduct(req, res) {
         res.status(500).json({ "message": "Server error" });
     }
 }
+
+/**
+ * Handles product image upload
+ * @param {Object} req - Request object with file
+ * @param {Object} res - Response object
+ * @returns {Promise<void>} JSON response with image URL or error
+ */
+export const uploadProductImage = async (req, res) => {
+    try {
+        console.log('Uploading product image...', req.file);
+        
+        if (!req.file) {
+            return res.status(400).json({ message: "No image file provided" });
+        }
+
+        // Construct the image URL for frontend access
+        const imageUrl = `/uploads/products/${req.file.filename}`;
+        
+        console.log('Image uploaded successfully:', imageUrl);
+        
+        res.status(200).json({
+            message: "Image uploaded successfully",
+            imageUrl: imageUrl
+        });
+    } catch (error) {
+        console.error("Error uploading product image:", error);
+        res.status(500).json({ message: "Server error while uploading image" });
+    }
+};
