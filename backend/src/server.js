@@ -43,9 +43,6 @@ app.use(cors({
 app.use(express.json()); // Parse JSON request bodies
 app.use(rateLimiter); // Apply rate limiting to all routes
 
-// Static file serving for uploaded files
-app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
-
 // API route registration
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
