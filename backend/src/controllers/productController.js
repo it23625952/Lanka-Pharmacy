@@ -84,10 +84,19 @@ export async function createProduct(req, res) {
  */
 export async function updateProduct(req, res) {
     try {
-        const { name, retailPrice, wholesalePrice, description, imageUrl } = req.body;
+        const { name, retailPrice, wholesalePrice, description, imageUrl, category, stock, expiryDate } = req.body;
         const updatedProduct = await Product.findByIdAndUpdate(
             req.params.id,
-            { name, retailPrice, wholesalePrice, description, imageUrl },
+            { 
+                name, 
+                retailPrice, 
+                wholesalePrice, 
+                description, 
+                imageUrl, 
+                category, 
+                stock,
+                expiryDate: new Date(expiryDate)
+            },
             { new: true } // Returns the updated document
         );
 
@@ -95,7 +104,7 @@ export async function updateProduct(req, res) {
             return res.status(404).json({ "message": "Product not found" });
         }
 
-        res.status(200).json({ "message": "Product updated successfully" });
+        res.status(200).json({ "message": "Product updated successfully", product: updatedProduct });
     } catch (error) {
         console.error("Error updating product: ", error);
         res.status(500).json({ "message": "Server error" });

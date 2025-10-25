@@ -1,8 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router';
-import Sidebar from "./components/Sidebar";
-import React from "react";
-import { Routes, Route, Navigate } from "react-router";
+import { Navigate, Route, Routes } from 'react-router';
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import HomePage from './pages/HomePage';
@@ -19,6 +16,7 @@ import CustomerOrdersPage from './pages/CustomerOrdersPage';
 import StaffOrdersPage from './pages/StaffOrdersPage';
 import OrderDetailPage from './pages/OrderDetailPage';
 import ProductDetailPage from './pages/ProductDetailPage';
+import EditProductPage from "./pages/EditProductPage";
 
 // Staff management
 import Dashboard from "./pages/Dashboard";
@@ -135,6 +133,10 @@ function App() {
 
         {/* Default route */}
         <Route path="*" element={<Navigate to="/" replace />} />
+        // Add these routes in your Routes component
+<Route path="/edit-product/:id" element={<EditProductPage />} />
+<Route path="/create-product" element={<CreateProductPage />} />
+<Route path="/product/:id" element={<ProductDetailPage />} />
       </Routes>
     </div>
   );
