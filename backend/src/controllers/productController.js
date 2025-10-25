@@ -1,5 +1,12 @@
 import Product from "../models/Product.js";
-import path from "path";
+import { v2 as cloudinary } from 'cloudinary';
+
+// Configure Cloudinary (make sure this is at the top)
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 /**
  * Retrieves all products from the database.
@@ -46,33 +53,55 @@ export async function getProductById(req, res) {
  * @param {Object} res - Response object
  * @returns {Promise<void>} JSON response with created product or error message
  */
+/**
+ * Checks if batch number already exists for the same product
+ */
+const checkBatchExists = async (productName, batchNumber) => {
+    const existingProduct = await Product.findOne({
+        name: productName,
+        batchNumber: batchNumber
+    });
+    return !!existingProduct;
+};
+
 export async function createProduct(req, res) {
     try {
-        const { name, retailPrice, wholesalePrice, description, imageUrl, category, stock, expiryDate } = req.body;
-        
-        console.log('Creating product with data:', req.body);
-        
+        const { name, retailPrice, wholesalePrice, description, imageUrl, category, stock, batchNumber, expiryDate, manufacturer, barcode } = req.body;
+
+        // Check if batch already exists for this product
+        const batchExists = await checkBatchExists(name, batchNumber);
+        if (batchExists) {
+            return res.status(400).json({ 
+                "message": "Batch number already exists for this product. Please use a different batch number." 
+            });
+        }
+
         const newProduct = new Product({ 
             name, 
             retailPrice, 
             wholesalePrice, 
             description, 
             imageUrl, 
-            category, 
+            category,
             stock,
-            expiryDate: new Date(expiryDate)
+            batchNumber,
+            expiryDate,
+            manufacturer,
+            barcode
         });
 
         await newProduct.save();
-        
-        console.log('Product created successfully:', newProduct._id);
-        
         res.status(201).json(newProduct);
     } catch (error) {
+        if (error.code === 11000) {
+            return res.status(400).json({ 
+                "message": "Duplicate batch detected. This batch number already exists for the same product." 
+            });
+        }
         console.error("Error creating product:", error);
         res.status(500).json({ "message": "Server error" });
     }
-}
+};
 
 /**
  * Updates an existing product by its ID.
@@ -103,8 +132,10 @@ export async function updateProduct(req, res) {
         if (!updatedProduct) {
             return res.status(404).json({ "message": "Product not found" });
         }
-
         res.status(200).json({ "message": "Product updated successfully", product: updatedProduct });
+
+        res.status(200).json(updatedProduct); // Return the updated product
+
     } catch (error) {
         console.error("Error updating product: ", error);
         res.status(500).json({ "message": "Server error" });
@@ -127,6 +158,18 @@ export async function deleteProduct(req, res) {
             return res.status(404).json({ "message": "Product not found" });
         }
 
+        // Delete image from Cloudinary if it's a Cloudinary URL
+        if (deletedProduct.imageUrl && deletedProduct.imageUrl.includes('cloudinary.com')) {
+            try {
+                const publicId = deletedProduct.imageUrl.split('/').pop().split('.')[0];
+                await cloudinary.uploader.destroy(`products/${publicId}`);
+                console.log('Product image deleted from Cloudinary:', publicId);
+            } catch (cloudinaryError) {
+                console.error('Error deleting image from Cloudinary:', cloudinaryError);
+                // Continue with product deletion even if image deletion fails
+            }
+        }
+
         res.status(200).json({ "message": "Product deleted successfully" });
     } catch (error) {
         console.error("Error deleting product: ", error);
@@ -135,30 +178,36 @@ export async function deleteProduct(req, res) {
 }
 
 /**
- * Handles product image upload
+ * Handles product image upload to Cloudinary
  * @param {Object} req - Request object with file
  * @param {Object} res - Response object
  * @returns {Promise<void>} JSON response with image URL or error
  */
 export const uploadProductImage = async (req, res) => {
     try {
-        console.log('Uploading product image...', req.file);
+        console.log('Uploading product image to Cloudinary...', req.file);
         
         if (!req.file) {
             return res.status(400).json({ message: "No image file provided" });
         }
 
-        // Construct the image URL for frontend access
-        const imageUrl = `/uploads/products/${req.file.filename}`;
+        // Upload to Cloudinary
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: 'products',
+            transformation: [
+                { width: 800, height: 800, crop: 'limit', quality: 'auto' }
+            ]
+        });
+
+        console.log('Cloudinary upload result:', result);
         
-        console.log('Image uploaded successfully:', imageUrl);
-        
+        // Return the secure URL from Cloudinary
         res.status(200).json({
             message: "Image uploaded successfully",
-            imageUrl: imageUrl
+            imageUrl: result.secure_url
         });
     } catch (error) {
-        console.error("Error uploading product image:", error);
+        console.error("Error uploading product image to Cloudinary:", error);
         res.status(500).json({ message: "Server error while uploading image" });
     }
 };

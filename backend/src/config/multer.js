@@ -1,37 +1,56 @@
 import multer from 'multer';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import { v2 as cloudinary } from 'cloudinary';
 import path from 'path';
-import fs from 'fs';
 
-// Ensure upload directories exist
-const createUploadDirectories = () => {
-    const dirs = [
-        'uploads',
-        'uploads/products',
-        'uploads/prescriptions'
-    ];
-    
-    dirs.forEach(dir => {
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-        }
-    });
-};
-
-createUploadDirectories();
+// Cloudinary configuration
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 /**
- * Multer disk storage configuration for prescription file uploads.
- * Defines where to store files and how to name them.
+ * Cloudinary storage configuration for prescription file uploads
  */
-const prescriptionStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/prescriptions/'); // Store files in uploads/prescriptions directory
+const prescriptionStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'prescriptions',
+    format: async (req, file) => {
+      // Preserve original format or convert to webp for images
+      const ext = path.extname(file.originalname).toLowerCase();
+      if (['.jpg', '.jpeg', '.png', '.gif', '.webp'].includes(ext)) {
+        return 'webp'; // Convert images to webp for better compression
+      }
+      return ext.substring(1); // Remove the dot for other formats
     },
-    filename: (req, file, cb) => {
-        // Generate unique filename with timestamp and random number to prevent conflicts
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, 'prescription-' + uniqueSuffix + path.extname(file.originalname));
-    }
+    public_id: (req, file) => {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      return 'prescription-' + uniqueSuffix;
+    },
+    transformation: [
+      { width: 1200, height: 1200, crop: 'limit', quality: 'auto' }
+    ]
+  },
+});
+
+/**
+ * Cloudinary storage configuration for product image uploads
+ */
+const productStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'products',
+    format: async (req, file) => 'webp',
+    public_id: (req, file) => {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      return 'product-' + uniqueSuffix;
+    },
+    transformation: [
+      { width: 800, height: 800, crop: 'limit', quality: 'auto' }
+    ]
+  },
 });
 
 /**
@@ -39,11 +58,23 @@ const prescriptionStorage = multer.diskStorage({
  * Only allows image files to be uploaded.
  */
 const prescriptionFileFilter = (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
-        cb(null, true); // Accept image files
-    } else {
-        cb(new Error('Only image files are allowed!'), false); // Reject non-image files
-    }
+  if (file.mimetype.startsWith('image/')) {
+    cb(null, true); // Accept image files
+  } else {
+    cb(new Error('Only image files are allowed!'), false); // Reject non-image files
+  }
+};
+
+/**
+ * File filter function to validate uploaded product images.
+ * Only allows image files to be uploaded.
+ */
+const productFileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image/')) {
+    cb(null, true); // Accept image files
+  } else {
+    cb(new Error('Only image files are allowed!'), false); // Reject non-image files
+  }
 };
 
 /**
@@ -51,48 +82,21 @@ const prescriptionFileFilter = (req, file, cb) => {
  * Handles file storage, filtering, and size limits.
  */
 const prescriptionUpload = multer({
-    storage: prescriptionStorage,
-    fileFilter: prescriptionFileFilter,
-    limits: { fileSize: 5 * 1024 * 1024 } // 5 MB file size limit
+  storage: prescriptionStorage,
+  fileFilter: prescriptionFileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 } // 5 MB file size limit
 });
-
-/**
- * Multer disk storage configuration for product image uploads.
- * Defines where to store files and how to name them.
- */
-const productStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/products/'); // Store product images in uploads/products directory
-    },
-    filename: (req, file, cb) => {
-        // Generate unique filename with timestamp and random number to prevent conflicts
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, 'product-' + uniqueSuffix + path.extname(file.originalname));
-    }
-});
-
-/**
- * File filter function to validate uploaded product images.
- * Only allows image files to be uploaded.
- */
-const productFileFilter = (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
-        cb(null, true); // Accept image files
-    } else {
-        cb(new Error('Only image files are allowed!'), false); // Reject non-image files
-    }
-};
 
 /**
  * Multer middleware instance configured for product image uploads.
  * Handles file storage, filtering, and size limits.
  */
 const productUpload = multer({
-    storage: productStorage,
-    fileFilter: productFileFilter,
-    limits: { 
-        fileSize: 5 * 1024 * 1024 // 5 MB file size limit
-    }
+  storage: productStorage,
+  fileFilter: productFileFilter,
+  limits: { 
+    fileSize: 5 * 1024 * 1024 // 5 MB file size limit
+  }
 });
 
 // Export configurations

@@ -3,6 +3,7 @@ import path from "path";
 import cors from "cors";
 import dotenv from "dotenv";
 
+// Route imports
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import prescriptionRoutes from "./routes/prescriptionRoutes.js";
@@ -12,12 +13,16 @@ import staffRoutes from './routes/staffRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
 import attendanceRoutes from './routes/attendanceRoutes.js';
 import salaryRoutes from './routes/salaryRoutes.js';
+import reviewRoutes from "./routes/reviewRoutes.js";
+import wasteRoutes from "./routes/wasteRoutes.js";
 
 // Configuration imports
 import { connectDB } from "./config/db.js";
 import { JWT_SECRET } from "./config/jwt.js";
 import rateLimiter from "./middleware/rateLimiter.js";
+import { fileURLToPath } from "url";
 
+// Load environment variables
 dotenv.config();
 
 // Validate required environment variables
@@ -25,12 +30,12 @@ const requiredEnvVars = ['JWT_SECRET', 'MONGO_URI'];
 requiredEnvVars.forEach(envVar => {
   if (!process.env[envVar] || process.env[envVar].includes('your_jwt_secret')) {
     console.error(`❌ FATAL: ${envVar} not configured properly`);
-    process.exit(1); // Terminate application on missing or default configuration
+    process.exit(1);
   }
 });
 
 const app = express();
-const PORT = process.env.PORT || 5001; // Default to port 5001 if not specified
+const PORT = process.env.PORT || 5001;
 
 // Middleware
 app.use(cors({
@@ -39,9 +44,6 @@ app.use(cors({
 }));
 app.use(express.json()); // Parse JSON request bodies
 app.use(rateLimiter); // Apply rate limiting to all routes
-
-// Static file serving for uploaded files
-app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // API route registration
 app.use("/api/products", productRoutes);
@@ -53,6 +55,8 @@ app.use("/api/reports", reportRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/salary", salaryRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/waste", wasteRoutes);
 
 // Start server after DB connection
 connectDB().then(() => {

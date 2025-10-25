@@ -268,7 +268,7 @@ const Navbar = () => {
               </Link>
               
               {/* Cart Link in Mobile Menu */}
-              <Link to="/cart" className="block px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 font-medium flex items-center gap-2">
+              <Link to="/cart" className="px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition-all duration-200 font-medium flex items-center gap-2">
                 <ShoppingCart className="size-4" />
                 Shopping Cart
               </Link>

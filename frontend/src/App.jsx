@@ -35,6 +35,7 @@ import CheckoutPage from './pages/CheckoutPage';
 import ConfirmationPage from './pages/ConfirmationPage';
 import ViewOrderPage from './pages/ViewOrderPage';
 import EditOrderPage from './pages/EditOrderPage';
+import WasteDashboard from './pages/WasteDashboard';
 
 function App() {
   return (
@@ -137,6 +138,7 @@ function App() {
 <Route path="/edit-product/:id" element={<EditProductPage />} />
 <Route path="/create-product" element={<CreateProductPage />} />
 <Route path="/product/:id" element={<ProductDetailPage />} />
+<Route path="/waste-dashboard" element={<WasteDashboard />} />
       </Routes>
     </div>
   );
