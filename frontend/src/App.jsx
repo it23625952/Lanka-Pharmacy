@@ -1,5 +1,5 @@
-import React from "react";
-import { Routes, Route, Navigate } from "react-router";
+import React from 'react';
+import { Navigate, Route, Routes } from 'react-router';
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import HomePage from './pages/HomePage';
@@ -16,6 +16,7 @@ import CustomerOrdersPage from './pages/CustomerOrdersPage';
 import StaffOrdersPage from './pages/StaffOrdersPage';
 import OrderDetailPage from './pages/OrderDetailPage';
 import ProductDetailPage from './pages/ProductDetailPage';
+import EditProductPage from "./pages/EditProductPage";
 
 // Staff management
 import Dashboard from "./pages/Dashboard";
@@ -34,9 +35,7 @@ import CheckoutPage from './pages/CheckoutPage';
 import ConfirmationPage from './pages/ConfirmationPage';
 import ViewOrderPage from './pages/ViewOrderPage';
 import EditOrderPage from './pages/EditOrderPage';
-import PaymentPage from "./pages/PaymentPage";
-import PaymentSuccessPage from "./pages/PaymentSuccessPage";
-import OrderVolumeDashboard from "./pages/OrderVolumeDashboard";
+import WasteDashboard from './pages/WasteDashboard';
 
 function App() {
   return (
@@ -70,17 +69,14 @@ function App() {
         <Route path="/attendance" element={<Attendance />} />
         <Route path="/salary" element={<Salary />} />
         <Route path="/reports" element={<Reports />} />
-        <Route path="/staff/orders/dashboard" element={<OrderVolumeDashboard />} />
 
         <Route path="/create-product" element={<CreateProductPage />} />
         <Route path="/product/:id" element={<ProductDetailPage />} />
               
         {/* Shopping cart flow routes */}
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/cart-page" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/view-order" element={<ViewOrderPage />} />
-        <Route path="/edit-order/:id" element={<EditOrderPage />} />
-        <Route path="/confirmation" element={<ConfirmationPage />} />
         
         {/* Staff protected routes */}
         <Route 
@@ -110,38 +106,39 @@ function App() {
           } 
         />
 
-        {/* payment routes */}
-    <Route path="/payment" element={<PaymentPage />} />
-    <Route path="/payment-success" element={<PaymentSuccessPage />} />
-
-            {/* Protected routes */}
-            <Route
-              path="/staff/prescriptions"
-              element={
-                <ProtectedRoute allowedRoles={["Owner","Manager","Staff"]}>
-                  <StaffPrescriptionsPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/staff/orders"
-              element={
-                <ProtectedRoute allowedRoles={["Owner","Manager","Staff"]}>
-                  <StaffOrdersPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/staff/orders/:id"
-              element={
-                <ProtectedRoute allowedRoles={["Owner","Manager","Staff"]}>
-                  <OrderDetailPage />
-                </ProtectedRoute>
-              }
-            />
+        {/* Protected routes */}
+        <Route
+          path="/staff/prescriptions"
+          element={
+            <ProtectedRoute allowedRoles={["Owner","Manager","Staff"]}>
+              <StaffPrescriptionsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/staff/orders"
+          element={
+            <ProtectedRoute allowedRoles={["Owner","Manager","Staff"]}>
+              <StaffOrdersPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/staff/orders/:id"
+          element={
+            <ProtectedRoute allowedRoles={["Owner","Manager","Staff"]}>
+              <OrderDetailPage />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Default route */}
         <Route path="*" element={<Navigate to="/" replace />} />
+        // Add these routes in your Routes component
+<Route path="/edit-product/:id" element={<EditProductPage />} />
+<Route path="/create-product" element={<CreateProductPage />} />
+<Route path="/product/:id" element={<ProductDetailPage />} />
+<Route path="/waste-dashboard" element={<WasteDashboard />} />
       </Routes>
     </div>
   );

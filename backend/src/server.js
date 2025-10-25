@@ -13,6 +13,8 @@ import staffRoutes from './routes/staffRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
 import attendanceRoutes from './routes/attendanceRoutes.js';
 import salaryRoutes from './routes/salaryRoutes.js';
+import reviewRoutes from "./routes/reviewRoutes.js";
+import wasteRoutes from "./routes/wasteRoutes.js";
 
 // Configuration imports
 import { connectDB } from "./config/db.js";
@@ -53,6 +55,8 @@ app.use("/api/reports", reportRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/salary", salaryRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/waste", wasteRoutes);
 
 // Start server after DB connection
 connectDB().then(() => {

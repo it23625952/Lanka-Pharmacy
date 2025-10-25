@@ -14,7 +14,10 @@ import {
     Plus,
     Minus,
     Check,
-    AlertTriangle
+    AlertTriangle,
+    Edit,
+    Trash2,
+    MoreVertical
 } from 'lucide-react';
 import api from '../lib/axios';
 import toast from 'react-hot-toast';
@@ -28,6 +31,8 @@ const ProductDetailPage = () => {
     const [selectedImage, setSelectedImage] = useState(0);
     const [isInWishlist, setIsInWishlist] = useState(false);
     const [addingToCart, setAddingToCart] = useState(false);
+    const [showActionsMenu, setShowActionsMenu] = useState(false);
+    const [deleting, setDeleting] = useState(false);
 
     // Mock related products (in real app, fetch from API)
     const relatedProducts = [
@@ -137,6 +142,35 @@ const ProductDetailPage = () => {
         }
     };
 
+    const handleEditProduct = () => {
+        navigate(`/edit-product/${id}`);
+    };
+
+    const handleDeleteProduct = async () => {
+        if (!window.confirm(`Are you sure you want to delete "${product.name}"? This action cannot be undone.`)) {
+            return;
+        }
+
+        setDeleting(true);
+        try {
+            await api.delete(`/products/${id}`);
+            toast.success('Product deleted successfully!');
+            navigate('/');
+        } catch (error) {
+            console.error('Error deleting product:', error);
+            if (error.response?.status === 401) {
+                toast.error('Please sign in to delete products');
+            } else if (error.response?.status === 403) {
+                toast.error('You do not have permission to delete products');
+            } else {
+                toast.error('Failed to delete product');
+            }
+        } finally {
+            setDeleting(false);
+            setShowActionsMenu(false);
+        }
+    };
+
     const increaseQuantity = () => {
         if (quantity < (product?.stock || 10)) {
             setQuantity(quantity + 1);
@@ -221,14 +255,50 @@ const ProductDetailPage = () => {
                     <span className="text-gray-800 font-medium">{product.name}</span>
                 </div>
 
-                {/* Back Button */}
-                <button 
-                    onClick={() => navigate(-1)}
-                    className="flex items-center gap-2 text-gray-600 hover:text-emerald-600 mb-6 transition-colors"
-                >
-                    <ArrowLeft className="size-5" />
-                    <span>Back</span>
-                </button>
+                {/* Back Button and Actions */}
+                <div className="flex justify-between items-center mb-6">
+                    <button 
+                        onClick={() => navigate(-1)}
+                        className="flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors"
+                    >
+                        <ArrowLeft className="size-5" />
+                        <span>Back</span>
+                    </button>
+
+                    {/* Actions Menu */}
+                    <div className="relative">
+                        <button
+                            onClick={() => setShowActionsMenu(!showActionsMenu)}
+                            className="p-2 border-2 border-gray-300 text-gray-600 rounded-xl hover:border-emerald-500 hover:text-emerald-600 transition-all duration-200"
+                        >
+                            <MoreVertical className="size-5" />
+                        </button>
+
+                        {showActionsMenu && (
+                            <div className="absolute right-0 top-12 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 z-50 min-w-48">
+                                <button
+                                    onClick={handleEditProduct}
+                                    className="w-full flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200"
+                                >
+                                    <Edit className="size-4" />
+                                    Edit Product
+                                </button>
+                                <button
+                                    onClick={handleDeleteProduct}
+                                    disabled={deleting}
+                                    className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                                >
+                                    {deleting ? (
+                                        <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+                                    ) : (
+                                        <Trash2 className="size-4" />
+                                    )}
+                                    {deleting ? 'Deleting...' : 'Delete Product'}
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
 
                 {/* Main Product Section */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">

@@ -53,29 +53,51 @@ export async function getProductById(req, res) {
  * @param {Object} res - Response object
  * @returns {Promise<void>} JSON response with created product or error message
  */
+/**
+ * Checks if batch number already exists for the same product
+ */
+const checkBatchExists = async (productName, batchNumber) => {
+    const existingProduct = await Product.findOne({
+        name: productName,
+        batchNumber: batchNumber
+    });
+    return !!existingProduct;
+};
+
 export async function createProduct(req, res) {
     try {
-        const { name, retailPrice, wholesalePrice, description, imageUrl, category, stock, expiryDate } = req.body;
-        
-        console.log('Creating product with data:', req.body);
-        
+        const { name, retailPrice, wholesalePrice, description, imageUrl, category, stock, batchNumber, expiryDate, manufacturer, barcode } = req.body;
+
+        // Check if batch already exists for this product
+        const batchExists = await checkBatchExists(name, batchNumber);
+        if (batchExists) {
+            return res.status(400).json({ 
+                "message": "Batch number already exists for this product. Please use a different batch number." 
+            });
+        }
+
         const newProduct = new Product({ 
             name, 
             retailPrice, 
             wholesalePrice, 
             description, 
             imageUrl, 
-            category, 
+            category,
             stock,
-            expiryDate: new Date(expiryDate)
+            batchNumber,
+            expiryDate,
+            manufacturer,
+            barcode
         });
 
         await newProduct.save();
-        
-        console.log('Product created successfully:', newProduct._id);
-        
         res.status(201).json(newProduct);
     } catch (error) {
+        if (error.code === 11000) {
+            return res.status(400).json({ 
+                "message": "Duplicate batch detected. This batch number already exists for the same product." 
+            });
+        }
         console.error("Error creating product:", error);
         res.status(500).json({ "message": "Server error" });
     }
@@ -110,8 +132,10 @@ export async function updateProduct(req, res) {
         if (!updatedProduct) {
             return res.status(404).json({ "message": "Product not found" });
         }
+        res.status(200).json({ "message": "Product updated successfully", product: updatedProduct });
 
         res.status(200).json(updatedProduct); // Return the updated product
+
     } catch (error) {
         console.error("Error updating product: ", error);
         res.status(500).json({ "message": "Server error" });

@@ -495,6 +495,47 @@ const CreateProductPage = () => {
                                         </div>
                                     )}
                                 </div>
+
+                                {/* Batch Number */}
+<div className='form-control'>
+    <label className='text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+        <Package className="size-5 text-emerald-600" />
+        Batch Number *
+    </label>
+    <input 
+        type='text' 
+        placeholder='Enter unique batch number (e.g., BATCH-001)' 
+        className='input input-lg w-full border-2 border-gray-300 bg-gray-50 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 transition-all duration-200 text-gray-800 placeholder-gray-500'
+        value={formData.batchNumber}
+        onChange={(e) => handleInputChange('batchNumber', e.target.value)}
+        required
+    />
+</div>
+
+{/* Expiry Date */}
+<div className='form-control'>
+    <label className='text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
+        <Calendar className="size-5 text-emerald-600" />
+        Expiry Date *
+    </label>
+    <input 
+        type='date' 
+        className='input input-lg w-full border-2 border-gray-300 bg-gray-50 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 transition-all duration-200 text-gray-800'
+        value={formData.expiryDate}
+        onChange={(e) => handleInputChange('expiryDate', e.target.value)}
+        min={new Date().toISOString().split('T')[0]}
+        required
+    />
+    {daysUntilExpiry !== null && (
+        <div className={`mt-2 p-2 rounded-lg text-sm ${
+            daysUntilExpiry <= 30 ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'
+        }`}>
+            {daysUntilExpiry <= 0 ? '⚠️ Product has expired' : 
+             `Expires in ${daysUntilExpiry} days`}
+        </div>
+    )}
+</div>
+                               
                             </div>
 
                             {/* Product Description */}

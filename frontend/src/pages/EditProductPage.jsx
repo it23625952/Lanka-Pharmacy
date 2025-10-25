@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
-import { Package, DollarSign, FileText, ArrowLeft, Save, Calendar, AlertTriangle, Upload, Trash2, Edit } from 'lucide-react';
+import { ArrowLeft, Package, DollarSign, FileText, Save, X, Calendar, AlertTriangle, Upload, Trash2, Image } from 'lucide-react';
 import api from '../lib/axios';
 import toast from 'react-hot-toast';
 import { useNavigate, useParams, Link } from 'react-router';
 
 const EditProductPage = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '',
         retailPrice: '',
@@ -18,11 +19,10 @@ const EditProductPage = () => {
         expiryDate: ''
     });
     const [isLoading, setIsLoading] = useState(false);
+    const [loadingProduct, setLoadingProduct] = useState(true);
     const [imagePreview, setImagePreview] = useState('');
     const [selectedFile, setSelectedFile] = useState(null);
     const [uploadProgress, setUploadProgress] = useState(0);
-    const [isDeleting, setIsDeleting] = useState(false);
-    const navigate = useNavigate();
 
     // Product categories
     const categories = [
@@ -43,7 +43,7 @@ const EditProductPage = () => {
 
     const fetchProduct = async () => {
         try {
-            setIsLoading(true);
+            setLoadingProduct(true);
             const response = await api.get(`/products/${id}`);
             const product = response.data;
             
@@ -59,20 +59,17 @@ const EditProductPage = () => {
             });
 
             if (product.imageUrl) {
-                setImagePreview(product.imageUrl);
+                setImagePreview(`http://localhost:5001${product.imageUrl}`);
             }
         } catch (error) {
             console.error('Error fetching product:', error);
             toast.error('Failed to load product');
             navigate('/');
         } finally {
-            setIsLoading(false);
+            setLoadingProduct(false);
         }
     };
 
-    /**
-     * Handles form input changes
-     */
     const handleInputChange = (field, value) => {
         setFormData(prev => ({
             ...prev,
@@ -80,21 +77,16 @@ const EditProductPage = () => {
         }));
     };
 
-    /**
-     * Handles file selection for image upload
-     */
     const handleFileSelect = (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
-        // Validate file type
         const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
         if (!validTypes.includes(file.type)) {
             toast.error('Please select a valid image file (JPEG, PNG, or WebP)');
             return;
         }
 
-        // Validate file size (5MB max)
         const maxSize = 5 * 1024 * 1024;
         if (file.size > maxSize) {
             toast.error('Image size must be less than 5MB');
@@ -103,29 +95,21 @@ const EditProductPage = () => {
 
         setSelectedFile(file);
         
-        // Create preview
         const reader = new FileReader();
         reader.onload = (e) => {
             setImagePreview(e.target.result);
         };
         reader.readAsDataURL(file);
 
-        // Clear URL input when file is selected
         setFormData(prev => ({ ...prev, imageUrl: '' }));
     };
 
-    /**
-     * Removes selected file and clears preview
-     */
     const handleRemoveFile = () => {
         setSelectedFile(null);
         setImagePreview('');
         setUploadProgress(0);
     };
 
-    /**
-     * Handles image URL input and generates preview
-     */
     const handleImageUrlChange = (url) => {
         setFormData(prev => ({ ...prev, imageUrl: url }));
         if (url) {
@@ -135,9 +119,6 @@ const EditProductPage = () => {
         }
     };
 
-    /**
-     * Uploads image file to server
-     */
     const uploadImageFile = async () => {
         if (!selectedFile) return formData.imageUrl;
 
@@ -166,9 +147,6 @@ const EditProductPage = () => {
         }
     };
 
-    /**
-     * Validates the form data before submission
-     */
     const validateForm = () => {
         if (!formData.name.trim()) {
             toast.error('Product name is required');
@@ -203,7 +181,6 @@ const EditProductPage = () => {
             return false;
         }
         
-        // Validate expiry date is not in the past
         const today = new Date();
         const expiry = new Date(formData.expiryDate);
         if (expiry < today) {
@@ -211,7 +188,6 @@ const EditProductPage = () => {
             return false;
         }
 
-        // Validate that either image file or URL is provided
         if (!selectedFile && !formData.imageUrl.trim()) {
             toast.error('Please either upload an image or provide an image URL');
             return false;
@@ -220,9 +196,6 @@ const EditProductPage = () => {
         return true;
     };
 
-    /**
-     * Handles form submission for updating the product
-     */
     const handleSubmit = async (e) => {
         e.preventDefault();
         
@@ -233,12 +206,8 @@ const EditProductPage = () => {
         try {
             let finalImageUrl = formData.imageUrl;
 
-            // Upload file if selected
             if (selectedFile) {
                 finalImageUrl = await uploadImageFile();
-                if (!finalImageUrl) {
-                    throw new Error('Image upload failed');
-                }
             }
 
             const productData = {
@@ -256,16 +225,12 @@ const EditProductPage = () => {
             navigate(`/product/${id}`);
         } catch (error) {
             console.error('Error updating product:', error);
-            
             if (error.response?.status === 401) {
-                toast.error('Please sign in to edit products');
-                navigate('/signin');
+                toast.error('Please sign in to update products');
             } else if (error.response?.status === 403) {
-                toast.error('You do not have permission to edit products');
-            } else if (error.code === 'ERR_NETWORK') {
-                toast.error('Cannot connect to server');
+                toast.error('You do not have permission to update products');
             } else {
-                toast.error(error.response?.data?.message || 'Failed to update product');
+                toast.error('Failed to update product');
             }
         } finally {
             setIsLoading(false);
@@ -273,71 +238,20 @@ const EditProductPage = () => {
         }
     };
 
-    /**
-     * Handles product deletion
-     */
-    const handleDelete = async () => {
-        if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
-            return;
-        }
-
-        setIsDeleting(true);
-        try {
-            await api.delete(`/products/${id}`);
-            toast.success('Product deleted successfully!');
-            navigate('/');
-        } catch (error) {
-            console.error('Error deleting product:', error);
-            
-            if (error.response?.status === 401) {
-                toast.error('Please sign in to delete products');
-                navigate('/signin');
-            } else if (error.response?.status === 403) {
-                toast.error('You do not have permission to delete products');
-            } else {
-                toast.error(error.response?.data?.message || 'Failed to delete product');
-            }
-        } finally {
-            setIsDeleting(false);
-        }
+    const handleClearForm = () => {
+        toast.success('Form cleared');
     };
 
-    /**
-     * Checks if product will trigger low stock notification
-     */
-    const isLowStock = () => {
-        return parseInt(formData.stock) < 10;
-    };
-
-    /**
-     * Checks if product will trigger expiry notification
-     */
+    const isLowStock = () => parseInt(formData.stock) < 10;
     const isNearExpiry = () => {
         if (!formData.expiryDate) return false;
-        
         const today = new Date();
         const expiry = new Date(formData.expiryDate);
         const daysUntilExpiry = Math.ceil((expiry - today) / (1000 * 60 * 60 * 24));
-        
         return daysUntilExpiry <= 30;
     };
 
-    /**
-     * Calculates days until expiry for display
-     */
-    const getDaysUntilExpiry = () => {
-        if (!formData.expiryDate) return null;
-        
-        const today = new Date();
-        const expiry = new Date(formData.expiryDate);
-        return Math.ceil((expiry - today) / (1000 * 60 * 60 * 24));
-    };
-
-    const daysUntilExpiry = getDaysUntilExpiry();
-    const showLowStockWarning = isLowStock();
-    const showExpiryWarning = isNearExpiry();
-
-    if (isLoading && !formData.name) {
+    if (loadingProduct) {
         return (
             <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
                 <Navbar />
@@ -368,17 +282,16 @@ const EditProductPage = () => {
                     <p className='text-gray-600 text-lg'>Update the product information</p>
                 </div>
 
-                {/* Product Edit Card */}
+                {/* Edit Product Card */}
                 <div className='bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100'>
-                    {/* Header Section with Gradient Background */}
                     <div className='bg-gradient-to-br from-blue-600 to-blue-700 px-8 py-6'>
                         <div className="flex items-center gap-4">
                             <div className="inline-block bg-white/20 backdrop-blur-sm p-3 rounded-2xl shadow-xl">
-                                <Edit className="size-8 text-white" />
+                                <Package className="size-8 text-white" />
                             </div>
                             <div>
                                 <h2 className='text-2xl font-bold text-white'>Edit Product Information</h2>
-                                <p className='text-blue-100'>Update the details below</p>
+                                <p className='text-blue-100'>Update the product details below</p>
                             </div>
                         </div>
                     </div>
@@ -394,7 +307,7 @@ const EditProductPage = () => {
                                 </label>
                                 <input 
                                     type='text' 
-                                    placeholder='Enter product name' 
+                                    placeholder='Enter product name'
                                     className='input input-lg w-full border-2 border-gray-300 bg-gray-50 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 transition-all duration-200 text-gray-800 placeholder-gray-500'
                                     value={formData.name}
                                     onChange={(e) => handleInputChange('name', e.target.value)}
@@ -404,7 +317,6 @@ const EditProductPage = () => {
 
                             {/* Pricing Section */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {/* Retail Price */}
                                 <div className='form-control'>
                                     <label className='text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
                                         <DollarSign className="size-5 text-green-600" />
@@ -422,7 +334,6 @@ const EditProductPage = () => {
                                     />
                                 </div>
 
-                                {/* Wholesale Price */}
                                 <div className='form-control'>
                                     <label className='text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
                                         <DollarSign className="size-5 text-blue-600" />
@@ -441,28 +352,8 @@ const EditProductPage = () => {
                                 </div>
                             </div>
 
-                            {/* Price Comparison Note */}
-                            {formData.retailPrice && formData.wholesalePrice && (
-                                <div className={`p-4 rounded-xl border-2 ${
-                                    parseFloat(formData.wholesalePrice) < parseFloat(formData.retailPrice)
-                                        ? 'bg-green-50 border-green-200 text-green-700'
-                                        : 'bg-red-50 border-red-200 text-red-700'
-                                }`}>
-                                    <div className="flex items-center gap-2">
-                                        <DollarSign className="size-4" />
-                                        <span className="font-medium">
-                                            {parseFloat(formData.wholesalePrice) < parseFloat(formData.retailPrice)
-                                                ? `✓ Wholesale price is ${((1 - parseFloat(formData.wholesalePrice) / parseFloat(formData.retailPrice)) * 100).toFixed(1)}% lower than retail`
-                                                : '⚠️ Wholesale price should be lower than retail price'
-                                            }
-                                        </span>
-                                    </div>
-                                </div>
-                            )}
-
                             {/* Category, Stock, and Expiry */}
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                {/* Category */}
                                 <div className='form-control'>
                                     <label className='block text-sm font-semibold text-gray-700 mb-2'>
                                         Category *
@@ -480,7 +371,6 @@ const EditProductPage = () => {
                                     </select>
                                 </div>
 
-                                {/* Stock Quantity */}
                                 <div className='form-control'>
                                     <label className='block text-sm font-semibold text-gray-700 mb-2'>
                                         Stock Quantity *
@@ -490,7 +380,7 @@ const EditProductPage = () => {
                                         min='0'
                                         placeholder='0'
                                         className={`input input-lg w-full border-2 rounded-xl focus:ring-4 transition-all duration-200 text-gray-800 placeholder-gray-500 ${
-                                            showLowStockWarning
+                                            isLowStock()
                                                 ? 'border-orange-300 bg-orange-50 focus:border-orange-500 focus:ring-orange-100'
                                                 : 'border-gray-300 bg-gray-50 focus:border-emerald-500 focus:ring-emerald-100'
                                         }`}
@@ -498,12 +388,31 @@ const EditProductPage = () => {
                                         onChange={(e) => handleInputChange('stock', e.target.value)}
                                         required
                                     />
-                                    {showLowStockWarning && (
+                                    {isLowStock() && (
                                         <div className="flex items-center gap-2 mt-2 text-orange-600 text-sm">
                                             <AlertTriangle className="size-4" />
                                             <span>Low stock! Managers will be notified.</span>
                                         </div>
                                     )}
+                                </div>
+
+                                <div className='form-control'>
+                                    <label className='text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2'>
+                                        <Calendar className="size-5 text-purple-600" />
+                                        Expiry Date *
+                                    </label>
+                                    <input 
+                                        type='date' 
+                                        className={`input input-lg w-full border-2 rounded-xl focus:ring-4 transition-all duration-200 text-gray-800 ${
+                                            isNearExpiry()
+                                                ? 'border-orange-300 bg-orange-50 focus:border-orange-500 focus:ring-orange-100'
+                                                : 'border-gray-300 bg-gray-50 focus:border-emerald-500 focus:ring-emerald-100'
+                                        }`}
+                                        value={formData.expiryDate}
+                                        onChange={(e) => handleInputChange('expiryDate', e.target.value)}
+                                        min={new Date().toISOString().split('T')[0]}
+                                        required
+                                    />
                                 </div>
                             </div>
 
@@ -526,7 +435,7 @@ const EditProductPage = () => {
                             {/* Image Upload Section */}
                             <div className='form-control'>
                                 <label className='text-sm font-semibold text-gray-700 mb-2 flex items-center gap-3'>
-                                    <Upload className="size-5 text-emerald-600" />
+                                    <Image className="size-5 text-emerald-600" />
                                     Product Image *
                                 </label>
                                 
@@ -581,7 +490,6 @@ const EditProductPage = () => {
                                         )}
                                     </div>
 
-                                    {/* OR Separator */}
                                     <div className="relative">
                                         <div className="absolute inset-0 flex items-center">
                                             <div className="w-full border-t border-gray-300"></div>
@@ -632,26 +540,17 @@ const EditProductPage = () => {
                             <div className="flex gap-4 pt-6 border-t border-gray-200">
                                 <button 
                                     type="button"
-                                    onClick={handleDelete}
-                                    className="btn border-2 border-red-300 text-red-700 bg-transparent hover:bg-red-50 flex-1 py-4 text-lg transition-all duration-200 flex items-center justify-center gap-2"
-                                    disabled={isLoading || isDeleting}
+                                    onClick={() => navigate(`/product/${id}`)}
+                                    className="btn border-2 border-gray-300 text-gray-700 bg-transparent hover:bg-gray-50 flex-1 py-4 text-lg transition-all duration-200 flex items-center justify-center gap-2"
+                                    disabled={isLoading}
                                 >
-                                    {isDeleting ? (
-                                        <>
-                                            <div className="w-5 h-5 border-2 border-red-700 border-t-transparent rounded-full animate-spin"></div>
-                                            <span>Deleting...</span>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Trash2 className="size-5" />
-                                            <span>Delete Product</span>
-                                        </>
-                                    )}
+                                    <X className="size-5" />
+                                    Cancel
                                 </button>
                                 <button 
                                     type="submit"
-                                    className="btn bg-gradient-to-r from-emerald-600 to-emerald-700 border-none text-white hover:from-emerald-700 hover:to-emerald-800 flex-1 py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
-                                    disabled={isLoading || isDeleting}
+                                    className="btn bg-gradient-to-r from-blue-600 to-blue-700 border-none text-white hover:from-blue-700 hover:to-blue-800 flex-1 py-4 text-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2"
+                                    disabled={isLoading}
                                 >
                                     {isLoading ? (
                                         <>
