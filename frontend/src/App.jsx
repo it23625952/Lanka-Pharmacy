@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate, Route, Routes } from 'react-router';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Public Pages
@@ -46,6 +46,8 @@ import EditOrderPage from './pages/EditOrderPage';
 
 // Waste Management
 import WasteDashboard from './pages/WasteDashboard';
+import PaymentPage from './pages/PaymentPage';  
+import PaymentSuccessPage from './pages/PaymentSuccessPage';
 
 // Help & Support Pages - Customer Side
 import HelpsupportPage from './pages/HelpsupportPage';
@@ -97,62 +99,8 @@ function App() {
         <Route path="/create-product" element={<CreateProductPage />} />
         <Route path="/edit-product/:id" element={<EditProductPage />} />
         <Route path="/product/:id" element={<ProductDetailPage />} />
-        
-        
-        {/* ================================================ */}
-        {/* HELP & SUPPORT ROUTES - CUSTOMER SIDE */}
-        {/* ================================================ */}
-        
-        {/* Main Help & Support Hub */}
-        <Route path="/help-support" element={<HelpsupportPage />} />
-        
-        {/* Customer Support Features */}
-        <Route path="/help-support/tickets" element={<TicketsPage />} />
-        <Route path="/help-support/chat" element={<ChatPage />} />
-        <Route path="/help-support/chat/:ticketId" element={<ChatPage />} />
-        <Route path="/help-support/feedback" element={<FeedbackPage />} />
-        <Route path="/help-support/callback" element={<CallbackPage />} />
-        
-        
-        {/* ================================================ */}
-        {/* HELP & SUPPORT ROUTES - STAFF/AGENT SIDE */}
-        {/* ================================================ */}
-        
-        {/* Agent Dashboard - For Support Agents & Staff */}
-        <Route 
-          path="/agent/dashboard" 
-          element={
-            <ProtectedRoute allowedRoles={['Owner', 'Manager', 'Staff', 'Support Agent']}>
-              <AgentDashboardPage />
-            </ProtectedRoute>
-          } 
-        />
-        
-        {/* Agent Chat - For Live Chat with Customers */}
-        <Route 
-          path="/agent/chat/:ticketID" 
-          element={
-            <ProtectedRoute allowedRoles={['Owner', 'Manager', 'Staff', 'Support Agent']}>
-              <AgentChatPage />
-            </ProtectedRoute>
-          } 
-        />
-        
-        {/* Staff Dashboard - For Pharmacy Staff Analytics */}
-        <Route 
-          path="/staff/dashboard" 
-          element={
-            <ProtectedRoute allowedRoles={['Owner', 'Manager', 'Staff']}>
-              <StaffDashboardPage />
-            </ProtectedRoute>
-          } 
-        />
-        
-        
-        {/* ================================================ */}
-        {/* STAFF MANAGEMENT ROUTES */}
-        {/* ================================================ */}
-        
+
+        {/* Staff routes */}
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/staff" element={<StaffList />} />
         <Route path="/staff/add" element={<AddStaff />} />
@@ -162,12 +110,19 @@ function App() {
         <Route path="/attendance" element={<Attendance />} />
         <Route path="/salary" element={<Salary />} />
         <Route path="/reports" element={<Reports />} />
+        <Route path="/waste-dashboard" element={<WasteDashboard />} />
+              
+        {/* Shopping cart flow routes */}
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/cart-page" element={<CartPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/confirmation" element={<ConfirmationPage />} />
+        <Route path="/view-order" element={<ViewOrderPage />} />
+        <Route path="/edit-order" element={<EditOrderPage />} />
+        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/payment-success" element={<PaymentSuccessPage />} />
         
-        
-        {/* ================================================ */}
-        {/* PHARMACY STAFF PROTECTED ROUTES */}
-        {/* ================================================ */}
-        
+        {/* Staff protected routes */}
         <Route 
           path="/staff/prescriptions" 
           element={

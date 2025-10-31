@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { ArrowLeft, MapPin, User, Phone, Home, Package, CheckCircle, CreditCard, Shield } from 'lucide-react';
 import Navbar from '../components/Navbar';

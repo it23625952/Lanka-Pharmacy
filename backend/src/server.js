@@ -66,8 +66,7 @@ const expressWsInstance = expressWs(app);
 // ============================================
 
 app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true
+    origin: 'http://localhost:5173', // Allow requests from frontend development server
 }));
 app.use(express.json());
 app.use(rateLimiter);

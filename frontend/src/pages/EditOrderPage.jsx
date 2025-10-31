@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router';
+import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Save, User, Home, MapPin, Phone, Package, Edit3, Plus, Minus } from 'lucide-react';
 
 const EditOrderPage = () => {
@@ -42,7 +42,6 @@ const EditOrderPage = () => {
       setForm(prev => ({ ...prev, [name]: value }));
     }
 
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -89,7 +88,6 @@ const EditOrderPage = () => {
 
     setIsSaving(true);
     
-    // Simulate save delay
     setTimeout(() => {
       const updatedOrder = {
         ...form,
@@ -114,7 +112,6 @@ const EditOrderPage = () => {
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
-      {/* Navigation Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="container mx-auto px-4 py-4">
           <Link to="/view-order" className="flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors duration-200">
@@ -125,7 +122,6 @@ const EditOrderPage = () => {
       </div>
 
       <div className='flex-1 container mx-auto px-4 py-8 max-w-4xl'>
-        {/* Header Section */}
         <div className='text-center mb-12'>
           <h1 className='text-5xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-transparent mb-4'>
             Edit Order
@@ -134,9 +130,7 @@ const EditOrderPage = () => {
         </div>
 
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
-          {/* Left Column - Delivery Information */}
           <div className='space-y-8'>
-            {/* Delivery Details Card */}
             <div className='bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden'>
               <div className='bg-gradient-to-r from-emerald-600 to-emerald-700 px-8 py-6'>
                 <div className='flex items-center gap-4'>
@@ -151,7 +145,6 @@ const EditOrderPage = () => {
               </div>
 
               <div className='p-8 space-y-6'>
-                {/* Name Field */}
                 <div>
                   <label className='block text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
                     <User className="size-5 text-emerald-600" />
@@ -177,7 +170,6 @@ const EditOrderPage = () => {
                   {errors.name && <p className="text-red-600 text-sm mt-2 flex items-center gap-2">{errors.name}</p>}
                 </div>
 
-                {/* Address Field */}
                 <div>
                   <label className='block text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
                     <Home className="size-5 text-emerald-600" />
@@ -204,7 +196,6 @@ const EditOrderPage = () => {
                   {errors.address && <p className="text-red-600 text-sm mt-2 flex items-center gap-2">{errors.address}</p>}
                 </div>
 
-                {/* Location Field */}
                 <div>
                   <label className='block text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
                     <MapPin className="size-5 text-emerald-600" />
@@ -230,7 +221,6 @@ const EditOrderPage = () => {
                   {errors.location && <p className="text-red-600 text-sm mt-2 flex items-center gap-2">{errors.location}</p>}
                 </div>
 
-                {/* Phone Field */}
                 <div>
                   <label className='block text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
                     <Phone className="size-5 text-emerald-600" />
@@ -260,9 +250,7 @@ const EditOrderPage = () => {
             </div>
           </div>
 
-          {/* Right Column - Order Items */}
           <div className='space-y-8'>
-            {/* Order Items Card */}
             <div className='bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden'>
               <div className='bg-gradient-to-r from-emerald-600 to-emerald-700 px-8 py-6'>
                 <div className='flex items-center gap-4'>
@@ -295,7 +283,6 @@ const EditOrderPage = () => {
                             </div>
                           </div>
 
-                          {/* Quantity Controls */}
                           <div className="flex justify-between items-center">
                             <div className="flex items-center gap-4">
                               <span className="text-gray-700 font-medium">Quantity:</span>
@@ -328,7 +315,6 @@ const EditOrderPage = () => {
                       );
                     })}
 
-                    {/* Total Amount */}
                     <div className="flex justify-between items-center mt-6 pt-6 border-t-2 border-gray-200">
                       <span className="text-xl font-bold text-gray-800">Total Amount:</span>
                       <span className="text-2xl font-bold text-emerald-600">LKR {totalAmount.toFixed(2)}</span>
@@ -343,7 +329,6 @@ const EditOrderPage = () => {
               </div>
             </div>
 
-            {/* Save Changes Card */}
             <div className='bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden'>
               <div className='p-8'>
                 <button 

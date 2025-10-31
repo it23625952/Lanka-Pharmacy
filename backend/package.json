@@ -1,13 +1,13 @@
 {
-  "name": "backend",
+  "name": "lanka-pharmacy-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Unified backend for authentication, cart, and order flows",
+  "main": "src/server.js",
+  "type": "module",
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js"
   },
-  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",

@@ -1,12 +1,24 @@
-import React from 'react';
-import { useNavigate, Link } from 'react-router';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { CheckCircle, Package, Truck, Home, ShoppingBag, Clock, Mail, Phone, Download } from 'lucide-react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
 const PaymentSuccessPage = () => {
   const navigate = useNavigate();
-  const order = JSON.parse(localStorage.getItem('pendingOrder'));
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [order, setOrder] = useState(null);
+
+  useEffect(() => {
+    const orderData = localStorage.getItem('pendingOrder');
+    if (orderData) {
+      try {
+        setOrder(JSON.parse(orderData));
+      } catch (error) {
+        console.error('Error parsing order data:', error);
+      }
+    }
+  }, []);
 
   const getEstimatedDelivery = () => {
     const deliveryDate = new Date();
@@ -29,8 +41,7 @@ const PaymentSuccessPage = () => {
 
     const doc = new jsPDF();
 
-    // Header
-    doc.setFillColor(5, 150, 105); // Emerald color
+    doc.setFillColor(5, 150, 105);
     doc.rect(0, 0, 210, 40, 'F');
     
     doc.setFontSize(20);
@@ -40,7 +51,6 @@ const PaymentSuccessPage = () => {
     doc.setFontSize(16);
     doc.text('Payment Receipt', 105, 25, { align: 'center' });
 
-    // Order Information
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
     
@@ -58,7 +68,6 @@ const PaymentSuccessPage = () => {
       yPosition += 6;
     });
 
-    // Table
     const tableData = order.items.map((item, idx) => {
       const name = item.productId?.name || item.name || 'Unnamed Product';
       const price = item.productId?.retailPrice || item.price || 0;
@@ -82,13 +91,11 @@ const PaymentSuccessPage = () => {
       }
     });
 
-    // Total
     const finalY = doc.lastAutoTable.finalY + 10;
     doc.setFontSize(12);
     doc.setFont(undefined, 'bold');
     doc.text(`Total Amount: LKR ${totalAmount.toFixed(2)}`, 14, finalY);
 
-    // Footer
     doc.setFontSize(8);
     doc.setTextColor(100, 100, 100);
     doc.text('Thank you for choosing Lanka Pharmacy - Your Trusted Healthcare Partner', 105, 280, { align: 'center' });
@@ -97,10 +104,26 @@ const PaymentSuccessPage = () => {
     doc.save(`Receipt_${order.orderNumber || 'PAID'}_${new Date().getTime()}.pdf`);
   };
 
+  if (!order) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">No Order Data Found</h1>
+          <p className="text-gray-600 mb-6">Unable to load order information. Please return to home.</p>
+          <Link 
+            to="/"
+            className="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition-colors"
+          >
+            Back to Home
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
       <div className='flex-1 container mx-auto px-4 py-8 max-w-4xl'>
-        {/* Header Section */}
         <div className='text-center mb-12'>
           <div className="w-24 h-24 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
             <CheckCircle className="size-12 text-white" />
@@ -111,9 +134,7 @@ const PaymentSuccessPage = () => {
           <p className='text-gray-600 text-xl'>Your order has been confirmed and payment processed</p>
         </div>
 
-        {/* Main Success Card */}
         <div className='bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden mb-8'>
-          {/* Success Header */}
           <div className='bg-gradient-to-r from-emerald-600 to-emerald-700 px-8 py-6'>
             <div className='flex items-center gap-4'>
               <div className="bg-white/20 backdrop-blur-sm p-3 rounded-2xl shadow-lg">
@@ -127,9 +148,7 @@ const PaymentSuccessPage = () => {
           </div>
 
           <div className='p-8'>
-            {/* Order Summary */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-              {/* Delivery Information */}
               <div className="space-y-6">
                 <h3 className="text-xl font-bold text-gray-800 flex items-center gap-3 mb-4">
                   <Truck className="size-6 text-emerald-600" />
@@ -154,7 +173,6 @@ const PaymentSuccessPage = () => {
                 </div>
               </div>
 
-              {/* Order Items */}
               <div className="space-y-6">
                 <h3 className="text-xl font-bold text-gray-800 flex items-center gap-3 mb-4">
                   <ShoppingBag className="size-6 text-emerald-600" />
@@ -181,7 +199,6 @@ const PaymentSuccessPage = () => {
                   })}
                 </div>
 
-                {/* Total Amount */}
                 <div className="flex justify-between items-center pt-4 border-t border-gray-200">
                   <span className="text-lg font-bold text-gray-800">Total Paid:</span>
                   <span className="text-xl font-bold text-emerald-600">LKR {totalAmount.toFixed(2)}</span>
@@ -189,7 +206,6 @@ const PaymentSuccessPage = () => {
               </div>
             </div>
 
-            {/* Next Steps */}
             <div className="bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-200 rounded-2xl p-6">
               <h3 className="text-xl font-bold text-emerald-800 mb-4 flex items-center gap-3">
                 <CheckCircle className="size-6" />
@@ -222,7 +238,6 @@ const PaymentSuccessPage = () => {
           </div>
         </div>
 
-        {/* Support Information */}
         <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 mb-8">
           <h3 className="text-xl font-bold text-gray-800 mb-6 text-center">Order Support</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -245,7 +260,6 @@ const PaymentSuccessPage = () => {
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
             onClick={handleDownloadReceipt}
@@ -254,6 +268,7 @@ const PaymentSuccessPage = () => {
             <Download className="size-6" />
             Download Receipt
           </button>
+          
           <Link 
             to="/"
             className="flex-1 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-3 text-lg text-center"
@@ -261,6 +276,7 @@ const PaymentSuccessPage = () => {
             <Home className="size-6" />
             Back to Home
           </Link>
+          
           <Link 
             to="/my-orders"
             className="flex-1 py-4 border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 rounded-2xl font-semibold transition-all duration-200 flex items-center justify-center gap-3 text-lg text-center"
@@ -270,7 +286,6 @@ const PaymentSuccessPage = () => {
           </Link>
         </div>
 
-        {/* Trust Badge */}
         <div className="text-center mt-8 text-gray-600 text-lg">
           <p>🎉 Thank you for your payment! Your order is being processed securely.</p>
         </div>

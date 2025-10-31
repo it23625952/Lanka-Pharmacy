@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router';
+import { useNavigate, Link } from 'react-router-dom';
 import { ShoppingCart, Plus, Minus, Trash2, ArrowRight, Package, ArrowLeft } from 'lucide-react';
 import Navbar from '../components/Navbar';
 
