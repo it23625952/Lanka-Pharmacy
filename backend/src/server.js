@@ -8,14 +8,19 @@ import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import prescriptionRoutes from "./routes/prescriptionRoutes.js";
 import orderRoutes from './routes/orderRoutes.js';
+import cartRoutes from "./routes/cartRoutes.js";
 import staffRoutes from './routes/staffRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
 import attendanceRoutes from './routes/attendanceRoutes.js';
 import salaryRoutes from './routes/salaryRoutes.js';
+import reviewRoutes from "./routes/reviewRoutes.js";
+import wasteRoutes from "./routes/wasteRoutes.js";
 
-// Config imports
+// Configuration imports
 import { connectDB } from "./config/db.js";
+import { JWT_SECRET } from "./config/jwt.js";
 import rateLimiter from "./middleware/rateLimiter.js";
+import { fileURLToPath } from "url";
 
 // Load environment variables
 dotenv.config();
@@ -34,16 +39,13 @@ const PORT = process.env.PORT || 5001;
 
 // Middleware
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174'], // fixed
+    origin: 'http://localhost:5173',
     credentials: true
 }));
-app.use(express.json());
-app.use(rateLimiter);
+app.use(express.json()); // Parse JSON request bodies
+app.use(rateLimiter); // Apply rate limiting to all routes
 
-// Serve uploaded files
-app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
-
-// API routes
+// API route registration
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/prescriptions", prescriptionRoutes);
@@ -52,6 +54,9 @@ app.use("/api/staff", staffRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/salary", salaryRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/waste", wasteRoutes);
 
 // Start server after DB connection
 connectDB().then(() => {

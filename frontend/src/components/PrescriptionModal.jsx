@@ -6,7 +6,8 @@ const PrescriptionModal = ({ prescription, isOpen, onClose, onVerify, onReject }
 
     // Construct image URL from prescription image path
     const getImageUrl = () => {
-        if (!prescription.prescriptionImage) return null;
+        // Add null check
+        if (!prescription || !prescription.prescriptionImage) return null;
         
         if (prescription.prescriptionImage.startsWith('http')) {
             return prescription.prescriptionImage;

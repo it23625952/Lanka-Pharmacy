@@ -1,10 +1,5 @@
 import mongoose from "mongoose";
 
-/**
- * Mongoose schema for Product entities.
- * Defines the data structure, validation rules, and pricing information
- * for products in the inventory management system.
- */
 const productSchema = new mongoose.Schema(
     {
         name: {
@@ -32,15 +27,34 @@ const productSchema = new mongoose.Schema(
             required: true,
             default: 0,
             min: 0
+        },
+        category: {
+            type: String,
+            required: true
+        },
+        batchNumber: {
+            type: String,
+            required: true
+        },
+        expiryDate: {
+            type: Date,
+            required: true
+        },
+        manufacturer: {
+            type: String,
+            default: ''
+        },
+        barcode: {
+            type: String,
+            default: ''
         }
     },
-    { timestamps: true } // Automatically manages createdAt and updatedAt fields
+    { 
+        timestamps: true
+    }
 );
 
-/**
- * Mongoose model for the Product collection.
- * Provides an interface for interacting with product documents in MongoDB.
- */
-const Product = mongoose.model("Product", productSchema);
+// Ensure batch number is unique per product name
+productSchema.index({ name: 1, batchNumber: 1 }, { unique: true });
 
-export default Product;
+export default mongoose.model("Product", productSchema);

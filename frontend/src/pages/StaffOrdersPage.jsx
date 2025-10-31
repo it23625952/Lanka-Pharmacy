@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
-import { Search, Package, Clock, CheckCircle, XCircle, Truck, User, Mail, Phone, Filter } from 'lucide-react';
+import { Search, Package, Clock, CheckCircle, XCircle, Truck, User, Mail, Phone, Filter, BarChart3 } from 'lucide-react';
 import api from '../lib/axios';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router';
@@ -90,7 +90,16 @@ const StaffOrdersPage = () => {
                     <h1 className='text-5xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-transparent mb-4'>
                         Orders Management
                     </h1>
-                    <p className='text-gray-600 text-xl'>Manage and track customer orders efficiently</p>
+                    <p className='text-gray-600 text-xl mb-8'>Manage and track customer orders efficiently</p>
+                    
+                    {/* Dashboard Button */}
+                    <Link 
+                        to="/staff/orders/dashboard"
+                        className='inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white rounded-2xl font-semibold shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 border-2 border-emerald-500/20'
+                    >
+                        <BarChart3 className="size-6" />
+                        View Order Analytics Dashboard
+                    </Link>
                 </div>
 
                 {/* Search and Filter Controls */}
