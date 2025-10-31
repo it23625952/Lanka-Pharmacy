@@ -63,7 +63,7 @@ app.use("/api/prescriptions", prescriptionRoutes);
 app.use("/api/orders", orderRoutes);
 
 // HELP & SUPPORT API ROUTES
-app.use("/api/feedback", feedbackRoutes);
+app.use("/api/feedbacks", feedbackRoutes);
 app.use("/api/tickets", ticketRoutes);
 app.use("/api/callbacks", callbackRoutes);
 app.use("/api/chats", chatRoutes);

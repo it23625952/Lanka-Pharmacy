@@ -140,11 +140,7 @@ const StaffDashboard = () => {
             <option value="1year">Last Year</option>
           </select>
           
-          {/* Export Button */}
-          <button className="flex items-center space-x-2 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
-            <Download className="w-4 h-4" />
-            <span>Export</span>
-          </button>
+          
           
           {/* Refresh Button */}
           <button
