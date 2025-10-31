@@ -1,23 +1,33 @@
 import express from 'express';
-import {
-  createOrder,
-  getOrdersByUser,
-  updateOrderStatus,
-  deleteOrder
+import { 
+    createOrderFromPrescription, 
+    getAllOrders, 
+    getCustomerOrders, 
+    getOrderById, 
+    updateOrderStatus, 
+    cancelOrder 
 } from '../controllers/orderController.js';
+import authenticate from '../middleware/authenticate.js';
 
 const router = express.Router();
 
-// Create a new order
-router.post('/create', createOrder);
+// Customer routes - require authentication
+router.post('/create-from-prescription', authenticate, createOrderFromPrescription);
+router.get('/customer/my-orders', authenticate, getCustomerOrders);
 
-// Get all orders for a user
-router.get('/user/:userId', getOrdersByUser);
+// Staff routes - require authentication (additional authorization handled in controller)
+router.get('/', authenticate, getAllOrders);
 
-// Update order status
-router.put('/update/:orderId', updateOrderStatus);
+// IMPORTANT: Put specific routes BEFORE parameterized routes
+router.get('/dashboard', authenticate, (req, res) => {
+    // This will handle /api/orders/dashboard
+    // You can either handle it here or create a separate controller
+    res.json({ message: 'Order dashboard endpoint' });
+});
 
-// Delete an order
-router.delete('/delete/:orderId', deleteOrder);
+// Parameterized routes - should come AFTER specific routes
+router.get('/:id', authenticate, getOrderById);
+router.put('/:id/status', authenticate, updateOrderStatus);
+router.put('/:id/cancel', authenticate, cancelOrder);
 
 export default router;

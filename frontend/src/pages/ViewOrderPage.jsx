@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
+<<<<<<< HEAD
 import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Edit3, Trash2, CreditCard, CheckCircle, Package, User, Home, MapPin, Phone, ShoppingBag } from 'lucide-react';
 import Navbar from '../components/Navbar';
+=======
+import { useNavigate, Link } from 'react-router';
+import { ArrowLeft, Edit3, Trash2, CreditCard, CheckCircle, Package, User, Home, MapPin, Phone, ShoppingBag } from 'lucide-react';
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
 
 const ViewOrderPage = () => {
   const navigate = useNavigate();
@@ -71,7 +76,10 @@ const ViewOrderPage = () => {
   return (
     <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
       {/* Navigation Header */}
+<<<<<<< HEAD
       <Navbar/>
+=======
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="container mx-auto px-4 py-4">
           <Link to="/checkout" className="flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors duration-200">

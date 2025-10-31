@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { ArrowLeft, MapPin, User, Phone, Home, Package, CheckCircle, CreditCard, Shield } from 'lucide-react';
 import Navbar from '../components/Navbar';
+
 const CheckoutPage = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -86,7 +87,7 @@ const CheckoutPage = () => {
       };
 
       localStorage.setItem('pendingOrder', JSON.stringify(order));
-      navigate('/view-order');
+      navigate('/confirmationpage');
       setIsSubmitting(false);
     }, 1500);
   };
@@ -102,8 +103,9 @@ const CheckoutPage = () => {
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
+      <Navbar />
+
       {/* Navigation Header */}
-         <Navbar />
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="container mx-auto px-4 py-4">
           <Link to="/cart" className="flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors duration-200">

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+<<<<<<< HEAD
 import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircle, Package, Truck, Home, ShoppingBag, Clock, Mail, Phone } from 'lucide-react';
 import Navbar from '../components/Navbar';
@@ -20,11 +21,50 @@ const ConfirmationPage = () => {
       // Redirect to home if no order found
       navigate('/');
     }
+=======
+import { Link, useNavigate } from 'react-router';
+import { CheckCircle, Package, Truck, Home, ShoppingBag, Clock, Mail, Phone } from 'lucide-react';
+
+const ConfirmationPage = () => {
+  const [order, setOrder] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedOrder = localStorage.getItem('pendingOrder');
+    
+    if (savedOrder) {
+      try {
+        const orderData = JSON.parse(savedOrder);
+        setOrder(orderData);
+        
+        // ✅ FIX: Only remove after a delay or don't remove at all
+        setTimeout(() => {
+          localStorage.removeItem('pendingOrder');
+        }, 1000); // Remove after 1 second
+        
+      } catch (error) {
+        console.error('Error parsing order data:', error);
+        navigate('/');
+      }
+    } else {
+      // ✅ FIX: Add a small delay before redirecting
+      setTimeout(() => {
+        navigate('/');
+      }, 100);
+    }
+    
+    setIsLoading(false);
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
   }, [navigate]);
 
   const getEstimatedDelivery = () => {
     const deliveryDate = new Date();
+<<<<<<< HEAD
     deliveryDate.setDate(deliveryDate.getDate() + 2); // 2 days delivery
+=======
+    deliveryDate.setDate(deliveryDate.getDate() + 2);
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
     return deliveryDate.toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
@@ -33,7 +73,12 @@ const ConfirmationPage = () => {
     });
   };
 
+<<<<<<< HEAD
   if (!order) {
+=======
+  // ✅ FIX: Better loading state
+  if (isLoading) {
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
     return (
       <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex items-center justify-center'>
         <div className="text-center">
@@ -44,17 +89,43 @@ const ConfirmationPage = () => {
     );
   }
 
+<<<<<<< HEAD
+=======
+  // ✅ FIX: Only show this if order is truly not available
+  if (!order) {
+    return (
+      <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex items-center justify-center'>
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">No Order Found</h1>
+          <p className="text-gray-600 mb-6">Unable to load order information.</p>
+          <Link 
+            to="/"
+            className="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition-colors"
+          >
+            Back to Home
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
   const totalAmount = order.items?.reduce((sum, item) => {
     const price = item.productId?.retailPrice || item.price || 0;
     return sum + price * item.quantity;
   }, 0) || 0;
 
   return (
+<<<<<<< HEAD
        
     <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
       <div className='flex-1 container mx-auto px-4 py-8 max-w-4xl'>
 <Navbar />
 
+=======
+    <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
+      <div className='flex-1 container mx-auto px-4 py-8 max-w-4xl'>
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
         {/* Header Section */}
         <div className='text-center mb-12'>
           <div className="w-24 h-24 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
@@ -66,6 +137,7 @@ const ConfirmationPage = () => {
           <p className='text-gray-600 text-xl'>Thank you for shopping with Lanka Pharmacy</p>
         </div>
 
+<<<<<<< HEAD
         {/* Main Confirmation Card */}
         <div className='bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden mb-8'>
           {/* Success Header */}
@@ -222,6 +294,9 @@ const ConfirmationPage = () => {
         <div className="text-center mt-8 text-gray-600 text-lg">
           <p>🎉 Thank you for choosing Lanka Pharmacy - Your Trusted Healthcare Partner</p>
         </div>
+=======
+        
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
       </div>
     </div>
   );

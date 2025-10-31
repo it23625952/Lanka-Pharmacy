@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
+<<<<<<< HEAD
 import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, CreditCard, User, Phone, Lock, Shield, CheckCircle } from 'lucide-react';
 import Navbar from '../components/Navbar';
+=======
+import { useNavigate, Link } from 'react-router';
+import { ArrowLeft, CreditCard, User, Phone, Lock, Shield, CheckCircle } from 'lucide-react';
+
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
 const PaymentPage = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -109,7 +115,10 @@ const PaymentPage = () => {
   return (
     <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
       {/* Navigation Header */}
+<<<<<<< HEAD
          <Navbar />
+=======
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="container mx-auto px-4 py-4">
           <Link to="/checkout" className="flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors duration-200">
@@ -147,7 +156,11 @@ const PaymentPage = () => {
             <div className='space-y-6'>
               {/* Name on Card */}
               <div>
+<<<<<<< HEAD
                 <label className='block text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
+=======
+                <label className='text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
                   <User className="size-5 text-emerald-600" />
                   Name on Card
                 </label>
@@ -173,7 +186,11 @@ const PaymentPage = () => {
 
               {/* Phone Number */}
               <div>
+<<<<<<< HEAD
                 <label className='block text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
+=======
+                <label className='text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
                   <Phone className="size-5 text-emerald-600" />
                   Phone Number
                 </label>
@@ -200,7 +217,11 @@ const PaymentPage = () => {
 
               {/* Card Number */}
               <div>
+<<<<<<< HEAD
                 <label className='block text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
+=======
+                <label className='text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
                   <CreditCard className="size-5 text-emerald-600" />
                   Card Number
                 </label>
@@ -256,7 +277,11 @@ const PaymentPage = () => {
                 </div>
 
                 <div>
+<<<<<<< HEAD
                   <label className='block text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
+=======
+                  <label className='text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
                     <Lock className="size-5 text-emerald-600" />
                     CVV
                   </label>

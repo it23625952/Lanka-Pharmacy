@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
+=======
+import React from 'react';
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
 import { useNavigate, Link } from 'react-router';
 import { CheckCircle, Package, Truck, Home, ShoppingBag, Clock, Mail, Phone, Download } from 'lucide-react';
 import jsPDF from 'jspdf';
@@ -6,6 +10,7 @@ import autoTable from 'jspdf-autotable';
 
 const PaymentSuccessPage = () => {
   const navigate = useNavigate();
+<<<<<<< HEAD
   const [isDownloading, setIsDownloading] = useState(false);
   const [order, setOrder] = useState(null);
 
@@ -20,6 +25,9 @@ const PaymentSuccessPage = () => {
       }
     }
   }, []);
+=======
+  const order = JSON.parse(localStorage.getItem('pendingOrder'));
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
 
   const getEstimatedDelivery = () => {
     const deliveryDate = new Date();
@@ -32,6 +40,7 @@ const PaymentSuccessPage = () => {
     });
   };
 
+<<<<<<< HEAD
   const getCurrentDate = () => {
     return new Date().toLocaleDateString('en-GB', {
       day: '2-digit',
@@ -40,11 +49,14 @@ const PaymentSuccessPage = () => {
     }).replace(/ /g, '-');
   };
 
+=======
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
   const totalAmount = order?.items?.reduce((sum, item) => {
     const price = item.productId?.retailPrice || item.price || 0;
     return sum + price * item.quantity;
   }, 0) || 0;
 
+<<<<<<< HEAD
   const taxAmount = totalAmount * 0.05; // 5% tax
   const finalTotal = totalAmount + taxAmount;
 
@@ -121,11 +133,29 @@ const PaymentSuccessPage = () => {
     
     doc.setFontSize(12);
     doc.text('LANKA PHARMACY - Your Trusted Healthcare Partner', 105, 25, { align: 'center' });
+=======
+  const handleDownloadReceipt = () => {
+    if (!order) return;
+
+    const doc = new jsPDF();
+
+    // Header
+    doc.setFillColor(5, 150, 105); // Emerald color
+    doc.rect(0, 0, 210, 40, 'F');
+    
+    doc.setFontSize(20);
+    doc.setTextColor(255, 255, 255);
+    doc.text('LANKA PHARMACY', 105, 15, { align: 'center' });
+    
+    doc.setFontSize(16);
+    doc.text('Payment Receipt', 105, 25, { align: 'center' });
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
 
     // Order Information
     doc.setFontSize(10);
     doc.setTextColor(0, 0, 0);
     
+<<<<<<< HEAD
     let yPosition = 45;
 
     // Customer & Date Info
@@ -286,6 +316,61 @@ const PaymentSuccessPage = () => {
     );
   }
 
+=======
+    const orderInfo = [
+      [`Order Number: ${order.orderNumber || 'PAID'}`, `Date: ${new Date().toLocaleDateString()}`],
+      [`Customer: ${order.name}`, `Phone: ${order.phoneNo}`],
+      [`Address: ${order.address}`, `Location: ${order.location}`],
+      [`Estimated Delivery: ${getEstimatedDelivery()}`, 'Payment: Credit Card']
+    ];
+
+    let yPosition = 50;
+    orderInfo.forEach(([left, right]) => {
+      doc.text(left, 14, yPosition);
+      doc.text(right, 140, yPosition);
+      yPosition += 6;
+    });
+
+    // Table
+    const tableData = order.items.map((item, idx) => {
+      const name = item.productId?.name || item.name || 'Unnamed Product';
+      const price = item.productId?.retailPrice || item.price || 0;
+      const subtotal = price * item.quantity;
+      return [idx + 1, name, item.quantity, `LKR ${price.toFixed(2)}`, `LKR ${subtotal.toFixed(2)}`];
+    });
+
+    autoTable(doc, {
+      startY: yPosition + 10,
+      head: [['#', 'Product', 'Qty', 'Unit Price', 'Subtotal']],
+      body: tableData,
+      theme: 'grid',
+      headStyles: {
+        fillColor: [5, 150, 105],
+        textColor: 255,
+        fontStyle: 'bold'
+      },
+      styles: {
+        fontSize: 10,
+        cellPadding: 3
+      }
+    });
+
+    // Total
+    const finalY = doc.lastAutoTable.finalY + 10;
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'bold');
+    doc.text(`Total Amount: LKR ${totalAmount.toFixed(2)}`, 14, finalY);
+
+    // Footer
+    doc.setFontSize(8);
+    doc.setTextColor(100, 100, 100);
+    doc.text('Thank you for choosing Lanka Pharmacy - Your Trusted Healthcare Partner', 105, 280, { align: 'center' });
+    doc.text('Contact: +94 51 222 5523 | Email: lp.hatton.sup@gmail.com', 105, 285, { align: 'center' });
+
+    doc.save(`Receipt_${order.orderNumber || 'PAID'}_${new Date().getTime()}.pdf`);
+  };
+
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
   return (
     <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
       <div className='flex-1 container mx-auto px-4 py-8 max-w-4xl'>
@@ -437,6 +522,7 @@ const PaymentSuccessPage = () => {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
+<<<<<<< HEAD
             onClick={() => handleDownloadReceipt('simple')}
             disabled={isDownloading}
             className={`flex-1 py-4 border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 rounded-2xl font-semibold transition-all duration-200 flex items-center justify-center gap-3 text-lg ${
@@ -467,6 +553,14 @@ const PaymentSuccessPage = () => {
             Download Detailed Invoice
           </button>
           
+=======
+            onClick={handleDownloadReceipt}
+            className="flex-1 py-4 border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 rounded-2xl font-semibold transition-all duration-200 flex items-center justify-center gap-3 text-lg"
+          >
+            <Download className="size-6" />
+            Download Receipt
+          </button>
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
           <Link 
             to="/"
             className="flex-1 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-3 text-lg text-center"
@@ -474,6 +568,16 @@ const PaymentSuccessPage = () => {
             <Home className="size-6" />
             Back to Home
           </Link>
+<<<<<<< HEAD
+=======
+          <Link 
+            to="/my-orders"
+            className="flex-1 py-4 border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-50 rounded-2xl font-semibold transition-all duration-200 flex items-center justify-center gap-3 text-lg text-center"
+          >
+            <ShoppingBag className="size-6" />
+            View My Orders
+          </Link>
+>>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
         </div>
 
         {/* Trust Badge */}
