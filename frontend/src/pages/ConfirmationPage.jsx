@@ -1,28 +1,5 @@
 import React, { useEffect, useState } from 'react';
-<<<<<<< HEAD
 import { Link, useNavigate } from 'react-router-dom';
-import { CheckCircle, Package, Truck, Home, ShoppingBag, Clock, Mail, Phone } from 'lucide-react';
-import Navbar from '../components/Navbar';
-
-const ConfirmationPage = () => {
-  const [order, setOrder] = useState(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Retrieve order from localStorage
-    const savedOrder = localStorage.getItem('pendingOrder');
-    if (savedOrder) {
-      const orderData = JSON.parse(savedOrder);
-      setOrder(orderData);
-      
-      // Clear the cart after order confirmation
-      localStorage.removeItem('pendingOrder');
-    } else {
-      // Redirect to home if no order found
-      navigate('/');
-    }
-=======
-import { Link, useNavigate } from 'react-router';
 import { CheckCircle, Package, Truck, Home, ShoppingBag, Clock, Mail, Phone } from 'lucide-react';
 
 const ConfirmationPage = () => {
@@ -38,33 +15,26 @@ const ConfirmationPage = () => {
         const orderData = JSON.parse(savedOrder);
         setOrder(orderData);
         
-        // ✅ FIX: Only remove after a delay or don't remove at all
         setTimeout(() => {
           localStorage.removeItem('pendingOrder');
-        }, 1000); // Remove after 1 second
+        }, 1000);
         
       } catch (error) {
         console.error('Error parsing order data:', error);
         navigate('/');
       }
     } else {
-      // ✅ FIX: Add a small delay before redirecting
       setTimeout(() => {
         navigate('/');
       }, 100);
     }
     
     setIsLoading(false);
->>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
   }, [navigate]);
 
   const getEstimatedDelivery = () => {
     const deliveryDate = new Date();
-<<<<<<< HEAD
-    deliveryDate.setDate(deliveryDate.getDate() + 2); // 2 days delivery
-=======
     deliveryDate.setDate(deliveryDate.getDate() + 2);
->>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
     return deliveryDate.toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
@@ -73,12 +43,7 @@ const ConfirmationPage = () => {
     });
   };
 
-<<<<<<< HEAD
-  if (!order) {
-=======
-  // ✅ FIX: Better loading state
   if (isLoading) {
->>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
     return (
       <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex items-center justify-center'>
         <div className="text-center">
@@ -89,9 +54,6 @@ const ConfirmationPage = () => {
     );
   }
 
-<<<<<<< HEAD
-=======
-  // ✅ FIX: Only show this if order is truly not available
   if (!order) {
     return (
       <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex items-center justify-center'>
@@ -109,24 +71,14 @@ const ConfirmationPage = () => {
     );
   }
 
->>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
   const totalAmount = order.items?.reduce((sum, item) => {
     const price = item.productId?.retailPrice || item.price || 0;
     return sum + price * item.quantity;
   }, 0) || 0;
 
   return (
-<<<<<<< HEAD
-       
     <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
       <div className='flex-1 container mx-auto px-4 py-8 max-w-4xl'>
-<Navbar />
-
-=======
-    <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
-      <div className='flex-1 container mx-auto px-4 py-8 max-w-4xl'>
->>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
-        {/* Header Section */}
         <div className='text-center mb-12'>
           <div className="w-24 h-24 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
             <CheckCircle className="size-12 text-white" />
@@ -137,10 +89,7 @@ const ConfirmationPage = () => {
           <p className='text-gray-600 text-xl'>Thank you for shopping with Lanka Pharmacy</p>
         </div>
 
-<<<<<<< HEAD
-        {/* Main Confirmation Card */}
         <div className='bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden mb-8'>
-          {/* Success Header */}
           <div className='bg-gradient-to-r from-emerald-600 to-emerald-700 px-8 py-6'>
             <div className='flex items-center gap-4'>
               <div className="bg-white/20 backdrop-blur-sm p-3 rounded-2xl shadow-lg">
@@ -154,9 +103,7 @@ const ConfirmationPage = () => {
           </div>
 
           <div className='p-8'>
-            {/* Order Summary */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-              {/* Delivery Information */}
               <div className="space-y-6">
                 <h3 className="text-xl font-bold text-gray-800 flex items-center gap-3 mb-4">
                   <Truck className="size-6 text-emerald-600" />
@@ -181,7 +128,6 @@ const ConfirmationPage = () => {
                 </div>
               </div>
 
-              {/* Order Items */}
               <div className="space-y-6">
                 <h3 className="text-xl font-bold text-gray-800 flex items-center gap-3 mb-4">
                   <ShoppingBag className="size-6 text-emerald-600" />
@@ -208,7 +154,6 @@ const ConfirmationPage = () => {
                   })}
                 </div>
 
-                {/* Total Amount */}
                 <div className="flex justify-between items-center pt-4 border-t border-gray-200">
                   <span className="text-lg font-bold text-gray-800">Total Amount:</span>
                   <span className="text-xl font-bold text-emerald-600">LKR {totalAmount.toFixed(2)}</span>
@@ -216,7 +161,6 @@ const ConfirmationPage = () => {
               </div>
             </div>
 
-            {/* Next Steps */}
             <div className="bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-200 rounded-2xl p-6">
               <h3 className="text-xl font-bold text-emerald-800 mb-4 flex items-center gap-3">
                 <CheckCircle className="size-6" />
@@ -249,7 +193,6 @@ const ConfirmationPage = () => {
           </div>
         </div>
 
-        {/* Support Information */}
         <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 mb-8">
           <h3 className="text-xl font-bold text-gray-800 mb-6 text-center">Need Help With Your Order?</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -272,7 +215,6 @@ const ConfirmationPage = () => {
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link 
             to="/"
@@ -290,13 +232,9 @@ const ConfirmationPage = () => {
           </Link>
         </div>
 
-        {/* Trust Badge */}
         <div className="text-center mt-8 text-gray-600 text-lg">
           <p>🎉 Thank you for choosing Lanka Pharmacy - Your Trusted Healthcare Partner</p>
         </div>
-=======
-        
->>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
       </div>
     </div>
   );

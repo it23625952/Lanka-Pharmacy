@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
-<<<<<<< HEAD
 import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, CreditCard, User, Phone, Lock, Shield, CheckCircle } from 'lucide-react';
-import Navbar from '../components/Navbar';
-=======
-import { useNavigate, Link } from 'react-router';
-import { ArrowLeft, CreditCard, User, Phone, Lock, Shield, CheckCircle } from 'lucide-react';
 
->>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
 const PaymentPage = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
@@ -55,7 +49,6 @@ const PaymentPage = () => {
       setForm(prev => ({ ...prev, cvv: digitsOnly }));
     }
 
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -105,7 +98,6 @@ const PaymentPage = () => {
     
     setIsProcessing(true);
     
-    // Simulate payment processing
     setTimeout(() => {
       navigate('/payment-success');
       setIsProcessing(false);
@@ -114,11 +106,6 @@ const PaymentPage = () => {
 
   return (
     <div className='min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex flex-col'>
-      {/* Navigation Header */}
-<<<<<<< HEAD
-         <Navbar />
-=======
->>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="container mx-auto px-4 py-4">
           <Link to="/checkout" className="flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors duration-200">
@@ -129,7 +116,6 @@ const PaymentPage = () => {
       </div>
 
       <div className='flex-1 container mx-auto px-4 py-8 max-w-2xl'>
-        {/* Header Section */}
         <div className='text-center mb-12'>
           <h1 className='text-5xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-transparent mb-4'>
             Payment Details
@@ -137,9 +123,7 @@ const PaymentPage = () => {
           <p className='text-gray-600 text-xl'>Complete your purchase securely</p>
         </div>
 
-        {/* Payment Card */}
         <div className='bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden'>
-          {/* Header */}
           <div className='bg-gradient-to-r from-emerald-600 to-emerald-700 px-8 py-6'>
             <div className='flex items-center gap-4'>
               <div className="bg-white/20 backdrop-blur-sm p-3 rounded-2xl shadow-lg">
@@ -154,13 +138,8 @@ const PaymentPage = () => {
 
           <div className='p-8'>
             <div className='space-y-6'>
-              {/* Name on Card */}
               <div>
-<<<<<<< HEAD
                 <label className='block text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
-=======
-                <label className='text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
->>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
                   <User className="size-5 text-emerald-600" />
                   Name on Card
                 </label>
@@ -184,13 +163,8 @@ const PaymentPage = () => {
                 {errors.nameOnCard && <p className="text-red-600 text-sm mt-2 flex items-center gap-2">{errors.nameOnCard}</p>}
               </div>
 
-              {/* Phone Number */}
               <div>
-<<<<<<< HEAD
                 <label className='block text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
-=======
-                <label className='text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
->>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
                   <Phone className="size-5 text-emerald-600" />
                   Phone Number
                 </label>
@@ -215,13 +189,8 @@ const PaymentPage = () => {
                 {errors.phoneNo && <p className="text-red-600 text-sm mt-2 flex items-center gap-2">{errors.phoneNo}</p>}
               </div>
 
-              {/* Card Number */}
               <div>
-<<<<<<< HEAD
                 <label className='block text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
-=======
-                <label className='text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
->>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
                   <CreditCard className="size-5 text-emerald-600" />
                   Card Number
                 </label>
@@ -252,7 +221,6 @@ const PaymentPage = () => {
                 {errors.cardNumber && <p className="text-red-600 text-sm mt-2 flex items-center gap-2">{errors.cardNumber}</p>}
               </div>
 
-              {/* Expiry and CVV */}
               <div className="grid grid-cols-2 gap-6">
                 <div>
                   <label className='block text-lg font-semibold text-gray-700 mb-3'>
@@ -277,11 +245,7 @@ const PaymentPage = () => {
                 </div>
 
                 <div>
-<<<<<<< HEAD
                   <label className='block text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
-=======
-                  <label className='text-lg font-semibold text-gray-700 mb-3 flex items-center gap-3'>
->>>>>>> cb342fb30c9b2af0b979105c26e931b71a185019
                     <Lock className="size-5 text-emerald-600" />
                     CVV
                   </label>
@@ -308,7 +272,6 @@ const PaymentPage = () => {
               </div>
             </div>
 
-            {/* Security Badge */}
             <div className="bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-200 rounded-2xl p-6 mt-8">
               <div className="flex items-center gap-4">
                 <Shield className="size-8 text-emerald-600" />
@@ -319,7 +282,6 @@ const PaymentPage = () => {
               </div>
             </div>
 
-            {/* Pay Button */}
             <button 
               onClick={handlePay}
               disabled={isProcessing}
@@ -338,7 +300,6 @@ const PaymentPage = () => {
               )}
             </button>
 
-            {/* Accepted Cards */}
             <div className="text-center mt-6">
               <p className="text-gray-600 text-sm mb-3">We accept</p>
               <div className="flex justify-center items-center gap-4">
